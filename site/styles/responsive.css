@@ -1,0 +1,130 @@
+@media (max-width: 900px) {
+  .thesis,
+  .run-loop,
+  .run-source {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .run-note {
+    grid-column: 1;
+  }
+
+  .term-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .arch-row--domain {
+    grid-template-columns: 100px repeat(2, minmax(0, 1fr));
+  }
+
+  .arch-row--domain > div:nth-of-type(n+3) {
+    grid-column: auto;
+  }
+
+  .content-index article {
+    grid-template-columns: 110px 160px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .hero__facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .hero__facts span {
+    min-width: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  }
+
+  .term-grid,
+  .card-engine__intro,
+  .code-compare,
+  .turn-columns,
+  .gallery__grid,
+  .content-index,
+  .ai-stories__body,
+  .truth-grid,
+  .run-links {
+    grid-template-columns: 1fr;
+  }
+
+  .term-grid article {
+    min-height: 180px;
+  }
+
+  .architecture-map {
+    padding: 14px;
+  }
+
+  .arch-row--entry,
+  .arch-row--domain,
+  .arch-row--core {
+    grid-template-columns: 1fr;
+  }
+
+  .arch-row > span {
+    padding-top: 6px;
+  }
+
+  .arch-arrow {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .autoload-strip {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .execution-pipeline,
+  .ai-boundary {
+    flex-direction: column;
+    align-items: stretch;
+    overflow-x: visible;
+  }
+
+  .execution-pipeline span,
+  .ai-boundary span {
+    min-width: 0;
+  }
+
+  .execution-pipeline i,
+  .ai-boundary i {
+    transform: rotate(90deg);
+    align-self: center;
+  }
+
+  pre {
+    min-height: 0;
+  }
+
+  .gallery__wide {
+    grid-column: 1;
+  }
+
+  .gallery figcaption {
+    display: block;
+  }
+
+  .gallery figcaption span {
+    margin-top: 6px;
+    display: block;
+    text-align: left;
+  }
+
+  .content-index article {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .source-map li {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .source-map li > p {
+    grid-column: 2;
+  }
+}

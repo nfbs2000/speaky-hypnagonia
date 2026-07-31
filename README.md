@@ -1,5 +1,7 @@
 # Hypnagonia: Therapy through Nightmares [v0.67.1](CHANGELOG.md)
 
+[한국어 소스 가이드와 아키텍처 해설](https://nfbs2000.github.io/speaky-hypnagonia/)은 게임 용어, run 구조, 카드 scripting engine, AI story 경계를 실제 코드와 함께 설명합니다.
+
 [![Hypnagonia preview image](http://hypnagonia.dbzer0.com/hypnagonia_showcase.gif "Hypnagonia preview image")](https://www.youtube.com/watch?v=Oc1_G28q328)
 
 Hypnagonia is a 'spire-like' deckbuilder card game where you take the part of a dreamer captured in a nightmare realm in their recurring dreams and struggling to overcome their own issues to break out of this loop.

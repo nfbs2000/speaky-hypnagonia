@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hypnagonia의 게임 규칙, Godot 구조, 카드 스크립팅 엔진을 실제 소스 기준으로 설명하는 한국어 가이드">
+  <meta property="og:title" content="Hypnagonia 한국어 소스 가이드">
+  <meta property="og:description" content="악몽을 해석하는 덱빌더가 어떻게 규칙과 코드로 구성되는지 읽습니다.">
+  <meta property="og:image" content="assets/preview.jpg">
+  <title>Hypnagonia 한국어 소스 가이드</title>
+  <link rel="icon" href="assets/icon.png">
+  <link rel="stylesheet" href="styles/foundation.css">
+  <link rel="stylesheet" href="styles/sections.css">
+  <link rel="stylesheet" href="styles/catalog.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Hypnagonia 가이드 맨 위로">
+      <img src="assets/icon.png" alt="">
+      <span>Hypnagonia <small>한국어 소스 가이드</small></span>
+    </a>
+    <nav aria-label="주요 링크">
+      <a href="#game">게임</a>
+      <a href="#architecture">구조</a>
+      <a href="#cards">카드 엔진</a>
+      <a href="#truth">경계</a>
+      <a href="https://dbzer0.itch.io/hypnagonia">플레이</a>
+      <a href="https://github.com/nfbs2000/speaky-hypnagonia">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero__media" src="assets/preview.jpg" alt="Hypnagonia 전투 화면. 세 Torment와 다섯 장의 카드가 보인다.">
+      <div class="hero__shade"></div>
+      <div class="hero__content">
+        <p class="eyebrow">THERAPY THROUGH NIGHTMARES · v0.67.1</p>
+        <h1 id="hero-title">Hypnagonia</h1>
+        <p class="hero__lead">
+          적을 죽이는 대신 악몽을 <strong>해석</strong>하고,
+          체력 대신 <strong>불안</strong>이 한계에 닿기 전에 돌파구를 찾는
+          Godot 기반 덱빌더입니다.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="https://dbzer0.itch.io/hypnagonia">온라인으로 플레이</a>
+          <a class="button" href="https://github.com/db0/hypnagonia">원 프로젝트 보기</a>
+        </div>
+      </div>
+      <div class="hero__facts" aria-label="프로젝트 요약">
+        <span><b>ENGINE</b>Godot 3.6</span>
+        <span><b>SOURCE</b>509 GDScript files</span>
+        <span><b>SCENES</b>146 Godot scenes</span>
+        <span><b>LICENSE</b>AGPL-3.0 + asset licenses</span>
+      </div>
+    </section>
+
+    <section class="thesis" id="game">
+      <div class="section-heading">
+        <p class="section-index">01 / THE GAME</p>
+        <h2>전투 용어를 바꾸면<br>플레이의 의미가 바뀐다</h2>
+      </div>
+      <div class="thesis__body">
+        <p>
+          Hypnagonia는 Slay the Spire 계열의 덱 구성·드로우·비용·상태 효과를 사용하지만,
+          전투의 언어를 심리적 은유로 다시 씁니다. 플레이어는 Dreamer이며,
+          적은 현실의 불안과 문제에서 나온 Torment입니다. 공격 수치는 Interpretation,
+          적의 체력은 Comprehension, 받는 피해는 Stress, 생존 한계는 Anxiety가 됩니다.
+        </p>
+        <blockquote>
+          핵심은 테마를 카드 위에 덧씌운 것이 아니라,
+          승리와 패배를 설명하는 기본 명사를 교체한 데 있습니다.
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="vocabulary" aria-labelledby="vocabulary-title">
+      <p class="section-index">PLAYER VOCABULARY</p>
+      <h2 id="vocabulary-title">한 턴을 구성하는 여섯 개념</h2>
+      <div class="term-grid">
+        <article>
+          <span class="term-no">01</span>
+          <h3>Interpretation</h3>
+          <p>Torment를 이해하는 진행량입니다. Comprehension 한계에 도달하면 Torment를 극복합니다.</p>
+        </article>
+        <article>
+          <span class="term-no">02</span>
+          <h3>Comprehension</h3>
+          <p>Torment가 요구하는 해석의 총량입니다. 일반 덱빌더의 적 체력에 해당합니다.</p>
+        </article>
+        <article>
+          <span class="term-no">03</span>
+          <h3>Stress</h3>
+          <p>Torment의 intent가 가하는 압력입니다. Confidence를 먼저 깎고 남은 값이 Anxiety를 올립니다.</p>
+        </article>
+        <article>
+          <span class="term-no">04</span>
+          <h3>Anxiety</h3>
+          <p>Dreamer의 실패 한계입니다. 최대치에 도달하면 악몽에서 깨어나 run이 끝납니다.</p>
+        </article>
+        <article>
+          <span class="term-no">05</span>
+          <h3>Immersion</h3>
+          <p>대부분의 카드를 사용할 때 지불하는 턴 자원입니다.</p>
+        </article>
+        <article>
+          <span class="term-no">06</span>
+          <h3>Confidence / Perplexity</h3>
+          <p>각각 Dreamer와 Torment의 방어층입니다. Stress와 Interpretation이 본체에 닿기 전에 흡수합니다.</p>
+        </article>
+      </div>
+      <p class="source-line">
+        근거:
+        <a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/cards/CardConfig.gd">CardConfig.gd의 EXPLANATIONS</a>
+      </p>
+    </section>
+
+    <section class="run-loop" id="run-loop">
+      <div class="section-heading">
+        <p class="section-index">02 / RUN LOOP</p>
+        <h2>악몽은 세 Act의<br>선택과 전투로 진행된다</h2>
+      </div>
+      <ol class="loop">
+        <li><span>01</span><div><b>Dreamer 구성</b><p>Archetype과 시작 카드, 성격 요소를 선택합니다.</p></div></li>
+        <li><span>02</span><div><b>Journal 선택</b><p>현재 Pathos와 확률에 따라 1~3개의 다음 encounter가 제시됩니다.</p></div></li>
+        <li><span>03</span><div><b>Ordeal 또는 사건</b><p>Torment 전투, 위험·비전투 사건, 상점, 휴식이 run을 변화시킵니다.</p></div></li>
+        <li><span>04</span><div><b>보상과 덱 변화</b><p>새 카드, Memory, Artifact와 영구적인 카드 향상·흉터가 누적됩니다.</p></div></li>
+        <li><span>05</span><div><b>다음 밤의 층</b><p>Early Night, Deep Sleep, Pre-Dawn을 거쳐 Act 보스와 마주합니다.</p></div></li>
+      </ol>
+      <div class="run-note">
+        <b>코드의 소유자</b>
+        <p>
+          <code>SingleRun</code>이 Act, 남은 encounter, 보스와 journal 선택을 관리하고,
+          <code>GameSave</code>가 RNG seed·player·encounter·difficulty를 함께 저장합니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="architecture" id="architecture">
+      <p class="section-index">03 / SOURCE ARCHITECTURE</p>
+      <h2>Framework와 게임 규칙을 분리한 두 층</h2>
+      <p class="section-lead">
+        <code>src/core</code>는 Card Game Framework의 카드·pile·drag·focus·범용 scripting을,
+        <code>src/dreamscape</code>는 Hypnagonia의 전투·런·용어·콘텐츠를 소유합니다.
+        설정 파일의 경로 상수가 이 확장 경계를 명시합니다.
+      </p>
+      <div class="architecture-map" role="img" aria-label="Godot 실행 표면, Hypnagonia dreamscape 계층, Card Game Framework core 계층의 구조">
+        <div class="arch-row arch-row--entry">
+          <span>ENTRY</span>
+          <div><b>MainMenu.tscn</b><small>새 run · 설정 · 덱과 라이브러리</small></div>
+          <div><b>project.godot</b><small>autoload · scene · input · export</small></div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">↓</div>
+        <div class="arch-row arch-row--domain">
+          <span>DREAMSCAPE</span>
+          <div><b>Run / Journal</b><small>Act · encounter · reward</small></div>
+          <div><b>Board / Turn</b><small>Dreamer · Torment · intent</small></div>
+          <div><b>Cards / Content</b><small>정의 · scripts · art</small></div>
+          <div><b>Globals / Save</b><small>player · RNG · persistence</small></div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">↓ extends / configures</div>
+        <div class="arch-row arch-row--core">
+          <span>CORE</span>
+          <div><b>Card & Piles</b><small>draw · hand · discard · focus</small></div>
+          <div><b>ScriptingEngine</b><small>task · subject · cost · result</small></div>
+          <div><b>CFControl</b><small>node map · cache · settings</small></div>
+        </div>
+      </div>
+      <div class="autoload-strip">
+        <span>AUTOLOAD</span>
+        <code>cfc</code><code>globals</code><code>SoundManager</code><code>EventBus</code><code>scripting_bus</code>
+      </div>
+    </section>
+
+    <section class="card-engine" id="cards">
+      <div class="section-heading">
+        <p class="section-index">04 / CARD ENGINE</p>
+        <h2>카드 텍스트와 실행 규칙을<br>별도로 정의한다</h2>
+      </div>
+      <div class="card-engine__intro">
+        <p>
+          카드 한 장은 표시용 definition과 실행용 script로 나뉩니다.
+          Definition은 이름·Type·Cost·Abilities·수치·업그레이드를 담고,
+          script는 어떤 task를 어떤 subject에게 실행할지 기술합니다.
+        </p>
+        <p>
+          범용 <code>ScriptingEngine</code>은 task를 queue로 만들고 비용 dry-run을 먼저 수행합니다.
+          실제 상태 변경은 <code>modify_damage</code>, <code>assign_defence</code>,
+          <code>apply_effect</code> 같은 executor 경계가 담당합니다.
+        </p>
+      </div>
+      <div class="code-compare">
+        <article>
+          <header><span>DEFINITION</span><b>무엇을 보여 줄 것인가</b></header>
+          <pre><code>"Interpretation": {
+  "Type": "Action",
+  "Abilities": "{damage} for {damage_amount}",
+  "Cost": 1,
+  "_amounts": { "damage_amount": 6 }
+}</code></pre>
+        </article>
+        <article>
+          <header><span>SCRIPT</span><b>무엇을 실행할 것인가</b></header>
+          <pre><code>{
+  "name": "modify_damage",
+  "subject": "target",
+  "needs_subject": true,
+  "amount": {
+    "lookup_property": "_amounts",
+    "value_key": "damage_amount"
+  }
+}</code></pre>
+        </article>
+      </div>
+      <div class="execution-pipeline" aria-label="카드 실행 단계">
+        <span>Card definition</span><i>→</i>
+        <span>State script</span><i>→</i>
+        <span>ScriptTask queue</span><i>→</i>
+        <span>Dry-run</span><i>→</i>
+        <span>Executor</span><i>→</i>
+        <span>Board state</span>
+      </div>
+      <p class="source-line">
+        근거:
+        <a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/cards/sets/SetDefinition_Core.gd">SetDefinition_Core.gd</a>
+        ·
+        <a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/cards/sets/SetScripts_Core.gd">SetScripts_Core.gd</a>
+        ·
+        <a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/core/ScriptingEngine/ScriptingEngine.gd">ScriptingEngine.gd</a>
+      </p>
+    </section>
+
+    <section class="turn-system">
+      <p class="section-index">05 / TURN & PREDICTION</p>
+      <h2>턴은 signal로 흐르고, intent는 dry-run으로 예측된다</h2>
+      <div class="turn-columns">
+        <div>
+          <h3>Player turn</h3>
+          <p>시작 signal을 보내고 카드를 사용합니다. 턴 종료 시 손을 정리하고 다음 손을 준비합니다.</p>
+        </div>
+        <div>
+          <h3>Enemy turn</h3>
+          <p>Board가 살아 있는 Torment를 순서대로 activate하며 각 완료 signal을 기다립니다.</p>
+        </div>
+        <div>
+          <h3>Intent prediction</h3>
+          <p>상태 snapshot과 cost dry-run으로 예상 Stress·방어 변화를 계산해 intent icon에 표시합니다.</p>
+        </div>
+      </div>
+      <aside class="truth-callout">
+        <b>예측은 실제 실행과 다르다</b>
+        <p>
+          source에는 예측값을 갱신하는 별도 cache와 snapshot이 있습니다.
+          화면에 보이는 intent는 다음 행동을 돕는 계산 결과이지, 이미 발생한 전투 기록이 아닙니다.
+        </p>
+      </aside>
+    </section>
+
+    <section class="gallery" aria-labelledby="gallery-title">
+      <div class="section-heading">
+        <p class="section-index">06 / PLAY SURFACES</p>
+        <h2 id="gallery-title">전투 밖에서도<br>덱은 계속 변한다</h2>
+      </div>
+      <div class="gallery__grid">
+        <figure class="gallery__wide">
+          <img src="assets/preview_cards.jpg" alt="224장의 카드를 격자로 보여 주는 Card Library 화면" loading="lazy">
+          <figcaption><b>Card Library</b><span>Type과 archetype으로 전체 카드 풀을 탐색합니다.</span></figcaption>
+        </figure>
+        <figure>
+          <img src="assets/preview2.jpg" alt="전투 중 Exhaustion 카드를 확대한 Hypnagonia 카드 상세 화면" loading="lazy">
+          <figcaption><b>Card inspection</b><span>전투 중 카드의 규칙과 상태 용어를 자세히 읽습니다.</span></figcaption>
+        </figure>
+        <figure>
+          <img src="assets/preview3.jpg" alt="그림과 이야기 문단을 함께 보여 주는 Hypnagonia encounter story 화면" loading="lazy">
+          <figcaption><b>Encounter Story</b><span>생성된 이야기와 encounter 서술이 게임 진행에 연결됩니다.</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="content-system">
+      <p class="section-index">07 / CONTENT SYSTEM</p>
+      <h2>콘텐츠는 코드와 데이터의 중간 형태다</h2>
+      <div class="content-index">
+        <article><b>Acts</b><span>Early Night · Deep Sleep · Pre-Dawn</span><p>적, elite, boss, 비전투 사건 풀을 분리합니다.</p></article>
+        <article><b>Cards</b><span>6 definition sets + script sets</span><p>표시 정보와 실행 task를 독립적으로 확장합니다.</p></article>
+        <article><b>Memories</b><span>run modifier</span><p>전투 효과와 장기적인 build 변화를 제공합니다.</p></article>
+        <article><b>Artifacts</b><span>passive rule hooks</span><p>비용, 보상, 선택, 상태 계산 규칙을 변형합니다.</p></article>
+        <article><b>Non-combat encounters</b><span>45 scripted event files</span><p>선택과 대가를 통해 Pathos와 덱을 변화시킵니다.</p></article>
+        <article><b>Scenes</b><span>146 .tscn resources</span><p>UI와 전투 객체를 Godot scene tree로 조립합니다.</p></article>
+      </div>
+    </section>
+
+    <section class="ai-stories">
+      <div class="section-heading">
+        <p class="section-index">08 / AI-GENERATED CONTENT</p>
+        <h2>AI는 플레이어가 아니라<br>이야기 공급 경로에 있다</h2>
+      </div>
+      <div class="ai-stories__body">
+        <p>
+          README가 말하는 AI 결합은 카드 선택을 실시간으로 대신하는 agent가 아닙니다.
+          소스의 <code>KoboldAI</code>는 story generation 경로를 제공하고,
+          <code>AIStories</code>와 <code>AIRatings</code>는 평가 중이거나 확정된 이야기를
+          원격 서비스에서 가져와 encounter에 연결하고 사용자의 평가를 제출합니다.
+        </p>
+        <p>
+          카드 규칙, turn, 대상 선택, 결과 계산은 여전히 Godot의 deterministic rule engine이 소유합니다.
+          원격 story endpoint의 현재 가용성은 이 가이드에서 성공으로 가정하지 않습니다.
+        </p>
+      </div>
+      <div class="ai-boundary">
+        <span><b>KoboldAI</b>story generation</span>
+        <i>→</i>
+        <span><b>AIStories</b>evaluating / finalized selection</span>
+        <i>→</i>
+        <span><b>EncounterStory</b>journal presentation</span>
+      </div>
+      <p class="source-line">
+        근거:
+        <a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/AI/KoboldAI.gd">KoboldAI.gd</a>
+        ·
+        <a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/AI/AIStories.gd">AIStories.gd</a>
+        ·
+        <a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/AI/AIRatings.gd">AIRatings.gd</a>
+      </p>
+    </section>
+
+    <section class="truth-boundary" id="truth">
+      <p class="section-index">09 / TRUTH BOUNDARY</p>
+      <h2>이 소스로 확인되는 것과<br>별도로 검증해야 하는 것</h2>
+      <div class="truth-grid">
+        <article>
+          <h3>소스에서 확인됨</h3>
+          <ul>
+            <li>Godot 3.6 export와 Card Game Framework 기반 구조</li>
+            <li>Definition → ScriptTask → Executor의 카드 실행 경계</li>
+            <li>세 Act와 journal 기반 encounter 선택</li>
+            <li>RNG seed를 포함한 run 저장·복원 계약</li>
+            <li>AI story 조회·평가 코드와 gameplay 규칙의 분리</li>
+          </ul>
+        </article>
+        <article>
+          <h3>페이지가 보장하지 않음</h3>
+          <ul>
+            <li>현재 모든 카드와 encounter의 밸런스 또는 무결성</li>
+            <li>과거 AI story endpoint가 지금도 작동한다는 주장</li>
+            <li>스크린샷이 최신 build의 모든 UI를 대표한다는 주장</li>
+            <li>AI 생성 이미지·shader별 라이선스가 하나로 동일하다는 주장</li>
+            <li>이 공개 포크가 upstream의 공식 배포라는 주장</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="source-map">
+      <p class="section-index">10 / READING ORDER</p>
+      <h2>소스를 읽는 가장 짧은 순서</h2>
+      <ol>
+        <li><span>01</span><div><b>프로젝트 진입과 autoload</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/project.godot">project.godot</a></div><p>main scene과 전역 서비스의 시작점을 확인합니다.</p></li>
+        <li><span>02</span><div><b>게임별 framework 설정</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/CFConst.gd">CFConst.gd</a></div><p>core와 dreamscape 경로, 카드 크기와 scripting 확장점을 읽습니다.</p></li>
+        <li><span>03</span><div><b>한 run의 선택</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/Run/Encounters.gd">Run/Encounters.gd</a></div><p>Act와 journal choice가 어떻게 만들어지는지 봅니다.</p></li>
+        <li><span>04</span><div><b>전투 board</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/Board.gd">Board.gd</a></div><p>Dreamer와 Torment, intent 예측과 turn 전환을 확인합니다.</p></li>
+        <li><span>05</span><div><b>카드 표시 계약</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/cards/CardConfig.gd">cards/CardConfig.gd</a></div><p>게임 용어가 카드 속성과 화면에 연결되는 방식을 읽습니다.</p></li>
+        <li><span>06</span><div><b>카드 정의와 실행</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/tree/main/src/dreamscape/cards/sets">cards/sets/</a></div><p>같은 카드의 definition과 script를 나란히 비교합니다.</p></li>
+        <li><span>07</span><div><b>범용 scripting loop</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/core/ScriptingEngine/ScriptingEngine.gd">core/ScriptingEngine.gd</a></div><p>task queue, cost dry-run, subject resolution을 추적합니다.</p></li>
+        <li><span>08</span><div><b>게임별 executor</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/tree/main/src/dreamscape/ScriptingEngine/Executors">dreamscape/Executors/</a></div><p>Interpretation, Confidence와 상태 효과가 실제 수치를 바꾸는 지점입니다.</p></li>
+        <li><span>09</span><div><b>저장과 재현성</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/blob/main/src/dreamscape/SaveGame/GameSave.gd">SaveGame/GameSave.gd</a></div><p>player, encounter, difficulty, RNG state의 저장 범위를 확인합니다.</p></li>
+        <li><span>10</span><div><b>AI story 경계</b><a href="https://github.com/nfbs2000/speaky-hypnagonia/tree/main/src/dreamscape/AI">dreamscape/AI/</a></div><p>생성 이야기와 게임 규칙이 섞이지 않는 경계를 봅니다.</p></li>
+      </ol>
+    </section>
+
+    <section class="run-source">
+      <div>
+        <p class="section-index">11 / RUN & LICENSE</p>
+        <h2>실행과 출처</h2>
+      </div>
+      <div class="run-source__body">
+        <p>
+          upstream workflow는 Godot 3.6으로 test와 HTML5·Windows·Linux·macOS export를 수행합니다.
+          가장 간단한 체험 경로는 itch.io의 공식 브라우저/다운로드 배포입니다.
+        </p>
+        <div class="run-links">
+          <a href="https://dbzer0.itch.io/hypnagonia"><b>PLAY</b><span>itch.io에서 실행</span></a>
+          <a href="https://github.com/db0/hypnagonia"><b>UPSTREAM</b><span>db0/hypnagonia</span></a>
+          <a href="https://github.com/db0/godot-card-game-framework"><b>FRAMEWORK</b><span>Godot Card Game Framework</span></a>
+          <a href="https://github.com/nfbs2000/speaky-hypnagonia"><b>KOREAN GUIDE FORK</b><span>nfbs2000/speaky-hypnagonia</span></a>
+        </div>
+        <p class="license-note">
+          코드의 기본 라이선스는 AGPL-3.0이며 Steamworks 연동에 관한 addendum이 있습니다.
+          이미지와 shader는 파일별 라이선스를 따르며 README는 대다수가 CC-BY-SA 4.0이라고 설명합니다.
+          원작자와 전체 크레딧은 게임 및 upstream 저장소를 기준으로 확인해야 합니다.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <b>Hypnagonia 한국어 소스 가이드</b>
+      <p>
+        Divided by Zer0의 원 프로젝트를 실제 소스 기준으로 설명하는 공개 포크 문서입니다.
+        upstream의 공식 문서나 보증을 의미하지 않습니다.
+      </p>
+    </div>
+    <a href="#top">맨 위로</a>
+  </footer>
+</body>
+</html>
