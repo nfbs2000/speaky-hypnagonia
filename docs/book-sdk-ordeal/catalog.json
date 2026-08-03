@@ -235,6 +235,22 @@
       "artifactSha256": "5bed64d002ec7793e452df8736073c64f45f075729b62fc7d49e94ab7602d258"
     },
     {
+      "chapterSlug": "ch13",
+      "title": "13장 캐시 아키텍처: stable prefix와 관찰 가능한 usage · Observation Ordeal",
+      "path": "./evidence/ch13.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 36,
+      "publicEventCount": 38,
+      "configuredClaims": 1,
+      "observedClaims": 10,
+      "inferredClaims": 1,
+      "notObservedClaims": 4,
+      "correctionRequired": 5,
+      "additionalObservationRequired": 4,
+      "artifactSha256": "71a4ebbe1f66d5e74a9d9c386c5d4a9544f29fd60d92630d61fe6dcc052aa27e"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -247,5 +263,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T23:06:32.544Z"
+  "generatedAt": "2026-08-03T23:32:27.518Z"
 }

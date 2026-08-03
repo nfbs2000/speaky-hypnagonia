@@ -15,6 +15,7 @@ import { ch09CardMeta } from './book-sdk-ordeal-ch09-cards.mjs'
 import { ch10CardMeta } from './book-sdk-ordeal-ch10-cards.mjs'
 import { ch11CardMeta } from './book-sdk-ordeal-ch11-cards.mjs'
 import { ch12CardMeta } from './book-sdk-ordeal-ch12-cards.mjs'
+import { ch13CardMeta } from './book-sdk-ordeal-ch13-cards.mjs'
 import { ch04bCardMeta } from './book-sdk-ordeal-ch04b-cards.mjs'
 import { ch30CardMeta } from './book-sdk-ordeal-ch30-cards.mjs'
 
@@ -323,6 +324,7 @@ const cardMetaByChapter = {
   ch10: ch10CardMeta,
   ch11: ch11CardMeta,
   ch12: ch12CardMeta,
+  ch13: ch13CardMeta,
   ch04b: ch04bCardMeta,
   ch30: ch30CardMeta,
 }
@@ -343,7 +345,15 @@ const cards = claimEvents.map((event, index) => {
     evidenceLevel: stringValue(event.evidenceLevel, 'Missing'),
     sourceSummary: safeText(event.summary),
     sourceRefs: safeRefs(event.sourceRefs),
-    cost: status === 'observed' ? index + 1 : status === 'correction_required' ? '!' : '?',
+    cost: status === 'observed'
+      ? index + 1
+      : status === 'configured'
+        ? 'C'
+        : status === 'inferred'
+          ? 'I'
+          : status === 'correction_required'
+            ? '!'
+            : '?',
   }
 })
 
@@ -369,7 +379,10 @@ const projection = {
       : [],
   },
   ordeal: {
+    configured: cards.filter((card) => card.status === 'configured').length,
     interpretation: cards.filter((card) => card.status === 'observed').length,
+    inferred: cards.filter((card) => card.status === 'inferred').length,
+    notObserved: cards.filter((card) => card.status === 'not_observed').length,
     correction: cards.filter((card) => card.status === 'correction_required').length,
     unresolved: cards.filter((card) => card.status === 'additional_observation_required').length,
     invalidAttempts: Array.isArray(summary.invalid_attempts) ? summary.invalid_attempts.length : 0,
@@ -386,17 +399,23 @@ async function verify(file) {
   const text = await fs.readFile(file, 'utf8')
   const value = JSON.parse(text)
   if (value.schemaVersion !== 'hypnagonia-book-ordeal.v1') throw new Error('observation_ordeal_schema_invalid')
-  if (value.source?.sourceEventCount <= value.source?.publicEventCount) {
+  if (value.source?.sourceEventCount <= 0 || value.source?.publicEventCount <= 0) {
     throw new Error('observation_ordeal_projection_counts_invalid')
   }
+  const expectedConfigured = value.cards.filter((card) => card.status === 'configured').length
   const expectedObserved = value.cards.filter((card) => card.status === 'observed').length
+  const expectedInferred = value.cards.filter((card) => card.status === 'inferred').length
+  const expectedNotObserved = value.cards.filter((card) => card.status === 'not_observed').length
   const expectedCorrection = value.cards.filter(
     (card) => card.status === 'correction_required',
   ).length
   const expectedPending = value.cards.filter(
     (card) => card.status === 'additional_observation_required',
   ).length
-  if (value.ordeal?.interpretation !== expectedObserved
+  if (value.ordeal?.configured !== expectedConfigured
+    || value.ordeal?.interpretation !== expectedObserved
+    || value.ordeal?.inferred !== expectedInferred
+    || value.ordeal?.notObserved !== expectedNotObserved
     || (value.ordeal?.correction ?? 0) !== expectedCorrection
     || value.ordeal?.unresolved !== expectedPending) {
     throw new Error('observation_ordeal_verdict_counts_invalid')
@@ -430,7 +449,10 @@ async function updateCatalog(file, evidencePath, value) {
     model: value.source.model,
     sourceEventCount: value.source.sourceEventCount,
     publicEventCount: value.source.publicEventCount,
+    configuredClaims: value.ordeal.configured,
     observedClaims: value.ordeal.interpretation,
+    inferredClaims: value.ordeal.inferred,
+    notObservedClaims: value.ordeal.notObserved,
     correctionRequired: value.ordeal.correction,
     additionalObservationRequired: value.ordeal.unresolved,
     artifactSha256: sha256(await fs.readFile(evidencePath, 'utf8')),
