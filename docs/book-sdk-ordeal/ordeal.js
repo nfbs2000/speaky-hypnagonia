@@ -83,7 +83,20 @@ function initialize(evidence) {
 }
 
 function bookUrl(chapterSlug) {
-  const part = chapterSlug === 'ch30' ? 'part7' : 'part1'
+  const chapter = Number(chapterSlug.replace(/^ch/, ''))
+  const part = chapter <= 4
+    ? 'part1'
+    : chapter <= 8
+      ? 'part2'
+      : chapter <= 12
+        ? 'part3'
+        : chapter <= 15
+          ? 'part4'
+          : chapter <= 19
+            ? 'part5'
+            : chapter <= 24
+              ? 'part6'
+              : 'part7'
   return `https://nfbs2000.github.io/speaky-claude-cookbooks/book/${part}/${chapterSlug}/`
 }
 

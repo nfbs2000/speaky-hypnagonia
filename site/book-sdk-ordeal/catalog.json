@@ -53,6 +53,19 @@
       "artifactSha256": "9d03719a4fbd84874d9d6e73219eb1d818cc139a21421742a503901839df574b"
     },
     {
+      "chapterSlug": "ch05",
+      "title": "5장 시스템 프롬프트: configured, observed, inferred의 경계 · Observation Ordeal",
+      "path": "./evidence/ch05.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 151,
+      "publicEventCount": 48,
+      "observedClaims": 7,
+      "correctionRequired": 1,
+      "additionalObservationRequired": 3,
+      "artifactSha256": "43ec28ec4d1511dd66b6a68ef3815d5e945ec1d54a0bd4f32aa7eedd19b20ced"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -65,5 +78,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T17:31:09.935Z"
+  "generatedAt": "2026-08-03T18:06:45.509Z"
 }

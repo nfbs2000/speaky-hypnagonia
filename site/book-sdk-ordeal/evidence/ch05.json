@@ -1,0 +1,239 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T18:06:45.502Z",
+  "title": "5장 시스템 프롬프트: configured, observed, inferred의 경계 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch05",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch05:book-sdk-live-20260803:2026-08-03T17:44:32.300Z",
+    "traceSha256": "bdc90adf2f44b788ed1e6e013cfa6e6dbf8882fe93ef45cd1f9572ba2d4edeca",
+    "summarySha256": "bc3d8474a6b773dc38865b7d9f3b0e9cb1f8c4e26c5b4d70032739836fb0abd9",
+    "sourceEventCount": 151,
+    "publicEventCount": 48,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "102115-1592cc3c",
+      "102206-ff8fd397",
+      "102245-348d28d3"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 7,
+    "correction": 1,
+    "unresolved": 3,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "custom-prompt-read-and-recovery-executed",
+      "sequence": 0,
+      "title": "오류를 딛고 읽은 표식",
+      "type": "Recovery",
+      "question": "custom prompt 실행에서 첫 Read 오류 뒤 실제 cwd를 찾아 같은 run으로 복구했는가?",
+      "consequence": "오류가 준 cwd로 다시 읽어 marker를 얻었고 ToolResult와 최종 설명까지 이어졌다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "custom string 설정 뒤 첫 Read 오류, 오류가 제공한 cwd를 이용한 재시도, marker tool result와 최종 설명이 실제 sequence로 연결됐다.",
+      "sourceRefs": [
+        "attempt:102115-1592cc3c:process-event:0",
+        "attempt:102115-1592cc3c:sdk-message:15",
+        "attempt:102115-1592cc3c:sdk-message:17",
+        "attempt:102115-1592cc3c:sdk-message:35",
+        "attempt:102115-1592cc3c:sdk-message:37",
+        "attempt:102115-1592cc3c:sdk-message:56",
+        "attempt:102115-1592cc3c:sdk-message:60"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "preset-append-read-executed",
+      "sequence": 1,
+      "title": "기본 지도 위의 덧붙임",
+      "type": "Configuration",
+      "question": "Claude Code preset과 append policy가 설정에만 머물지 않고 실제 Read 실행으로 이어졌는가?",
+      "consequence": "configured 입력, Opus 5 init, Read, ToolResult, 최종 답변과 성공 Result가 순서대로 남았다.",
+      "art": "init",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Claude Code preset와 append policy가 configured로 남았고, Opus 5 init 뒤 Read, tool result, final text, 성공 Result가 순서대로 관찰됐다.",
+      "sourceRefs": [
+        "attempt:102206-ff8fd397:process-event:0",
+        "attempt:102206-ff8fd397:sdk-message:3",
+        "attempt:102206-ff8fd397:sdk-message:20",
+        "attempt:102206-ff8fd397:sdk-message:22",
+        "attempt:102206-ff8fd397:sdk-message:37",
+        "attempt:102206-ff8fd397:sdk-message:41"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "exclude-dynamic-option-executed-not-inspected",
+      "sequence": 2,
+      "title": "설정 뒤의 안개",
+      "type": "Boundary",
+      "question": "exclude_dynamic_sections 실행 성공이 내부 prompt 재배치까지 보았다는 뜻인가?",
+      "consequence": "옵션과 성공 run만 관찰했다. 내부 prompt 이동은 이번 증거에서 보이지 않는다.",
+      "art": "unknown",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Python exclude_dynamic_sections=True 설정과 성공 run은 관찰됐다. 이 claim은 내부 prompt 이동이 보였다는 뜻이 아니다.",
+      "sourceRefs": [
+        "attempt:102245-348d28d3:manifest:option_summary",
+        "attempt:102245-348d28d3:sdk-message:3",
+        "attempt:102245-348d28d3:sdk-message:17",
+        "attempt:102245-348d28d3:sdk-message:19",
+        "attempt:102245-348d28d3:sdk-message:41"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "init-exposes-runtime-surface-not-prompt-body",
+      "sequence": 3,
+      "title": "창문에 비친 제어면",
+      "type": "Boundary",
+      "question": "SDK init은 조립된 system prompt 전문을 공개하는가, 실행 표면만 공개하는가?",
+      "consequence": "cwd, model, permission, tools, skills, plugins, MCP, agents는 보였지만 prompt 전문은 없었다.",
+      "art": "init",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 init은 cwd, model, permission mode, tools, skills, plugins, MCP와 agents를 노출했지만 조립된 system prompt 전문은 노출하지 않았다.",
+      "sourceRefs": [
+        "attempt:102115-1592cc3c:sdk-message:3",
+        "attempt:102206-ff8fd397:sdk-message:3",
+        "attempt:102245-348d28d3:sdk-message:3"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "read-result-precedes-final-claim",
+      "sequence": 4,
+      "title": "근거가 먼저인 답변",
+      "type": "Ordering",
+      "question": "marker를 말한 최종 답변보다 실제 Read와 matching ToolResult가 먼저였는가?",
+      "consequence": "세 case 모두 성공한 Read와 ToolResult 뒤에 marker를 인용한 최종 답변이 나타났다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 case 모두 성공 Read와 matching tool result가 marker를 인용한 assistant final text보다 먼저 발생했다.",
+      "sourceRefs": [
+        "attempt:102115-1592cc3c:sdk-message:35",
+        "attempt:102115-1592cc3c:sdk-message:37",
+        "attempt:102115-1592cc3c:sdk-message:56",
+        "attempt:102206-ff8fd397:sdk-message:20",
+        "attempt:102206-ff8fd397:sdk-message:22",
+        "attempt:102206-ff8fd397:sdk-message:37",
+        "attempt:102245-348d28d3:sdk-message:17",
+        "attempt:102245-348d28d3:sdk-message:19",
+        "attempt:102245-348d28d3:sdk-message:37"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "setting-sources-is-not-skills-off",
+      "sequence": 5,
+      "title": "남아 있던 열여섯 기술",
+      "type": "Separation",
+      "question": "setting_sources=[]이면 skill도 함께 꺼진다고 볼 수 있는가?",
+      "consequence": "세 init에 16개 skill이 남았다. filesystem settings 격리와 skills=[]는 별도 제어다.",
+      "art": "separation",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "setting_sources=[]인 세 run의 init에 16개 skill이 남았다. filesystem setting 격리와 skills=[] 비활성화는 별도 제어다.",
+      "sourceRefs": [
+        "attempt:102115-1592cc3c:manifest:option_summary",
+        "attempt:102115-1592cc3c:sdk-message:3",
+        "attempt:102206-ff8fd397:sdk-message:3",
+        "attempt:102245-348d28d3:sdk-message:3",
+        "python-sdk:0.2.128:types.py:ClaudeAgentOptions.skills:sha256:de495a6fa20136b0dd0528865e94c5f429eef5ad5ba197e214a2e597e4601e2a"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "prompt-contracts-are-language-version-specific",
+      "sequence": 6,
+      "title": "서로 다른 두 계약",
+      "type": "Version",
+      "question": "Python과 TypeScript SDK의 system prompt 입력 계약을 같은 목록으로 설명해도 되는가?",
+      "consequence": "TypeScript 0.3.177과 Python 0.2.128의 공개 타입과 옵션 이름이 서로 달랐다.",
+      "art": "separation",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "TypeScript 0.3.177은 string array와 dynamic boundary를 공개하지만 Python 0.2.128은 custom/preset/file과 snake_case option을 공개한다.",
+      "sourceRefs": [
+        "typescript-sdk:0.3.177:sdk.d.ts:Options.systemPrompt:sha256:3dcd0551702fc970c7dc78adc115f6083ebdd23cddba1bd087fec3713182cb18",
+        "python-sdk:0.2.128:types.py:ClaudeAgentOptions.system_prompt:sha256:de495a6fa20136b0dd0528865e94c5f429eef5ad5ba197e214a2e597e4601e2a"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "primary-model-is-not-only-provider-usage",
+      "sequence": 7,
+      "title": "하나의 주연, 두 모델",
+      "type": "Correction",
+      "question": "primary assistant가 Opus 5였으니 provider 사용도 전부 Opus뿐이었다고 써도 되는가?",
+      "consequence": "두 preset Result에 Haiku 4.5 보조 사용이 남아 있어 책의 표현을 교정했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 primary assistant model은 Opus 5였지만 두 preset Result의 model_usage에는 Haiku 4.5 보조 사용도 있다. 모든 provider 사용이 Opus뿐이었다고 쓰면 안 된다.",
+      "sourceRefs": [
+        "attempt:102206-ff8fd397:sdk-message:41",
+        "attempt:102245-348d28d3:sdk-message:41"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "dynamic-section-relocation-and-cache-effect",
+      "sequence": 8,
+      "title": "보이지 않은 재배치",
+      "type": "Unknown",
+      "question": "exclude option이 dynamic section을 옮기고 cache를 개선한 과정까지 직접 관찰했는가?",
+      "consequence": "조립 전후 prompt와 반복 cache 비교가 없어 아직 관찰되지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "option 계약은 확인했지만 조립 전후 prompt와 고정 반복 cache 비교가 없어 user-message 이동과 cache 개선은 아직 직접 관찰되지 않았다.",
+      "sourceRefs": [
+        "spec:claims:dynamic-section-relocation-and-cache-effect"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "typescript-array-boundary-live-run",
+      "sequence": 9,
+      "title": "타입에만 그어진 경계",
+      "type": "Unknown",
+      "question": "TypeScript의 string array와 dynamic boundary가 실제 live run에서도 확인됐는가?",
+      "consequence": "정적 타입 계약만 확인했다. TypeScript SDK의 실제 evidence tape가 더 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "TypeScript 0.3.177의 array와 boundary는 정적 타입으로 확인했지만 실제 SDK run의 evidence tape는 아직 없다.",
+      "sourceRefs": [
+        "spec:claims:typescript-array-boundary-live-run"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "prompt-causes-read-and-preset-improves-cwd",
+      "sequence": 10,
+      "title": "인과를 묻는 대조군",
+      "type": "Unknown",
+      "question": "prompt가 Read의 유일 원인이고 preset이 항상 cwd를 개선한다고 단정할 수 있는가?",
+      "consequence": "정책 제거 대조군과 반복 표본이 없어 일반적 인과는 아직 주장하지 않는다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "정책 제거 대조군과 반복 표본이 없으므로 prompt의 유일 인과와 preset의 일반적 cwd 우월성을 단정할 수 없다.",
+      "sourceRefs": [
+        "spec:claims:prompt-causes-read-and-preset-improves-cwd"
+      ],
+      "cost": "?"
+    }
+  ]
+}
