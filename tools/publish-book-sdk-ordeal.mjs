@@ -8,6 +8,7 @@ import { ch06bCardMeta } from './book-sdk-ordeal-ch06b-cards.mjs'
 import { ch07CardMeta } from './book-sdk-ordeal-ch07-cards.mjs'
 import { ch08CardMeta } from './book-sdk-ordeal-ch08-cards.mjs'
 import { ch08cCardMeta } from './book-sdk-ordeal-ch08c-cards.mjs'
+import { ch08dCardMeta } from './book-sdk-ordeal-ch08d-cards.mjs'
 import { ch30CardMeta } from './book-sdk-ordeal-ch30-cards.mjs'
 
 const args = process.argv.slice(2)
@@ -308,6 +309,7 @@ const cardMetaByChapter = {
   ch07: ch07CardMeta,
   ch08: ch08CardMeta,
   ch08c: ch08cCardMeta,
+  ch08d: ch08dCardMeta,
   ch30: ch30CardMeta,
 }
 
