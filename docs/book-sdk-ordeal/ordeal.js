@@ -55,8 +55,9 @@ function initialize(evidence) {
   document.getElementById('public-count').textContent = evidence.source.publicEventCount
   document.getElementById('proof-gate').textContent = evidence.source.proofGate
   document.getElementById('resolved').textContent = evidence.ordeal.interpretation
+  document.getElementById('correction').textContent = evidence.ordeal.correction ?? 0
   document.getElementById('unresolved').textContent = evidence.ordeal.unresolved
-  document.getElementById('resolve-fill').style.width = `${(evidence.ordeal.interpretation / evidence.cards.length) * 100}%`
+  document.getElementById('resolve-fill').style.width = `${((evidence.ordeal.interpretation + (evidence.ordeal.correction ?? 0)) / evidence.cards.length) * 100}%`
 
   const cards = evidence.cards.map((card) => cardElement(card, evidence))
   cardList.replaceChildren(...cards)
@@ -70,6 +71,7 @@ function initialize(evidence) {
       sourceEventCount: evidence.source.sourceEventCount,
       publicEventCount: evidence.source.publicEventCount,
       observed: evidence.ordeal.interpretation,
+      correctionRequired: evidence.ordeal.correction ?? 0,
       additionalObservationRequired: evidence.ordeal.unresolved,
       selectedCardId: cardList.querySelector('[data-active="true"]')?.dataset.cardId,
     }),
@@ -95,7 +97,7 @@ function cardElement(card, evidence) {
   button.innerHTML = `
     <div class="proof-card__head">
       <span>${escapeHtml(card.type)}</span>
-      <em>${card.status === 'observed' ? 'OBSERVED' : 'MORE EVIDENCE'}</em>
+      <em>${statusLabel(card.status)}</em>
     </div>
     <div>
       <h3>${escapeHtml(card.title)}</h3>
@@ -116,14 +118,18 @@ function selectCard(card, element) {
   }
   inspection.dataset.status = card.status
   document.getElementById('card-type').textContent = card.type.toUpperCase()
-  document.getElementById('card-status').textContent = card.status === 'observed'
-    ? 'OBSERVED'
-    : 'ADDITIONAL OBSERVATION REQUIRED'
+  document.getElementById('card-status').textContent = statusLabel(card.status)
   document.getElementById('card-title').textContent = card.title
   document.getElementById('card-question').textContent = card.question
   document.getElementById('card-consequence').textContent = card.consequence
   document.getElementById('card-source-summary').textContent = card.sourceSummary
   document.getElementById('card-source-ref').textContent = card.sourceRefs[0] || '-'
+}
+
+function statusLabel(status) {
+  if (status === 'observed') return 'OBSERVED'
+  if (status === 'correction_required') return 'CORRECTION REQUIRED'
+  return 'ADDITIONAL OBSERVATION REQUIRED'
 }
 
 function escapeHtml(value) {

@@ -65,6 +65,57 @@ const cardMetaByChapter = {
       art: 'unknown',
     },
   },
+  ch02: {
+    'unapproved-tool-callback-allow': {
+      title: '승인을 기다리는 손',
+      type: 'Permission',
+      question: '사전 승인되지 않은 custom MCP 요청이 host callback의 allow 뒤에만 실행되는가?',
+      consequence: 'permission request와 allow decision 뒤 handler와 tool result가 이어졌다.',
+      art: 'permission',
+    },
+    'allowed-tools-auto-approval': {
+      title: '먼저 열린 문',
+      type: 'Ordering',
+      question: 'allowed_tools whole-tool 규칙과 can_use_tool callback 중 어느 쪽이 먼저 작동하는가?',
+      consequence: 'callback 없이 handler가 실행되어 allow rule의 자동 승인이 관찰됐다.',
+      art: 'permission',
+    },
+    'deny-blocks-without-removing-init-name': {
+      title: '이름은 남은 닫힌 문',
+      type: 'Correction',
+      question: 'disallowed_tools가 custom MCP 이름을 init 표면에서 제거해야만 실행을 막는가?',
+      consequence: '이름은 init.tools에 남았지만 explicit deny가 실행을 차단했다. 책의 범위를 수정해야 한다.',
+      art: 'denial',
+    },
+    'pretool-deny-precedes-auto-approval': {
+      title: '가장 앞의 갈고리',
+      type: 'Hook',
+      question: 'allowed_tools에 든 도구도 PreToolUse deny가 먼저 차단할 수 있는가?',
+      consequence: 'hook deny 뒤 error tool result가 남았고 handler는 실행되지 않았다.',
+      art: 'denial',
+    },
+    'dontask-denies-without-app-callback': {
+      title: '묻지 않는 거절',
+      type: 'Constraint',
+      question: 'dontAsk는 미승인 도구를 앱 승인창 없이 닫는가?',
+      consequence: 'callback을 구성하지 않은 실행이 error tool result와 permission denial로 종료됐다.',
+      art: 'denial',
+    },
+    'built-in-deny-init-surface': {
+      title: '다른 도구의 안개',
+      type: 'Unknown',
+      question: 'custom MCP에서 본 init 표면을 built-in deny에도 그대로 적용할 수 있는가?',
+      consequence: '이번 실행 범위 밖이다. built-in 도구로 별도 관측해야 한다.',
+      art: 'unknown',
+    },
+    'large-result-progress-tool-search': {
+      title: '아직 열리지 않은 기록',
+      type: 'Unknown',
+      question: 'large result, progress event, ToolSearch와 cache는 어떤 실제 사건을 남기는가?',
+      consequence: '이번 다섯 실행은 이 경로를 유도하지 않았다.',
+      art: 'unknown',
+    },
+  },
   ch04: {
   'read-only-overlap': {
     title: '동시에 읽는 두 손',
@@ -171,7 +222,7 @@ const cards = claimEvents.map((event, index) => {
     evidenceLevel: stringValue(event.evidenceLevel, 'Missing'),
     sourceSummary: safeText(event.summary),
     sourceRefs: safeRefs(event.sourceRefs),
-    cost: status === 'observed' ? index + 1 : '?',
+    cost: status === 'observed' ? index + 1 : status === 'correction_required' ? '!' : '?',
   }
 })
 
@@ -198,7 +249,8 @@ const projection = {
   },
   ordeal: {
     interpretation: cards.filter((card) => card.status === 'observed').length,
-    unresolved: cards.filter((card) => card.status !== 'observed').length,
+    correction: cards.filter((card) => card.status === 'correction_required').length,
+    unresolved: cards.filter((card) => card.status === 'additional_observation_required').length,
     invalidAttempts: Array.isArray(summary.invalid_attempts) ? summary.invalid_attempts.length : 0,
   },
   cards,
@@ -217,10 +269,15 @@ async function verify(file) {
     throw new Error('observation_ordeal_projection_counts_invalid')
   }
   const expectedObserved = value.cards.filter((card) => card.status === 'observed').length
+  const expectedCorrection = value.cards.filter(
+    (card) => card.status === 'correction_required',
+  ).length
   const expectedPending = value.cards.filter(
     (card) => card.status === 'additional_observation_required',
   ).length
-  if (value.ordeal?.interpretation !== expectedObserved || value.ordeal?.unresolved !== expectedPending) {
+  if (value.ordeal?.interpretation !== expectedObserved
+    || (value.ordeal?.correction ?? 0) !== expectedCorrection
+    || value.ordeal?.unresolved !== expectedPending) {
     throw new Error('observation_ordeal_verdict_counts_invalid')
   }
   if (expectedPending > 0 && !value.cards?.some((card) => card.evidenceLevel === 'Missing')) {
@@ -253,6 +310,7 @@ async function updateCatalog(file, evidencePath, value) {
     sourceEventCount: value.source.sourceEventCount,
     publicEventCount: value.source.publicEventCount,
     observedClaims: value.ordeal.interpretation,
+    correctionRequired: value.ordeal.correction,
     additionalObservationRequired: value.ordeal.unresolved,
     artifactSha256: sha256(await fs.readFile(evidencePath, 'utf8')),
   }
