@@ -170,6 +170,19 @@
       "artifactSha256": "a0a7529f3433daa0aa597c199df6ac9c07ae4da4a0737ae3fb60f6836a8251f7"
     },
     {
+      "chapterSlug": "ch09",
+      "title": "9장 컴팩션: summary 보존과 fresh evidence의 분리 · Observation Ordeal",
+      "path": "./evidence/ch09.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 170,
+      "publicEventCount": 67,
+      "observedClaims": 8,
+      "correctionRequired": 9,
+      "additionalObservationRequired": 6,
+      "artifactSha256": "c2d88fe41248c896c1bf96afc4f55037c7d2bad7047bb4d410ee982424d2b1c8"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -182,5 +195,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T20:59:53.982Z"
+  "generatedAt": "2026-08-03T21:18:52.782Z"
 }
