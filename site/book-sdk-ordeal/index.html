@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Book SDK 4장의 실제 Python SDK 관찰을 Hypnagonia 카드형 검증 과제로 재생합니다.">
+  <title>Book SDK Observation Ordeal · Hypnagonia</title>
+  <link rel="icon" href="../assets/icon.png">
+  <link rel="stylesheet" href="./ordeal.css">
+</head>
+<body>
+  <main class="ordeal-shell" data-state="loading">
+    <img class="battle-backdrop" src="../assets/preview.jpg" alt="Hypnagonia 전투 화면">
+    <div class="battle-shade" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="../">
+        <img src="../assets/icon.png" alt="">
+        <span>Hypnagonia <small>Book SDK Observation Ordeal</small></span>
+      </a>
+      <nav>
+        <a href="../">소스 가이드</a>
+        <a href="./evidence.json">증거 JSON</a>
+        <a href="https://github.com/nfbs2000/speaky-hypnagonia">GitHub</a>
+      </nav>
+    </header>
+
+    <section class="briefing">
+      <p>RECORDED EVIDENCE · CHAPTER 04</p>
+      <h1 id="title">Observation Ordeal</h1>
+      <strong id="subtitle">실제 evidence를 불러오는 중입니다.</strong>
+      <span id="boundary"></span>
+      <dl>
+        <div><dt>MODEL</dt><dd id="model">-</dd></div>
+        <div><dt>RAW EVENTS</dt><dd id="raw-count">-</dd></div>
+        <div><dt>PUBLIC</dt><dd id="public-count">-</dd></div>
+        <div><dt>PROOF GATE</dt><dd id="proof-gate">-</dd></div>
+      </dl>
+    </section>
+
+    <section class="torment" aria-labelledby="torment-title">
+      <div class="torment__portrait">
+        <img src="../assets/preview3.jpg" alt="Hypnagonia encounter story 장면">
+      </div>
+      <div>
+        <p>THE QUESTION</p>
+        <h2 id="torment-title">어떤 SDK 주장을 실제 사건으로 말할 수 있는가?</h2>
+        <div class="resolve-bar" aria-label="검증 진행">
+          <span id="resolve-fill"></span>
+        </div>
+        <small><b id="resolved">0</b> observed · <b id="unresolved">0</b> additional observation required</small>
+      </div>
+    </section>
+
+    <section class="inspection" aria-live="polite">
+      <div class="inspection__status">
+        <span id="card-type">-</span>
+        <em id="card-status">-</em>
+      </div>
+      <h2 id="card-title">카드를 선택하세요</h2>
+      <p class="question" id="card-question">주장을 선택하면 검증 질문이 나타납니다.</p>
+      <div class="consequence">
+        <span>OBSERVED CONSEQUENCE</span>
+        <p id="card-consequence">-</p>
+      </div>
+      <p class="source-summary" id="card-source-summary">-</p>
+      <div class="source-ref"><b>SOURCE</b><code id="card-source-ref">-</code></div>
+    </section>
+
+    <section class="hand" aria-label="검증 카드">
+      <div id="card-list" class="card-list"></div>
+    </section>
+
+    <footer>
+      <p>
+        이 장면은 Hypnagonia 게임플레이 결과가 아닙니다. 카드 선택과 consequence 문법으로
+        Education Shell의 검증 판정을 설명하는 강의용 projection입니다.
+      </p>
+      <a href="https://nfbs2000.github.io/speaky-claude-cookbooks/book/part1/ch04/">공개 책 4장 읽기</a>
+    </footer>
+
+    <section class="load-error" id="load-error" hidden>
+      <h2>검증된 evidence를 불러오지 못했습니다.</h2>
+      <p>가짜 ordeal로 대체하지 않습니다. <a href="./evidence.json">source JSON</a>을 확인하세요.</p>
+    </section>
+  </main>
+  <script type="module" src="./ordeal.js"></script>
+</body>
+</html>
