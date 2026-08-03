@@ -105,6 +105,19 @@
       "artifactSha256": "c70aa92bc92ed5662518c1c510f8c9dccb3786941c8a980e4cea24473a28de70"
     },
     {
+      "chapterSlug": "ch08",
+      "title": "8장 도구 프롬프트: description/schema, disallowed Bash, Agent 전역 표면 · Observation Ordeal",
+      "path": "./evidence/ch08.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 664,
+      "publicEventCount": 130,
+      "observedClaims": 7,
+      "correctionRequired": 5,
+      "additionalObservationRequired": 6,
+      "artifactSha256": "951ce7f7a28a6a03c9f451961375eda6843cc34ab43f7e39453373a4453f9e39"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -117,5 +130,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T19:13:49.134Z"
+  "generatedAt": "2026-08-03T19:38:15.095Z"
 }

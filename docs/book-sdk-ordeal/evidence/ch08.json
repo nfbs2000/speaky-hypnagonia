@@ -1,0 +1,365 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T19:38:15.085Z",
+  "title": "8장 도구 프롬프트: description/schema, disallowed Bash, Agent 전역 표면 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch08",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch08:book-sdk-live-20260803:2026-08-03T19:30:00.000Z",
+    "traceSha256": "b6a6fc0ae3b1a137728e142c2d2521217952ea367daa65f01429ada40e34f817",
+    "summarySha256": "1710f38573c77f7fe9b70bedd22ec051e20897b5f46c3c736daa977cf076df34",
+    "sourceEventCount": 664,
+    "publicEventCount": 130,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "104326-a2a8922b",
+      "104443-c119bcec",
+      "104523-e1aa0451",
+      "104600-de788e47",
+      "104843-e6d50d01"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 7,
+    "correction": 5,
+    "unresolved": 6,
+    "invalidAttempts": 1
+  },
+  "cards": [
+    {
+      "id": "fixed-input-description-schema-pair",
+      "sequence": 0,
+      "title": "같은 질문, 다른 도구 안내",
+      "type": "Control",
+      "question": "vague와 rich 실행의 비교 조건이 실제로 고정됐는가?",
+      "consequence": "fixture, 사용자 프롬프트, 장 원문, primary model, 도구 이름과 handler는 같고 description/schema 안내가 달랐다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "vague와 rich attempt는 fixture, user prompt, chapter source, requested/actual model이 같고 host source에서 tool description과 input schema 설명을 다르게 구성했다.",
+      "sourceRefs": [
+        "attempt:104326-a2a8922b:manifest:option_summary",
+        "attempt:104443-c119bcec:manifest:option_summary"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "vague-fallback-control-and-ten-calls",
+      "sequence": 1,
+      "title": "판별하지 못한 지름길",
+      "type": "Recovery",
+      "question": "모호한 설명에서 fallback 결과를 곧바로 근거로 채택했는가?",
+      "consequence": "custom tool을 10회 호출했고, 무의미한 control query에도 같은 marker가 나온 fallback을 근거에서 제외했다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "vague run은 10회 호출했고 의미 없는 control query에도 같은 marker를 주는 fallback을 발견해 최종 근거에서 제외했다.",
+      "sourceRefs": [
+        "attempt:104326-a2a8922b:sdk-message:89",
+        "attempt:104326-a2a8922b:sdk-message:95",
+        "attempt:104326-a2a8922b:sdk-message:198",
+        "attempt:104326-a2a8922b:sdk-message:202"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "rich-keyword-recovery-and-four-calls",
+      "sequence": 2,
+      "title": "설명에서 찾은 검색어",
+      "type": "Evidence",
+      "question": "풍부한 description/schema가 빈 결과 뒤의 실제 입력에 나타났는가?",
+      "consequence": "approval과 permission으로 query를 좁혀 4회 호출 안에 근거를 찾았고 shell-style fallback은 쓰지 않았다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "rich run은 첫 NO_MATCH 뒤 approval과 permission으로 query를 바꾸고 structured search 네 번만 사용해 성공했다.",
+      "sourceRefs": [
+        "attempt:104443-c119bcec:sdk-message:14",
+        "attempt:104443-c119bcec:sdk-message:17",
+        "attempt:104443-c119bcec:sdk-message:22",
+        "attempt:104443-c119bcec:sdk-message:25",
+        "attempt:104443-c119bcec:sdk-message:56",
+        "attempt:104443-c119bcec:sdk-message:59",
+        "attempt:104443-c119bcec:sdk-message:95"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "both-runs-recovered-after-empty",
+      "sequence": 3,
+      "title": "빈 결과 다음 행동",
+      "type": "Recovery",
+      "question": "두 실행 모두 첫 빈 결과에 멈췄는가?",
+      "consequence": "두 실행 모두 query를 바꾸어 계속 탐색했고 최종 근거를 반환했다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "두 run 모두 첫 빈 결과를 결론으로 삼지 않고 query를 바꿨으며 최종 답에서 관찰과 추론을 분리했다.",
+      "sourceRefs": [
+        "attempt:104326-a2a8922b:sdk-message:19",
+        "attempt:104326-a2a8922b:sdk-message:198",
+        "attempt:104443-c119bcec:sdk-message:17",
+        "attempt:104443-c119bcec:sdk-message:91"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "disallowed-bash-removed-from-built-in-init",
+      "sequence": 4,
+      "title": "표면에서 사라진 Bash",
+      "type": "Constraint",
+      "question": "built-in Bash를 disallowed로 두자 실제 init에도 남았는가?",
+      "consequence": "init에는 Read만 보였고 Bash 호출은 0회였다.",
+      "art": "denial",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Read와 Bash를 tools/allowed에 함께 넣고 Bash를 disallowed로 둔 실행의 init에는 Read만 있었고 Bash use는 0이었다.",
+      "sourceRefs": [
+        "attempt:104523-e1aa0451:manifest:option_summary",
+        "attempt:104523-e1aa0451:sdk-message:1",
+        "attempt:104523-e1aa0451:sdk-message:14",
+        "attempt:104523-e1aa0451:sdk-message:30",
+        "attempt:104523-e1aa0451:sdk-message:48"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "role-selected-and-nested-read-executed",
+      "sequence": 5,
+      "title": "역할을 고른 부모",
+      "type": "Delegation",
+      "question": "agent 이름을 지시하지 않아도 역할 설명으로 specialist를 골랐는가?",
+      "consequence": "parent가 evidence-reviewer를 골랐고 수정 실행에서 nested Read와 specialist 결과가 관찰됐다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "agent 이름을 말하지 않은 prompt에서 parent가 evidence-reviewer를 선택했고 수정 run의 같은 parent tool ID 아래 nested Read가 review와 policy 파일을 읽었다.",
+      "sourceRefs": [
+        "attempt:104843-e6d50d01:sdk-message:21",
+        "attempt:104843-e6d50d01:sdk-message:28",
+        "attempt:104843-e6d50d01:sdk-message:29",
+        "attempt:104843-e6d50d01:sdk-message:31",
+        "attempt:104843-e6d50d01:sdk-message:32"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "global-surface-failure-and-repair-sequence",
+      "sequence": 6,
+      "title": "닫힌 손을 다시 열다",
+      "type": "Recovery",
+      "question": "worker 도구 표면 결함과 수정이 실제 실행으로 이어졌는가?",
+      "consequence": "첫 run의 worker Read는 unrecognized로 실패했고, 전역 Read가 보인 수정 run에서는 nested Read가 실행됐다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "첫 init의 Task-only 표면에서는 worker Read가 거부됐고 수정 init의 Task+Read 표면에서는 nested Read와 specialist 결과가 실행됐다.",
+      "sourceRefs": [
+        "attempt:104600-de788e47:sdk-message:1",
+        "attempt:104600-de788e47:sdk-message:22",
+        "attempt:104600-de788e47:sdk-message:26",
+        "attempt:104843-e6d50d01:sdk-message:1",
+        "attempt:104843-e6d50d01:sdk-message:120",
+        "attempt:104843-e6d50d01:sdk-message:124",
+        "attempt:104843-e6d50d01:sdk-message:127"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "result-success-is-not-subtask-success",
+      "sequence": 7,
+      "title": "성공 봉투 속 실패",
+      "type": "Correction",
+      "question": "terminal Result success만으로 내부 specialist task도 성공했다고 말할 수 있는가?",
+      "consequence": "같은 run에서 TaskUpdated failed와 Agent ToolResult error가 있었다. run 성공과 subtask 성공을 분리해야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "실패 attempt의 specialist task와 ToolResult는 failed/error였지만 terminal SDK Result는 success/completed였으므로 run-level success만으로 내부 task 성공을 선언하면 안 된다.",
+      "sourceRefs": [
+        "attempt:104600-de788e47:sdk-message:22",
+        "attempt:104600-de788e47:sdk-message:26",
+        "attempt:104600-de788e47:sdk-message:155"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "agent-option-and-init-task-name-boundary",
+      "sequence": 8,
+      "title": "Agent와 Task의 한 경계",
+      "type": "Correction",
+      "question": "Python option의 Agent와 init의 Task를 서로 다른 두 위임 도구로 세어도 되는가?",
+      "consequence": "완성 ToolUseBlock은 Agent, init 표면은 Task로 나타났다. 같은 위임 경계를 중복 집계하지 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Python option과 완성 ToolUseBlock은 Agent 이름을 사용했지만 init은 Task로 노출했으므로 둘을 서로 다른 위임 도구로 중복 집계하지 않는다.",
+      "sourceRefs": [
+        "attempt:104843-e6d50d01:sdk-message:1",
+        "attempt:104843-e6d50d01:sdk-message:21"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "primary-opus-is-not-only-provider-usage",
+      "sequence": 9,
+      "title": "주연과 보조 모델",
+      "type": "Correction",
+      "question": "primary가 Opus 5이면 provider 사용 전체도 Opus 하나뿐인가?",
+      "consequence": "주 응답은 Opus 5였지만 모든 Result model_usage에 Haiku 4.5 보조 사용도 기록됐다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "다섯 init과 primary assistant는 Opus 5지만 모든 Result model_usage에는 Haiku 4.5 보조 사용도 기록됐다.",
+      "sourceRefs": [
+        "attempt:104326-a2a8922b:sdk-message:202",
+        "attempt:104443-c119bcec:sdk-message:95",
+        "attempt:104523-e1aa0451:sdk-message:48",
+        "attempt:104600-de788e47:sdk-message:155",
+        "attempt:104843-e6d50d01:sdk-message:154"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "single-pair-does-not-prove-description-causality",
+      "sequence": 10,
+      "title": "한 쌍은 법칙이 아니다",
+      "type": "Correction",
+      "question": "한 번씩의 vague/rich 실행으로 description 효과의 일반적 인과를 확정할 수 있는가?",
+      "consequence": "호출 수와 비용 차이는 관찰됐지만 fixed-order 단일 표본이라 반복 분포와 순서 교차가 필요하다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "한 번씩 fixed-order로 실행한 10회 대 4회, 비용과 시간 차이는 관찰값이지 description/schema 효과의 일반 인과나 승자가 아니다.",
+      "sourceRefs": [
+        "attempt:104326-a2a8922b:sdk-message:202",
+        "attempt:104443-c119bcec:sdk-message:95"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "probe-source-not-bound-in-attempt-provenance",
+      "sequence": 11,
+      "title": "해시에 빠진 실행 코드",
+      "type": "Correction",
+      "question": "artifact만으로 실패와 수정 사이에 정확히 한 줄만 바뀌었다고 증명할 수 있는가?",
+      "consequence": "attempt provenance에 장 원문은 묶였지만 probe source와 완전한 tools config hash는 빠졌다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "당시 manifest provenance는 장 원문과 option summary를 묶었지만 probe source와 완전한 tools option hash를 묶지 않아 artifact만으로 수정의 유일 변수를 증명할 수 없다.",
+      "sourceRefs": [
+        "attempt:104600-de788e47:manifest:option_summary",
+        "attempt:104843-e6d50d01:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "exact-description-provider-receipt-not-observed",
+      "sequence": 12,
+      "title": "보이지 않은 provider 영수증",
+      "type": "Unknown",
+      "question": "provider가 받은 exact description/schema 직렬화를 raw init에서 확인했는가?",
+      "consequence": "init에는 custom tool 이름만 남아 exact payload receipt는 관찰하지 못했다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "host code의 description/schema 구성은 확인했지만 raw init에는 도구 이름만 있어 provider가 받은 exact 직렬화 text는 관찰하지 못했다.",
+      "sourceRefs": [
+        "spec:claims:exact-description-provider-receipt-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "read-vs-bash-visible-choice-not-observed",
+      "sequence": 13,
+      "title": "열리지 않은 선택 대조군",
+      "type": "Unknown",
+      "question": "Read와 Bash가 모두 보일 때 모델이 설명 때문에 Read를 골랐는가?",
+      "consequence": "이번 실행에서는 Bash를 모델 표면에서 제거했다. 동시 노출 선택은 별도 실제 run이 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "disallowed case는 Bash를 표면에서 제거했으므로 Read와 Bash가 함께 보일 때 모델이 설명만으로 Read를 우선하는지는 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:read-vs-bash-visible-choice-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "permission-decision-not-observed",
+      "sequence": 14,
+      "title": "승인 장면은 다음 실험",
+      "type": "Unknown",
+      "question": "도구 설명과 permission callback의 연결까지 이번 장에서 실행했는가?",
+      "consequence": "permission callback과 hook callback은 모두 0개였다. 승인 결정은 관찰하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "다섯 attempt의 permission callback과 hook callback은 0개여서 tool description과 사용자 승인 결정의 연결은 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:permission-decision-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "efficient-single-delegation-not-observed",
+      "sequence": 15,
+      "title": "한 번에 끝나지 않은 위임",
+      "type": "Unknown",
+      "question": "역할 선택이 효율적인 단일 specialist 호출까지 보장했는가?",
+      "consequence": "첫 specialist가 marker 전에 끝나 parent 직접 Read와 두 번째 위임이 필요했다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "수정 run에서도 첫 specialist output이 불완전해 parent 직접 Read와 두 번째 위임이 필요했으므로 최적의 단일 위임은 관찰하지 않았다.",
+      "sourceRefs": [
+        "attempt:104843-e6d50d01:sdk-message:37",
+        "attempt:104843-e6d50d01:sdk-message:56",
+        "attempt:104843-e6d50d01:sdk-message:113",
+        "attempt:104843-e6d50d01:sdk-message:127"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "typescript-agent-surfaces-not-observed-in-python",
+      "sequence": 16,
+      "title": "다른 언어의 미관찰 표면",
+      "type": "Unknown",
+      "question": "TypeScript의 toolConfig와 subagent 표시 옵션도 Python 실행에서 검증됐는가?",
+      "consequence": "Python 0.2.128 option에는 해당 필드가 없었고 이 실행에서 관찰하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "toolConfig, forwardSubagentText, agentProgressSummaries는 이 Python 0.2.128 실행에서 option으로 사용하거나 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:typescript-agent-surfaces-not-observed-in-python"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "rate-limit-event-influence-not-observed",
+      "sequence": 17,
+      "title": "경고등의 인과는 미정",
+      "type": "Unknown",
+      "question": "RateLimitEvent가 호출 수, 비용, Agent 결과의 차이를 만들었다고 증명됐는가?",
+      "consequence": "다섯 실행 모두 allowed_warning 0.76을 남겼지만 결과 차이와의 인과는 관찰하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "다섯 실행에 allowed_warning과 utilization 0.76이 있었지만 호출 수, 비용, task 결과에 미친 인과 영향은 관찰하지 않았다.",
+      "sourceRefs": [
+        "attempt:104326-a2a8922b:sdk-message:3",
+        "attempt:104443-c119bcec:sdk-message:3",
+        "attempt:104523-e1aa0451:sdk-message:3",
+        "attempt:104600-de788e47:sdk-message:6",
+        "attempt:104843-e6d50d01:sdk-message:3"
+      ],
+      "cost": "?"
+    }
+  ]
+}

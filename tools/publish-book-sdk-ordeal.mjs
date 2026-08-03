@@ -6,6 +6,7 @@ import path from 'node:path'
 import { ch06CardMeta } from './book-sdk-ordeal-ch06-cards.mjs'
 import { ch06bCardMeta } from './book-sdk-ordeal-ch06b-cards.mjs'
 import { ch07CardMeta } from './book-sdk-ordeal-ch07-cards.mjs'
+import { ch08CardMeta } from './book-sdk-ordeal-ch08-cards.mjs'
 import { ch30CardMeta } from './book-sdk-ordeal-ch30-cards.mjs'
 
 const args = process.argv.slice(2)
@@ -304,6 +305,7 @@ const cardMetaByChapter = {
   ch06: ch06CardMeta,
   ch06b: ch06bCardMeta,
   ch07: ch07CardMeta,
+  ch08: ch08CardMeta,
   ch30: ch30CardMeta,
 }
 
