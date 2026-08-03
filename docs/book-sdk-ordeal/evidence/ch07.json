@@ -1,0 +1,263 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T19:13:49.124Z",
+  "title": "7장 모델별 튜닝: 같은 Opus 5 prompt-policy A/B의 실제 증거 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch07",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch07:book-sdk-live-20260803:2026-08-03T19:08:00.000Z",
+    "traceSha256": "95af65433b8b95eb9078465917b7c5d34696e3a2cd55aae0859a05c953d6c2b8",
+    "summarySha256": "7ab6e7152344f41c5dda6585c918f93298d9d6486bb3c2194e500918d841b871",
+    "sourceEventCount": 216,
+    "publicEventCount": 46,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "104030-78617aa1",
+      "104110-7a6f1e3e"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 5,
+    "correction": 4,
+    "unresolved": 4,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "fixed-input-system-policy-only-diff",
+      "sequence": 0,
+      "title": "같은 입력, 다른 정책",
+      "type": "Control",
+      "question": "두 실행에서 system prompt 정책만 다르게 두었다는 비교 조건이 보존됐는가?",
+      "consequence": "fixture와 user prompt hash는 같고 system prompt hash만 달랐다. 모델은 두 실행 모두 Opus 5였다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "fixture, user prompt, requested/actual model, 도구와 최대 턴은 같고 system prompt hash만 달랐다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:manifest:option_summary",
+        "attempt:104110-7a6f1e3e:manifest:option_summary"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "baseline-grounded-before-final",
+      "sequence": 1,
+      "title": "기준선도 읽은 문서",
+      "type": "Evidence",
+      "question": "baseline은 근거 문서를 읽지 않고 답했는가?",
+      "consequence": "baseline도 Grep 세 번과 Read 한 번을 수행한 뒤 최종 답을 냈다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "baseline도 두 키워드 Grep과 정책 파일 Read를 최종 주장 전에 수행하고 성공 Result로 끝났다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:sdk-message:24",
+        "attempt:104030-78617aa1:sdk-message:27",
+        "attempt:104030-78617aa1:sdk-message:34",
+        "attempt:104030-78617aa1:sdk-message:36",
+        "attempt:104030-78617aa1:sdk-message:52",
+        "attempt:104030-78617aa1:sdk-message:56",
+        "attempt:104030-78617aa1:sdk-message:115",
+        "attempt:104030-78617aa1:sdk-message:119"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "patched-read-error-and-recovery",
+      "sequence": 2,
+      "title": "잘못 연 문을 다시 찾다",
+      "type": "Recovery",
+      "question": "evidence-first 실행이 Read 오류를 숨기지 않고 복구했는가?",
+      "consequence": "첫 Read 오류 뒤 경로를 고쳐 다시 Read했고, 성공 결과를 받은 뒤 최종 답을 냈다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "patched run은 잘못된 절대경로 Read의 error result를 받은 뒤 cwd를 반영한 Read로 복구하고 성공했다.",
+      "sourceRefs": [
+        "attempt:104110-7a6f1e3e:sdk-message:47",
+        "attempt:104110-7a6f1e3e:sdk-message:49",
+        "attempt:104110-7a6f1e3e:sdk-message:59",
+        "attempt:104110-7a6f1e3e:sdk-message:61",
+        "attempt:104110-7a6f1e3e:sdk-message:89",
+        "attempt:104110-7a6f1e3e:sdk-message:93"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "single-pair-metrics-differed",
+      "sequence": 3,
+      "title": "한 쌍의 다른 계기판",
+      "type": "Metrics",
+      "question": "같은 모델의 두 attempt에서 실제 비용과 시간이 달랐는가?",
+      "consequence": "baseline과 evidence-first의 duration, API duration, cost, 최종 답 길이가 서로 달랐다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "patched attempt는 이 한 쌍에서 175단어 짧고 API duration과 total cost가 작았으며 두 run 모두 5턴 성공이었다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:sdk-message:115",
+        "attempt:104030-78617aa1:sdk-message:119",
+        "attempt:104110-7a6f1e3e:sdk-message:89",
+        "attempt:104110-7a6f1e3e:sdk-message:93"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "both-finals-separated-evidence-and-inference",
+      "sequence": 4,
+      "title": "근거와 추론의 두 칸",
+      "type": "Reporting",
+      "question": "두 최종 답이 관찰된 사실과 해석을 구분했는가?",
+      "consequence": "두 답 모두 문서 근거와 추론을 분리해 보고했다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "두 최종 답변 모두 정책 파일에서 확인한 값과 저장소가 확립하지 않은 추론을 구분해 보고했다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:sdk-message:115",
+        "attempt:104110-7a6f1e3e:sdk-message:89"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "primary-opus-is-not-only-provider-usage",
+      "sequence": 5,
+      "title": "주연과 보조 모델",
+      "type": "Correction",
+      "question": "primary가 Opus 5이면 provider 사용 전체도 Opus 하나뿐인가?",
+      "consequence": "주 응답은 Opus 5였지만 Result model_usage에는 Haiku 4.5 보조 사용도 기록됐다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "init과 assistant primary는 Opus 5지만 두 Result model_usage에는 Haiku 4.5 보조 사용도 기록됐다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:sdk-message:119",
+        "attempt:104110-7a6f1e3e:sdk-message:93"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "same-model-policy-ab-is-not-cross-model-ab",
+      "sequence": 6,
+      "title": "모델은 바뀌지 않았다",
+      "type": "Correction",
+      "question": "이번 두 실행을 서로 다른 모델의 A/B라고 부를 수 있는가?",
+      "consequence": "두 primary 모두 Opus 5다. 이번 증거는 system prompt 정책 A/B이지 cross-model A/B가 아니다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "두 attempt의 actual model은 모두 claude-opus-5이므로 이 tape는 cross-model A/B가 아니라 same-model prompt-policy A/B다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:sdk-message:1",
+        "attempt:104110-7a6f1e3e:sdk-message:1"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "single-pair-does-not-prove-patch-superiority",
+      "sequence": 7,
+      "title": "승자를 만들지 않은 한 쌍",
+      "type": "Correction",
+      "question": "한 번씩의 실행만으로 한 정책이 항상 우월하다고 결론 내릴 수 있는가?",
+      "consequence": "관찰값은 한 쌍의 attempt 차이다. 반복 분포가 없으므로 일반적 우월성을 주장하지 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "baseline도 근거를 읽었고 독립 반복이 없으므로 한 쌍의 비용과 길이 차이를 patch의 일반적 인과 우월성으로 선언하면 안 된다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:sdk-message:52",
+        "attempt:104030-78617aa1:sdk-message:56",
+        "attempt:104110-7a6f1e3e:sdk-message:59",
+        "attempt:104110-7a6f1e3e:sdk-message:61"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "duration-api-is-not-ui-latency",
+      "sequence": 8,
+      "title": "API 시계와 화면 시계",
+      "type": "Correction",
+      "question": "Result의 duration_api_ms를 사용자가 느낀 화면 지연으로 불러도 되는가?",
+      "consequence": "이 값은 SDK Result의 API 시간이다. 브라우저 렌더링과 사용자 체감 지연은 계측하지 않았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Result의 duration_api_ms는 관찰됐지만 제품 UI timestamp를 수집하지 않아 UI 체감 지연이라고 부를 수 없다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:sdk-message:119",
+        "attempt:104110-7a6f1e3e:sdk-message:93"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "prompt-patch-general-effect-needs-repetition",
+      "sequence": 9,
+      "title": "분포를 기다리는 패치",
+      "type": "Unknown",
+      "question": "prompt patch의 일반 효과를 말할 만큼 반복 실행했는가?",
+      "consequence": "정책별 한 번의 실행만 있다. 순서를 바꾼 반복 표본과 분산 측정이 더 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "prompt patch의 행동, 비용, 길이 효과 분포를 말하려면 같은 조건의 독립 fresh-session 반복이 필요하다.",
+      "sourceRefs": [
+        "spec:claims:prompt-patch-general-effect-needs-repetition"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "cross-model-behavior-not-observed",
+      "sequence": 10,
+      "title": "아직 만나지 않은 다른 모델",
+      "type": "Unknown",
+      "question": "서로 다른 primary model의 행동 차이를 직접 관찰했는가?",
+      "consequence": "이번 실행은 모두 Opus 5였다. cross-model 비교는 별도 실제 실행이 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "서로 다른 실제 model을 같은 fixture와 policy로 실행하지 않았으므로 모델별 성향 차이는 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:cross-model-behavior-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "permission-behavior-not-observed",
+      "sequence": 11,
+      "title": "열리지 않은 승인 문",
+      "type": "Unknown",
+      "question": "두 정책의 permission 행동 차이도 이번 A/B에서 관찰했는가?",
+      "consequence": "Grep과 Read만 실행했고 permission callback이나 승인 UI는 이 장에서 실행하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "두 run은 auto-approved Grep과 Read만 사용했고 permission callback은 0개이므로 위험 작업 승인 행동은 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:permission-behavior-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "rate-limit-event-influence-not-observed",
+      "sequence": 12,
+      "title": "경고등의 원인은 미정",
+      "type": "Unknown",
+      "question": "RateLimitEvent가 두 실행의 시간과 비용 차이를 만들었다고 증명됐는가?",
+      "consequence": "두 실행에 allowed_warning이 있었지만 결과 차이와의 인과는 관찰되지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "두 RateLimitEvent의 allowed_warning과 utilization 0.76은 보였지만 결과 차이에 미친 인과 영향은 계측하지 않았다.",
+      "sourceRefs": [
+        "attempt:104030-78617aa1:sdk-message:3",
+        "attempt:104110-7a6f1e3e:sdk-message:3"
+      ],
+      "cost": "?"
+    }
+  ]
+}

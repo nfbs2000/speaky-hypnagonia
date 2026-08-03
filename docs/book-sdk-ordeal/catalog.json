@@ -92,6 +92,19 @@
       "artifactSha256": "7279a825d1189f1587415178de44cf9e3a25e0b9224730d0375e98de3c7bd540"
     },
     {
+      "chapterSlug": "ch07",
+      "title": "7장 모델별 튜닝: 같은 Opus 5 prompt-policy A/B의 실제 증거 · Observation Ordeal",
+      "path": "./evidence/ch07.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 216,
+      "publicEventCount": 46,
+      "observedClaims": 5,
+      "correctionRequired": 4,
+      "additionalObservationRequired": 4,
+      "artifactSha256": "c70aa92bc92ed5662518c1c510f8c9dccb3786941c8a980e4cea24473a28de70"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -104,5 +117,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T18:54:15.873Z"
+  "generatedAt": "2026-08-03T19:13:49.134Z"
 }
