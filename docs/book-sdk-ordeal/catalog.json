@@ -196,6 +196,19 @@
       "artifactSha256": "8ef023be67e315e7f349b42a0988a7e8a3d07cae668d3026674d1db4304b68a0"
     },
     {
+      "chapterSlug": "ch11",
+      "title": "11장 large result: raw archive와 active context 분리 · Observation Ordeal",
+      "path": "./evidence/ch11.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 82,
+      "publicEventCount": 53,
+      "observedClaims": 9,
+      "correctionRequired": 12,
+      "additionalObservationRequired": 6,
+      "artifactSha256": "c4c4b07135a57fa135d409e5e97796bb93617b84ccef097e556943d1ca82a9c7"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -208,5 +221,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T21:39:23.596Z"
+  "generatedAt": "2026-08-03T22:01:15.521Z"
 }

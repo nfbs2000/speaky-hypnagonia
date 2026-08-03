@@ -1,0 +1,490 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T22:01:15.512Z",
+  "title": "11장 large result: raw archive와 active context 분리 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch11",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch11:book-sdk-live-20260803:2026-08-03T22:50:00.000Z",
+    "traceSha256": "c9775b090bcc86fe636e40456a3a9565f944bf7b7937ebe5a7f82670489ceb8a",
+    "summarySha256": "5000ffb0f4d2febba337153d05c80b22a93fb568661782fee55e907251475ac1",
+    "sourceEventCount": 82,
+    "publicEventCount": 53,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "112453-6f7401e1"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 9,
+    "correction": 12,
+    "unresolved": 6,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "attempt-integrity-files-match",
+      "sequence": 0,
+      "title": "일곱 기록의 봉인",
+      "type": "Integrity",
+      "question": "CH11 원본 증거 파일의 hash가 수집 당시 값과 일치하는가?",
+      "consequence": "manifest, verdict, raw 4종, OTel의 SHA-256 7개가 모두 일치했다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "integrity manifest가 열거한 manifest, verdict, raw 4종, OTel의 SHA-256 7개를 현재 파일에서 다시 계산해 모두 일치했다.",
+      "sourceRefs": [
+        "spec:claims:attempt-integrity-files-match"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "one-session-three-sequential-phases",
+      "sequence": 1,
+      "title": "세 번 열린 같은 문",
+      "type": "Continuity",
+      "question": "ALPHA, BETA, final phase가 같은 session에서 순차 실행됐는가?",
+      "consequence": "세 init은 같은 session ID였고 manual compact 없이 동시성 1로 실행됐다.",
+      "art": "continuity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "init seq 2, 33, 63은 같은 session ID와 Opus 5 model을 사용했고 manifest는 manual compact false, provider concurrency 1을 기록했다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:2",
+        "attempt:112453-6f7401e1:sdk-message:33",
+        "attempt:112453-6f7401e1:sdk-message:63",
+        "attempt:112453-6f7401e1:manifest:option_summary"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "large-payload-tool-chains-and-text-lengths",
+      "sequence": 2,
+      "title": "두 대형 화물",
+      "type": "Evidence",
+      "question": "두 MCP payload는 실제 ToolUse/ToolResult로 전달됐는가?",
+      "consequence": "15/18과 45/50이 연결됐고 실제 text는 24,088/24,085자였다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "ALPHA/BETA ToolUse와 ToolResult는 15/18, 45/50으로 연결되고 실제 MCP text는 24,088/24,085자다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:15",
+        "attempt:112453-6f7401e1:process-event:16",
+        "attempt:112453-6f7401e1:sdk-message:18",
+        "attempt:112453-6f7401e1:sdk-message:45",
+        "attempt:112453-6f7401e1:process-event:46",
+        "attempt:112453-6f7401e1:sdk-message:50"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "recorder-archive-retains-both-payloads",
+      "sequence": 3,
+      "title": "보관 창고의 원문",
+      "type": "Archive",
+      "question": "recorder raw archive는 두 payload를 온전히 남겼는가?",
+      "consequence": "152,378-byte SDK tape에 두 payload와 marker가 보존됐다.",
+      "art": "memory",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "152,378-byte raw SDK JSONL은 두 full payload text와 각 head/tail marker를 보존한다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:18",
+        "attempt:112453-6f7401e1:sdk-message:50"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "no-direct-compact-or-micro-pruning-event",
+      "sequence": 4,
+      "title": "울리지 않은 경계 신호",
+      "type": "Boundary",
+      "question": "이번 stream에 compact 또는 micro-pruning 직접 사건이 있었는가?",
+      "consequence": "system event는 init/status뿐이며 direct pruning event는 0건이다.",
+      "art": "unknown",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "SystemMessage는 init 3건과 status 5건이고 compact_boundary 또는 식별 가능한 micro-pruning event는 0건이다.",
+      "sourceRefs": [
+        "spec:claims:no-direct-compact-or-micro-pruning-event"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "final-tool-lane-empty-and-four-markers-output",
+      "sequence": 5,
+      "title": "도구 없는 마지막 회상",
+      "type": "Recall",
+      "question": "final turn은 재호출 없이 네 marker를 출력했는가?",
+      "consequence": "final tool lane은 비어 있었고 seq 75/79가 네 marker를 출력했다.",
+      "art": "memory",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "final phase seq 62 이후 ToolUse/ToolResult는 없고 assistant seq 75와 Result seq 79는 네 marker를 모두 출력했다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:process-event:62",
+        "attempt:112453-6f7401e1:sdk-message:75",
+        "attempt:112453-6f7401e1:sdk-message:79"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "final-answer-omits-large-filler",
+      "sequence": 6,
+      "title": "말하지 않은 사십팔 킬로바이트",
+      "type": "Output",
+      "question": "final answer는 large filler를 그대로 다시 출력했는가?",
+      "consequence": "marker와 판정만 답하고 약 48KB filler는 출력에서 생략했다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "final answer는 네 marker와 event 판정만 쓰고 두 payload의 약 48KB filler를 출력하지 않았다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:18",
+        "attempt:112453-6f7401e1:sdk-message:50",
+        "attempt:112453-6f7401e1:sdk-message:75"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "three-success-results-and-usage-recorded",
+      "sequence": 7,
+      "title": "세 장의 성공 영수증",
+      "type": "Receipt",
+      "question": "세 query의 terminal Result와 usage가 모두 남았는가?",
+      "consequence": "30/60/79는 success이며 query usage와 누적 model usage를 기록했다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Result seq 30, 60, 79는 모두 success이며 per-query usage와 누적 model_usage가 있고 final cumulative usage에는 Opus 5와 Haiku 4.5가 함께 있다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:30",
+        "attempt:112453-6f7401e1:sdk-message:60",
+        "attempt:112453-6f7401e1:sdk-message:79"
+      ],
+      "cost": 8
+    },
+    {
+      "id": "raw-and-otel-sequences-align",
+      "sequence": 8,
+      "title": "겹쳐진 일흔두 사건",
+      "type": "Telemetry",
+      "question": "raw SDK와 OTel projection의 sequence가 일치하는가?",
+      "consequence": "72개 sequence가 일치하고 86개 span은 한 trace에 속한다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "raw SDK 72개와 OTel sdk.message 72개의 sequence가 일치하고 OTel 86개 span은 하나의 trace에 속한다.",
+      "sourceRefs": [
+        "spec:claims:raw-and-otel-sequences-align"
+      ],
+      "cost": 9
+    },
+    {
+      "id": "python-repr-length-is-not-payload-length",
+      "sequence": 9,
+      "title": "서른네 글자의 착시",
+      "type": "Correction",
+      "question": "24,122/24,119를 실제 tool text 길이로 써도 되는가?",
+      "consequence": "Python wrapper repr 길이였고 실제 text는 각각 34자 더 짧았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "기존 24,122/24,119는 Python list repr 길이이며 실제 MCP payload text 24,088/24,085와 구분해야 한다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:process-event:16",
+        "attempt:112453-6f7401e1:sdk-message:18",
+        "attempt:112453-6f7401e1:process-event:46",
+        "attempt:112453-6f7401e1:sdk-message:50"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "raw-archive-retention-is-not-active-context-retention",
+      "sequence": 10,
+      "title": "창고와 적재함의 차이",
+      "type": "Correction",
+      "question": "raw archive의 보존이 final provider context 보존을 증명하는가?",
+      "consequence": "recorder 보관과 모델 활성 context는 다른 층이므로 소급할 수 없다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "recorder raw archive에 payload가 존재해도 provider의 final active context가 full payload를 보존했다고 단정할 수 없다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:18",
+        "attempt:112453-6f7401e1:sdk-message:50",
+        "attempt:112453-6f7401e1:sdk-message:75"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "marker-recall-is-confounded-by-assistant-summaries",
+      "sequence": 11,
+      "title": "두 번 적힌 표식",
+      "type": "Correction",
+      "question": "final marker 회상이 large payload 전체의 보존을 증명하는가?",
+      "consequence": "marker가 seq 26/56에도 있어 final provenance가 혼재한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "final marker는 seq 26/56의 짧은 assistant 답변에도 이미 있어 seq 75 회상만으로 large payload provenance나 full retention을 증명할 수 없다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:26",
+        "attempt:112453-6f7401e1:sdk-message:56",
+        "attempt:112453-6f7401e1:sdk-message:75"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "answer-omission-is-not-pruning",
+      "sequence": 12,
+      "title": "침묵은 삭제가 아니다",
+      "type": "Correction",
+      "question": "답변에서 filler를 생략하면 runtime pruning이 일어난 것인가?",
+      "consequence": "output selection만 관찰됐고 pruning 직접 사건은 없었다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "final output의 filler 생략은 output selection이며 tool result pruning의 직접 사건이 아니다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:18",
+        "attempt:112453-6f7401e1:sdk-message:50",
+        "attempt:112453-6f7401e1:sdk-message:75"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "usage-numbers-do-not-name-an-algorithm",
+      "sequence": 13,
+      "title": "숫자에 붙일 수 없는 이름",
+      "type": "Correction",
+      "question": "cache/token 변화만으로 cache_edits 실행을 확정할 수 있는가?",
+      "consequence": "수치는 관찰됐지만 원인 알고리즘은 식별되지 않았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "cache creation/read와 token 변화는 관찰 수치지만 cache_edits, idle pruning, server clearing 중 원인 알고리즘을 식별하지 않는다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:30",
+        "attempt:112453-6f7401e1:sdk-message:60",
+        "attempt:112453-6f7401e1:sdk-message:79"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "event-absence-is-not-mechanism-impossibility",
+      "sequence": 14,
+      "title": "보이지 않음과 없음",
+      "type": "Correction",
+      "question": "direct event가 없으면 내부 mechanism도 절대 없는가?",
+      "consequence": "현재 workload와 event surface에서 비관찰됐다는 뜻만 허용된다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "direct event 0건은 현재 event surface와 workload에서 비관찰됐다는 뜻이지 내부 mechanism이 절대로 없다는 뜻이 아니다.",
+      "sourceRefs": [
+        "spec:claims:event-absence-is-not-mechanism-impossibility"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "messages-api-context-editing-is-not-agent-sdk-proof",
+      "sequence": 15,
+      "title": "서로 다른 API의 문",
+      "type": "Correction",
+      "question": "Messages API context editing을 Agent SDK 실행 증거로 써도 되는가?",
+      "consequence": "API family가 다르므로 각각 별도 runtime evidence가 필요하다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Messages API의 context_management, clear_tool_uses_20250919, applied_edits는 현재 Agent SDK attempt의 동작 증거가 아니다.",
+      "sourceRefs": [
+        "spec:claims:messages-api-context-editing-is-not-agent-sdk-proof"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "dedicated-boundary-class-is-not-current-python-type",
+      "sequence": 16,
+      "title": "없는 전용 클래스",
+      "type": "Correction",
+      "question": "SDKCompactBoundaryMessage가 Python 0.2.128의 현재 타입인가?",
+      "consequence": "export되지 않으므로 generic SystemMessage payload를 읽어야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Python Agent SDK 0.2.128은 SDKCompactBoundaryMessage를 export하지 않으므로 generic SystemMessage payload를 읽어야 한다.",
+      "sourceRefs": [
+        "spec:claims:dedicated-boundary-class-is-not-current-python-type"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "primary-opus-is-not-only-provider-usage",
+      "sequence": 17,
+      "title": "주연 뒤의 보조 모델",
+      "type": "Correction",
+      "question": "primary Opus를 전체 provider 사용 모델 하나로 표시해도 되는가?",
+      "consequence": "terminal model_usage에는 Haiku 4.5 항목도 있었다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "primary assistant model은 Opus 5지만 terminal model_usage에는 Haiku 4.5도 있어 전체 provider usage를 Opus 하나로 쓰면 안 된다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:sdk-message:30",
+        "attempt:112453-6f7401e1:sdk-message:60",
+        "attempt:112453-6f7401e1:sdk-message:79"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "captured-is-not-claim-pass",
+      "sequence": 18,
+      "title": "수집과 합격의 간격",
+      "type": "Correction",
+      "question": "CAPTURED와 assertion 0이 micro-compaction 판정 통과를 뜻하는가?",
+      "consequence": "verdict TODO와 passed null인 수집 완료 표식일 뿐이다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "OTel CAPTURED, assertion count 0, verdict TODO, passed null은 raw 수집 완료 표식이며 micro-compaction claim pass가 아니다.",
+      "sourceRefs": [
+        "spec:claims:captured-is-not-claim-pass"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "otel-is-not-independent-provider-proof",
+      "sequence": 19,
+      "title": "같은 기록의 두 번째 그림자",
+      "type": "Correction",
+      "question": "recorder OTel을 독립 provider 관측기로 취급할 수 있는가?",
+      "consequence": "같은 recorder가 raw와 host 사건을 투영한 trace다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "같은 recorder가 raw와 host event를 OTel로 투영했으므로 이 trace를 독립 provider 관측기로 부르면 안 된다.",
+      "sourceRefs": [
+        "spec:claims:otel-is-not-independent-provider-proof"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "probe-runtime-source-is-not-provenance-bound",
+      "sequence": 20,
+      "title": "봉인되지 않은 실행 코드",
+      "type": "Correction",
+      "question": "attempt가 exact probe/case/runtime code hash를 모두 묶었는가?",
+      "consequence": "장과 prompt hash만 있어 실행 코드 동일성은 증명되지 않았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "manifest는 실행 당시 장 source와 prompt hash를 묶지만 exact probe, case, runtime source hash를 묶지 않았다.",
+      "sourceRefs": [
+        "attempt:112453-6f7401e1:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "unrepeated-nonce-retention-not-observed",
+      "sequence": 21,
+      "title": "아직 숨기지 않은 nonce",
+      "type": "Unknown",
+      "question": "중간 답변에 반복되지 않은 표식을 final이 찾는 실험을 했는가?",
+      "consequence": "현재 marker는 중간 답변에도 있어 새 controlled attempt가 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "중간 assistant 답변에 노출하지 않은 nonce를 large result에 넣고 final에서 조회하는 controlled attempt가 필요하다.",
+      "sourceRefs": [
+        "spec:claims:unrepeated-nonce-retention-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "direct-agent-sdk-micro-pruning-surface-not-observed",
+      "sequence": 22,
+      "title": "열리지 않은 micro 사건",
+      "type": "Unknown",
+      "question": "Agent SDK가 direct micro-pruning event를 실제 방출했는가?",
+      "consequence": "현재 option과 event surface에서는 관찰되지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "Agent SDK에서 direct clearing/micro-pruning event를 노출하는 documented surface 또는 threshold workload는 관찰되지 않았다.",
+      "sourceRefs": [
+        "spec:claims:direct-agent-sdk-micro-pruning-surface-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "post-clearing-reacquisition-not-observed",
+      "sequence": 23,
+      "title": "아직 없는 재획득",
+      "type": "Unknown",
+      "question": "알려진 clearing 뒤 tool을 다시 호출해 근거를 회수했는가?",
+      "consequence": "clearing 자체가 직접 관찰되지 않아 재획득 chain도 남지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "알려진 clearing 뒤 모델이 같은 tool evidence를 다시 획득하는 ToolUse/ToolResult chain은 별도 실행이 필요하다.",
+      "sourceRefs": [
+        "spec:claims:post-clearing-reacquisition-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "time-based-idle-pruning-not-observed",
+      "sequence": 24,
+      "title": "기다리지 않은 긴 밤",
+      "type": "Unknown",
+      "question": "긴 idle 뒤 time-based pruning을 관찰했는가?",
+      "consequence": "이번 짧은 run은 idle threshold를 시험하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "긴 idle 뒤 오래된 tool result가 바뀌는 time-based 동작은 이번 짧은 실행에서 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:time-based-idle-pruning-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "messages-api-context-editing-live-run-not-observed",
+      "sequence": 25,
+      "title": "다른 API의 미실행 실험",
+      "type": "Unknown",
+      "question": "Messages API applied_edits를 실제 controlled run으로 수집했는가?",
+      "consequence": "공식 문서는 확인했지만 별도 live evidence는 아직 없다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "Messages API에서 clear_tool_uses_20250919를 실제 실행해 applied_edits와 cleared token을 읽는 증거는 별도 API-family attempt로 남겨야 한다.",
+      "sourceRefs": [
+        "spec:claims:messages-api-context-editing-live-run-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "full-source-provenance-not-observed",
+      "sequence": 26,
+      "title": "완성되지 않은 출처 봉인",
+      "type": "Unknown",
+      "question": "장과 모든 실행 코드 hash를 하나의 manifest로 봉인했는가?",
+      "consequence": "다음 capture는 chapter/probe/case/runtime hash를 모두 저장해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "chapter, probe, case, runtime source hash를 모두 attempt에 묶는 새 provenance manifest가 필요하다.",
+      "sourceRefs": [
+        "spec:claims:full-source-provenance-not-observed"
+      ],
+      "cost": "?"
+    }
+  ]
+}
