@@ -209,6 +209,19 @@
       "artifactSha256": "c4c4b07135a57fa135d409e5e97796bb93617b84ccef097e556943d1ca82a9c7"
     },
     {
+      "chapterSlug": "ch12",
+      "title": "12장 토큰 예산: runtime overflow와 host preview 분리 · Observation Ordeal",
+      "path": "./evidence/ch12.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 124,
+      "publicEventCount": 51,
+      "observedClaims": 10,
+      "correctionRequired": 14,
+      "additionalObservationRequired": 6,
+      "artifactSha256": "5bed64d002ec7793e452df8736073c64f45f075729b62fc7d49e94ab7602d258"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -221,5 +234,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T22:01:15.521Z"
+  "generatedAt": "2026-08-03T22:33:37.983Z"
 }
