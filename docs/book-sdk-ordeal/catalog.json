@@ -79,6 +79,19 @@
       "artifactSha256": "934bfbac90a6d98a601ef50e8e8217970d3e338b8b803072013e353306eb3ce2"
     },
     {
+      "chapterSlug": "ch06b",
+      "title": "6b장 API 통신 계층: 스트리밍, 중단, 저장, 재시도의 실제 증거 · Observation Ordeal",
+      "path": "./evidence/ch06b.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 392,
+      "publicEventCount": 101,
+      "observedClaims": 6,
+      "correctionRequired": 3,
+      "additionalObservationRequired": 5,
+      "artifactSha256": "7279a825d1189f1587415178de44cf9e3a25e0b9224730d0375e98de3c7bd540"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -91,5 +104,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T18:32:22.012Z"
+  "generatedAt": "2026-08-03T18:54:15.873Z"
 }

@@ -1,0 +1,292 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T18:54:15.860Z",
+  "title": "6b장 API 통신 계층: 스트리밍, 중단, 저장, 재시도의 실제 증거 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch06b",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch06b:book-sdk-live-20260803:2026-08-03T18:42:54.000Z",
+    "traceSha256": "4b09f5cd25159082da94cf4ddc1909b3631cecf9c8ea13db7c8ca81b0cf9e200",
+    "summarySha256": "92e334585788d8cc6d65e76863b8cab3800fd0423a5a4e24c09cbe1ce308fd38",
+    "sourceEventCount": 392,
+    "publicEventCount": 101,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "103238-e1ac26b5",
+      "103316-15c0b725",
+      "103340-dfe3c027",
+      "103401-427be665",
+      "103439-e3093bb2",
+      "113303-a2d4890a"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 6,
+    "correction": 3,
+    "unresolved": 5,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "partial-stream-tool-result-final-order",
+      "sequence": 0,
+      "title": "부분 사건이 남긴 길",
+      "type": "Streaming",
+      "question": "부분 스트림부터 Read 결과와 최종 성공까지 실제 사건 순서를 복원할 수 있는가?",
+      "consequence": "58개 StreamEvent와 Read use/result, 최종 text 및 success가 순서대로 남았다. 숨은 사고는 관찰 대상이 아니다.",
+      "art": "stream",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "58개 StreamEvent 사이에서 Read 요청과 같은 ID의 결과가 연결되고 최종 assistant 뒤 성공 Result가 왔다.",
+      "sourceRefs": [
+        "attempt:103238-e1ac26b5:sdk-message:5",
+        "attempt:103238-e1ac26b5:sdk-message:57",
+        "attempt:103238-e1ac26b5:sdk-message:59",
+        "attempt:103238-e1ac26b5:sdk-message:78",
+        "attempt:103238-e1ac26b5:sdk-message:82"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "python-interrupt-cancelled-running-handler",
+      "sequence": 1,
+      "title": "실행 중 닫힌 파이프",
+      "type": "Interrupt",
+      "question": "Python interrupt가 실행 중인 도구 handler와 스트림을 실제로 중단했는가?",
+      "consequence": "host interrupt 뒤 error ToolResult, aborted_streaming, handler cancelled가 같은 실행에 이어졌다.",
+      "art": "interrupt",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "장기 handler가 시작된 뒤 host interrupt가 전송됐고 error result, aborted_streaming, handler cancelled가 이어졌다.",
+      "sourceRefs": [
+        "attempt:103316-15c0b725:sdk-message:15",
+        "attempt:103316-15c0b725:process-event:16",
+        "attempt:103316-15c0b725:process-event:17",
+        "attempt:103316-15c0b725:process-event:19",
+        "attempt:103316-15c0b725:sdk-message:20",
+        "attempt:103316-15c0b725:sdk-message:21",
+        "attempt:103316-15c0b725:sdk-message:22",
+        "attempt:103316-15c0b725:process-event:24"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "max-turns-is-runtime-boundary-after-tool-success",
+      "sequence": 2,
+      "title": "성공 뒤의 턴 경계",
+      "type": "Boundary",
+      "question": "도구가 성공했더라도 runtime의 max-turns 경계가 별도로 적용되는가?",
+      "consequence": "도구 완료와 ONE_STEP_COMPLETE 뒤 Result가 error_max_turns로 끝났다.",
+      "art": "constraint",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "MCP tool은 ONE_STEP_COMPLETE를 반환했고 그 다음 Result가 error_max_turns로 실행을 닫았다.",
+      "sourceRefs": [
+        "attempt:103340-dfe3c027:sdk-message:16",
+        "attempt:103340-dfe3c027:process-event:17",
+        "attempt:103340-dfe3c027:sdk-message:19",
+        "attempt:103340-dfe3c027:sdk-message:22"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "checkpoint-rewind-restored-original-hash",
+      "sequence": 3,
+      "title": "되감긴 파일",
+      "type": "Recovery",
+      "question": "checkpoint rewind가 실제 Edit 결과를 원래 파일 hash로 되돌렸는가?",
+      "consequence": "Edit 직후 hash만 달랐고 rewind 뒤와 최종 hash는 실행 전 원본과 같았다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "실제 최초 UserMessage UUID로 rewind_files를 호출했고 Edit 뒤 바뀐 파일 hash가 실행 전 hash로 복원됐다.",
+      "sourceRefs": [
+        "attempt:103401-427be665:sdk-message:5",
+        "attempt:103401-427be665:sdk-message:88",
+        "attempt:103401-427be665:sdk-message:90",
+        "attempt:103401-427be665:sdk-message:106",
+        "attempt:103401-427be665:process-event:107",
+        "attempt:103401-427be665:process-event:108",
+        "attempt:103401-427be665:process-event:110"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "session-store-count-and-identity",
+      "sequence": 4,
+      "title": "스물한 개의 기록",
+      "type": "Persistence",
+      "question": "실행 뒤 session store에서 같은 session의 기록 개수와 identity를 확인했는가?",
+      "consequence": "Result와 같은 session ID로 저장소 한 개와 21개 entry를 확인했다. 본문 등가성은 아직 열지 않았다.",
+      "art": "memory",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "eager session store에 한 session의 21개 항목이 남았고 store session ID는 성공 Result와 같았다.",
+      "sourceRefs": [
+        "attempt:103439-e3093bb2:sdk-message:75",
+        "attempt:103439-e3093bb2:sdk-message:79",
+        "attempt:103439-e3093bb2:sdk-message:94",
+        "attempt:103439-e3093bb2:process-event:96"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "python-generic-api-retry-and-recovery",
+      "sequence": 5,
+      "title": "다른 장에서 온 세 번의 재시도",
+      "type": "Cross-chapter",
+      "question": "Python SDK의 실제 retry 사건과 최종 recovery를 raw event로 확인했는가?",
+      "consequence": "12장 실행에서 529 overloaded retry 세 번과 증가한 delay, 같은 실행의 최종 success를 확인했다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "12장 소유 실행에서 529 overloaded retry가 520, 1169, 2440ms 지연으로 세 번 나타난 뒤 같은 run이 성공했다.",
+      "sourceRefs": [
+        "attempt:113303-a2d4890a:sdk-message:4",
+        "attempt:113303-a2d4890a:sdk-message:5",
+        "attempt:113303-a2d4890a:sdk-message:6",
+        "attempt:113303-a2d4890a:sdk-message:46"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "primary-opus-is-not-only-provider-usage",
+      "sequence": 6,
+      "title": "주연과 보조 모델",
+      "type": "Correction",
+      "question": "primary assistant가 Opus 5이면 provider 사용 전체도 Opus 하나뿐인가?",
+      "consequence": "요청과 주 응답은 Opus 5였지만 Result model_usage에 Haiku 4.5 보조 사용도 기록됐다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "요청, init, assistant primary는 Opus 5지만 Result model_usage에는 Haiku 4.5 보조 사용도 기록됐다.",
+      "sourceRefs": [
+        "attempt:103238-e1ac26b5:sdk-message:82",
+        "attempt:103316-15c0b725:sdk-message:22",
+        "attempt:103340-dfe3c027:sdk-message:22",
+        "attempt:103401-427be665:sdk-message:106",
+        "attempt:103439-e3093bb2:sdk-message:94",
+        "attempt:113303-a2d4890a:sdk-message:46"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "python-host-latency-is-not-provider-ttft",
+      "sequence": 7,
+      "title": "같지 않은 두 시계",
+      "type": "Correction",
+      "question": "host가 계산한 첫 사건 지연을 provider TTFT라고 불러도 되는가?",
+      "consequence": "Python 사건에는 provider ttft_ms가 없었다. 954.535ms는 host 관찰 시계의 첫 사건 지연이다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Python 0.2.128 StreamEvent에는 ttft_ms가 없으므로 capture 시작과 첫 message의 host clock 차이를 provider TTFT라고 부르면 안 된다.",
+      "sourceRefs": [
+        "spec:claims:python-host-latency-is-not-provider-ttft"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "interrupt-protocol-text-is-not-human-ui-click",
+      "sequence": 8,
+      "title": "버튼 없는 중단",
+      "type": "Correction",
+      "question": "SDK interrupt 프로토콜 사건이 곧 사람의 UI 버튼 클릭을 증명하는가?",
+      "consequence": "host 코드가 interrupt를 보낸 사실은 보이지만 사람의 화면 조작은 이번 실행에 없었다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Request interrupted by user라는 protocol text는 host 프로그램의 interrupt 결과이며 사람의 UI 버튼 클릭을 입증하지 않는다.",
+      "sourceRefs": [
+        "attempt:103316-15c0b725:process-event:17",
+        "attempt:103316-15c0b725:process-event:19",
+        "attempt:103316-15c0b725:sdk-message:21"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "event-gap-cause-needs-more-observation",
+      "sequence": 9,
+      "title": "간격 뒤의 안개",
+      "type": "Unknown",
+      "question": "연속 사건 사이의 시간 간격만으로 provider 지연 원인을 특정할 수 있는가?",
+      "consequence": "간격은 관찰할 수 있지만 network, queue, model, host 중 어느 원인인지는 추가 계측이 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "host event gap은 계산할 수 있지만 큰 gap 하나로 network, model, tool 중 원인을 식별할 수 없다.",
+      "sourceRefs": [
+        "spec:claims:event-gap-cause-needs-more-observation"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "session-store-content-equivalence-not-observed",
+      "sequence": 10,
+      "title": "본문을 열지 않은 저장소",
+      "type": "Unknown",
+      "question": "entry 개수와 session ID만으로 저장된 대화 본문이 stream과 동일하다고 증명되는가?",
+      "consequence": "identity와 count만 확인했다. entry payload의 내용 등가성은 아직 비교하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "store의 ID와 항목 수는 읽었지만 transcript 본문과 raw stream의 완전 동일성은 비교하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:session-store-content-equivalence-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "retry-mutation-duplication-not-observed",
+      "sequence": 11,
+      "title": "일어나지 않은 중복",
+      "type": "Unknown",
+      "question": "관찰된 API retry가 외부 mutation 중복까지 실제로 일으켰는가?",
+      "consequence": "retry와 recovery는 보였지만 외부 쓰기 도구의 중복 실행은 이번 증거에 없다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "529 retry 뒤 host tool은 한 번 실행됐으며 mutation 부작용 중복은 이번 tape에 없다.",
+      "sourceRefs": [
+        "spec:claims:retry-mutation-duplication-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "availability-fallback-not-observed",
+      "sequence": 12,
+      "title": "아직 바뀌지 않은 모델",
+      "type": "Unknown",
+      "question": "모델 가용성 문제 때 다른 primary model로 자동 fallback되는 과정이 관찰됐는가?",
+      "consequence": "이번 실행에서는 primary model fallback 사건을 확인하지 못했다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "다섯 6b 실행은 fallback_model을 설정하지 않았고 실제 model 전환 사건도 없었다.",
+      "sourceRefs": [
+        "spec:claims:availability-fallback-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "checkpoint-does-not-prove-files-api-whole",
+      "sequence": 13,
+      "title": "되감기 밖의 파일 세계",
+      "type": "Unknown",
+      "question": "한 파일의 Edit와 rewind 성공이 files API 전체 계약을 증명하는가?",
+      "consequence": "checkpoint 한 경로만 확인했다. 파일 API 전체 동작과 예외 경계는 별도 실험이 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "checkpoint와 rewind는 관찰했지만 attachment download와 원격 Files API 전체는 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:checkpoint-does-not-prove-files-api-whole"
+      ],
+      "cost": "?"
+    }
+  ]
+}
