@@ -66,6 +66,19 @@
       "artifactSha256": "43ec28ec4d1511dd66b6a68ef3815d5e945ec1d54a0bd4f32aa7eedd19b20ced"
     },
     {
+      "chapterSlug": "ch06",
+      "title": "6장 프롬프트 행동 조종: 여섯 패턴과 실패 복구의 실제 증거 · Observation Ordeal",
+      "path": "./evidence/ch06.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 685,
+      "publicEventCount": 171,
+      "observedClaims": 6,
+      "correctionRequired": 2,
+      "additionalObservationRequired": 4,
+      "artifactSha256": "934bfbac90a6d98a601ef50e8e8217970d3e338b8b803072013e353306eb3ce2"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -78,5 +91,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T18:06:45.509Z"
+  "generatedAt": "2026-08-03T18:32:22.012Z"
 }

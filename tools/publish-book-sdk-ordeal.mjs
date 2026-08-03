@@ -3,6 +3,7 @@
 import { createHash } from 'node:crypto'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import { ch06CardMeta } from './book-sdk-ordeal-ch06-cards.mjs'
 
 const args = process.argv.slice(2)
 const verifyPath = valueAfter('--verify')
@@ -297,6 +298,7 @@ const cardMetaByChapter = {
       art: 'unknown',
     },
   },
+  ch06: ch06CardMeta,
   ch30: {
     'local-report-host-allow': {
       title: '허용된 기록',
