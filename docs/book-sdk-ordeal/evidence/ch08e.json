@@ -1,0 +1,434 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T20:33:59.336Z",
+  "title": "8e장 도구 설명: 실제 built-in 입력과 인과 판정의 경계 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch08e",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch08e:book-sdk-live-20260803:2026-08-03T20:45:00.000Z",
+    "traceSha256": "210151fce9d762657152ea1772c8f3185034f918b72ccd96086c03e5ab2203c4",
+    "summarySha256": "6bba92c8b0dd4342302635f741a9cac3af494d943ebec2545b1a08dfc78dfa14",
+    "sourceEventCount": 616,
+    "publicEventCount": 57,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "105914-4dbec404",
+      "105957-c4d885c3",
+      "110040-d85664b5",
+      "104326-a2a8922b",
+      "104443-c119bcec",
+      "104843-e6d50d01"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 7,
+    "correction": 10,
+    "unresolved": 6,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "all-attempt-integrity-matches",
+      "sequence": 0,
+      "title": "세 도구 실행의 봉인",
+      "type": "Integrity",
+      "question": "Read, Grep, Bash 실행의 보관 파일이 수집 당시 hash를 유지했는가?",
+      "consequence": "세 attempt의 모든 evidence file SHA-256이 integrity manifest와 일치했다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 8e attempt의 integrity manifest에 기록된 모든 evidence file SHA-256이 현재 파일과 일치했다.",
+      "sourceRefs": [
+        "spec:claims:all-attempt-integrity-matches"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "targeted-read-input-and-marker-result",
+      "sequence": 1,
+      "title": "스물한 줄의 창",
+      "type": "Evidence",
+      "question": "모델은 지정된 170~190줄만 읽고 같은 marker를 답에 연결했는가?",
+      "consequence": "offset 170, limit 21의 Read와 matching ToolResult, final marker가 이어졌다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Read input은 offset 170, limit 21이었고 연결된 ToolResult와 final에 같은 window marker가 나타났다.",
+      "sourceRefs": [
+        "attempt:105914-4dbec404:sdk-message:17",
+        "attempt:105914-4dbec404:sdk-message:19",
+        "attempt:105914-4dbec404:sdk-message:28"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "exact-grep-followed-by-matching-read",
+      "sequence": 2,
+      "title": "정확한 이름의 검색",
+      "type": "Evidence",
+      "question": "정확한 SDK 타입명을 검색한 뒤 matching file까지 읽었는가?",
+      "consequence": "SDKAPIRetryMessage 한 줄 match 뒤 types.ts Read와 status 결과가 연결됐다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "exact SDKAPIRetryMessage Grep이 한 줄 match를 반환했고 matching types.ts Read와 controlled status 결과가 이어졌다.",
+      "sourceRefs": [
+        "attempt:105957-c4d885c3:sdk-message:21",
+        "attempt:105957-c4d885c3:sdk-message:24",
+        "attempt:105957-c4d885c3:sdk-message:40",
+        "attempt:105957-c4d885c3:sdk-message:44",
+        "attempt:105957-c4d885c3:sdk-message:53"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "bash-denial-and-bare-command-recovery",
+      "sequence": 3,
+      "title": "좁혀서 다시 연 검증문",
+      "type": "Recovery",
+      "question": "복합 Bash 거부 뒤 허용된 최소 command로 실제 검증을 마쳤는가?",
+      "consequence": "오류 ToolResult 뒤 bare python3 verify.py가 실제 PASS를 반환했다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "source Read 뒤 복합 Bash는 오류 ToolResult로 거부됐고 bare python3 verify.py 재시도는 실제 PASS ToolResult를 반환했다.",
+      "sourceRefs": [
+        "attempt:110040-d85664b5:sdk-message:15",
+        "attempt:110040-d85664b5:sdk-message:17",
+        "attempt:110040-d85664b5:sdk-message:28",
+        "attempt:110040-d85664b5:sdk-message:30",
+        "attempt:110040-d85664b5:sdk-message:47",
+        "attempt:110040-d85664b5:sdk-message:51"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "terminal-results-and-metrics-observed",
+      "sequence": 4,
+      "title": "세 실행의 종착 기록",
+      "type": "Terminal",
+      "question": "각 run의 종료와 비용, turn, model usage가 raw Result에 남았는가?",
+      "consequence": "세 run 모두 success Result로 닫혔고 실행 지표가 보존됐다.",
+      "art": "lifecycle",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 run은 각각 2, 3, 4 turns의 success Result로 닫혔고 duration, API duration, 비용, model usage가 raw에 남았다.",
+      "sourceRefs": [
+        "attempt:105914-4dbec404:sdk-message:32",
+        "attempt:105957-c4d885c3:sdk-message:57",
+        "attempt:110040-d85664b5:sdk-message:64"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "supporting-description-pair-paths-observed",
+      "sequence": 5,
+      "title": "열 번과 네 번의 두 경로",
+      "type": "Comparison",
+      "question": "8장 보조 출처의 vague와 rich description 실행 경로가 실제로 달랐는가?",
+      "consequence": "같은 fixture와 user prompt에서 search 호출 10회와 4회가 관찰됐다.",
+      "art": "separation",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "8장 보조 출처의 같은 fixture와 user prompt에서 vague 10회와 rich 4회의 서로 다른 custom search 경로가 실제로 기록됐다.",
+      "sourceRefs": [
+        "attempt:104326-a2a8922b:sdk-message:202",
+        "attempt:104443-c119bcec:sdk-message:95"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "supporting-agent-role-and-nested-read-observed",
+      "sequence": 6,
+      "title": "위임 안쪽의 읽기",
+      "type": "Delegation",
+      "question": "parent가 specialist를 선택하고 그 아래 nested Read가 실제로 실행됐는가?",
+      "consequence": "evidence-reviewer Agent와 같은 parent tool ID의 nested Read가 연결됐다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "8장 보조 출처에서 parent가 evidence-reviewer를 선택했고 같은 parent tool 아래 nested Read와 specialist result가 나타났다.",
+      "sourceRefs": [
+        "attempt:104843-e6d50d01:sdk-message:21",
+        "attempt:104843-e6d50d01:sdk-message:28",
+        "attempt:104843-e6d50d01:sdk-message:29",
+        "attempt:104843-e6d50d01:sdk-message:31",
+        "attempt:104843-e6d50d01:sdk-message:32",
+        "attempt:104843-e6d50d01:sdk-message:127"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "prompt-confounds-built-in-description-causality",
+      "sequence": 7,
+      "title": "지시문이 섞인 인과",
+      "type": "Correction",
+      "question": "올바른 도구 입력을 built-in description의 단독 효과라고 말할 수 있는가?",
+      "consequence": "세 user prompt가 원하는 Read, Grep, Bash 경로를 이미 직접 지시했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 prompt가 원하는 Read/Grep/Bash 경로를 직접 지시했으므로 관찰된 입력만으로 built-in description의 단독 인과 효과를 선언하면 안 된다.",
+      "sourceRefs": [
+        "attempt:105914-4dbec404:manifest:option_summary",
+        "attempt:105957-c4d885c3:manifest:option_summary",
+        "attempt:110040-d85664b5:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "permission-hook-declined-is-unsupported",
+      "sequence": 8,
+      "title": "없었던 permission hook",
+      "type": "Correction",
+      "question": "Bash 거부를 permission hook callback 사건이라고 설명해도 되는가?",
+      "consequence": "거부는 ToolResult와 permission_denials에 있지만 두 callback 파일은 0건이다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Bash 거부는 오류 ToolResult와 Result.permission_denials에 있지만 hook/permission callback은 0건이어서 permission hook이 거부했다고 쓰면 안 된다.",
+      "sourceRefs": [
+        "attempt:110040-d85664b5:sdk-message:30",
+        "attempt:110040-d85664b5:sdk-message:60",
+        "attempt:110040-d85664b5:sdk-message:64"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "filtered-snapshot-is-not-total-filesystem-proof",
+      "sequence": 9,
+      "title": "필터 밖의 파일시스템",
+      "type": "Correction",
+      "question": "changed_paths가 비면 전체 filesystem이 전혀 바뀌지 않았다는 뜻인가?",
+      "consequence": "snapshot은 .git과 __pycache__를 제외해 source path만 판정한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "changed_paths snapshot은 .git과 __pycache__를 제외하므로 빈 목록을 전체 filesystem 무변경 증거로 확장하면 안 된다.",
+      "sourceRefs": [
+        "attempt:105914-4dbec404:manifest:option_summary",
+        "attempt:105957-c4d885c3:manifest:option_summary",
+        "attempt:110040-d85664b5:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "grep-num-files-zero-is-not-no-match",
+      "sequence": 10,
+      "title": "0보다 강한 실제 한 줄",
+      "type": "Correction",
+      "question": "Grep metadata의 numFiles=0만 보고 no-match라 판정해도 되는가?",
+      "consequence": "같은 ToolResult content와 numLines에는 실제 한 줄 match가 있다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Grep ToolResult content와 numLines는 한 줄 match를 보이지만 부가 metadata numFiles는 0이므로 numFiles만으로 no-match라 판정하면 안 된다.",
+      "sourceRefs": [
+        "attempt:105957-c4d885c3:sdk-message:24"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "primary-opus-is-not-only-provider-usage",
+      "sequence": 11,
+      "title": "Opus 뒤의 보조 모델",
+      "type": "Correction",
+      "question": "primary Opus 5 표기가 전체 provider 사용을 뜻하는가?",
+      "consequence": "세 Result 모두 Haiku 4.5 보조 사용도 기록했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 init과 primary assistant는 Opus 5지만 세 Result model_usage에는 Haiku 4.5 보조 사용도 기록됐다.",
+      "sourceRefs": [
+        "attempt:105914-4dbec404:sdk-message:32",
+        "attempt:105957-c4d885c3:sdk-message:57",
+        "attempt:110040-d85664b5:sdk-message:64"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "captured-is-not-claim-pass",
+      "sequence": 12,
+      "title": "수집과 합격의 차이",
+      "type": "Correction",
+      "question": "OTel CAPTURED와 assertion 0을 장의 주장 합격으로 읽어도 되는가?",
+      "consequence": "CAPTURED는 raw 저장 완료 표식이며 claim 판정은 직접 판독에서 나왔다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "OTel oracle.verdict CAPTURED와 assertion count 0은 raw 수집 완료 표식이지 도구 설명 주장 합격이 아니다.",
+      "sourceRefs": [
+        "spec:claims:captured-is-not-claim-pass"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "built-in-otel-has-no-tool-execution-span",
+      "sequence": 13,
+      "title": "없는 도구 실행 span",
+      "type": "Correction",
+      "question": "built-in Read, Grep, Bash마다 host tool.execution span이 있다고 그려도 되는가?",
+      "consequence": "세 trace에는 sdk.message, process.event, root, oracle span만 있다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 trace에는 sdk.message, process.event, root, oracle span만 있고 built-in Read/Grep/Bash별 tool.execution span은 없다.",
+      "sourceRefs": [
+        "spec:claims:built-in-otel-has-no-tool-execution-span"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "probe-fixture-not-provenance-bound",
+      "sequence": 14,
+      "title": "해시에 빠진 실험 재료",
+      "type": "Correction",
+      "question": "attempt만으로 exact prompt, probe, fixture, verify script까지 증명하는가?",
+      "consequence": "manifest는 장 source와 option summary만 묶어 host source를 함께 읽어야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "manifest는 장 source와 option summary를 묶지만 exact prompt, probe source, fixture, verification script를 묶지 않았다.",
+      "sourceRefs": [
+        "attempt:105914-4dbec404:manifest:option_summary",
+        "attempt:105957-c4d885c3:manifest:option_summary",
+        "attempt:110040-d85664b5:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "single-description-pair-does-not-prove-causality",
+      "sequence": 15,
+      "title": "한 쌍뿐인 비교",
+      "type": "Correction",
+      "question": "10회 대 4회 한 쌍으로 description/schema의 일반 우열을 선언해도 되는가?",
+      "consequence": "fixed-order 1회씩의 관찰값이며 반복·counterbalance가 없다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "8장의 vague/rich 실행은 fixed-order 한 번씩이라 10회 대 4회의 관찰값을 description/schema의 일반 인과나 승자로 만들 수 없다.",
+      "sourceRefs": [
+        "attempt:104326-a2a8922b:sdk-message:202",
+        "attempt:104443-c119bcec:sdk-message:95"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "agent-init-task-and-use-agent-are-one-surface-boundary",
+      "sequence": 16,
+      "title": "Task와 Agent의 한 통로",
+      "type": "Correction",
+      "question": "init Task와 완성 ToolUseBlock Agent를 위임 두 번으로 세어도 되는가?",
+      "consequence": "같은 위임 표면의 버전별 이름 경계이므로 중복 집계하지 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "보조 Agent 실행의 init은 Task, 완성 ToolUseBlock은 Agent 이름을 사용하므로 서로 다른 위임 두 개로 중복 집계하지 않는다.",
+      "sourceRefs": [
+        "attempt:104843-e6d50d01:sdk-message:1",
+        "attempt:104843-e6d50d01:sdk-message:21"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "exact-built-in-description-receipt-not-observed",
+      "sequence": 17,
+      "title": "보이지 않은 설명 전문",
+      "type": "Unknown",
+      "question": "provider가 받은 built-in tool description 전문을 raw에서 확인했는가?",
+      "consequence": "init에는 도구 이름만 있고 exact 직렬화 receipt는 없다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "raw init에 built-in Read/Grep/Bash의 exact description 전문이나 provider 직렬화 receipt가 없다.",
+      "sourceRefs": [
+        "spec:claims:exact-built-in-description-receipt-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "description-only-counterbalanced-test-not-observed",
+      "sequence": 18,
+      "title": "아직 없는 인과 대조군",
+      "type": "Unknown",
+      "question": "description만 바꾼 반복·counterbalanced 실행을 수행했는가?",
+      "consequence": "사용자 지시와 fixture를 고정한 description-only 대조군은 아직 없다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "사용자 지시와 fixture는 같게 두고 description만 바꾼 반복·counterbalanced built-in 대조군을 실행하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:description-only-counterbalanced-test-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "actual-permission-callback-ui-decision-not-observed",
+      "sequence": 19,
+      "title": "열리지 않은 승인 UI",
+      "type": "Unknown",
+      "question": "실제 사용자의 승인 버튼과 SDK permission callback decision을 연결했는가?",
+      "consequence": "세 attempt의 permission callback은 모두 0건이다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "세 attempt의 permission callback은 0건이라 실제 사용자 승인 UI와 SDK callback decision을 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:actual-permission-callback-ui-decision-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "toolsearch-deferred-schema-not-observed",
+      "sequence": 20,
+      "title": "열리지 않은 지연 schema",
+      "type": "Unknown",
+      "question": "ToolSearch에서 검색, schema load, actual tool use가 이어졌는가?",
+      "consequence": "Python 0.2.128 실행에서는 그 경로를 구성하거나 관찰하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "ToolSearch query, schema loaded, actual tool use의 deferred schema 흐름은 Python 0.2.128 실행에서 구성하거나 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:toolsearch-deferred-schema-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "typescript-agent-options-not-observed-in-python",
+      "sequence": 21,
+      "title": "Python 밖의 Agent 옵션",
+      "type": "Unknown",
+      "question": "forwardSubagentText와 agentProgressSummaries를 Python run에서 보았는가?",
+      "consequence": "두 이름은 이번 Python option이나 raw 사건에 나타나지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "forwardSubagentText와 agentProgressSummaries는 이 Python 0.2.128 실행에서 option으로 사용하거나 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:typescript-agent-options-not-observed-in-python"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "description-only-read-vs-bash-choice-not-observed",
+      "sequence": 22,
+      "title": "아직 치르지 않은 선택 시험",
+      "type": "Unknown",
+      "question": "Read와 Bash를 함께 보인 중립 prompt에서 description만으로 선택이 달라졌는가?",
+      "consequence": "사용자 지시를 중립화한 Read 대 Bash 선택 실험은 아직 없다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "Read와 Bash가 모두 보이는 조건에서 사용자 지시를 중립화하고 description만으로 선택이 달라지는지 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:description-only-read-vs-bash-choice-not-observed"
+      ],
+      "cost": "?"
+    }
+  ]
+}

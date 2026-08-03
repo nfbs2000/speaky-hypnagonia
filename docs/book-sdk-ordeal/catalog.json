@@ -144,6 +144,19 @@
       "artifactSha256": "45299a095986567210b9cad87e692d3ae1b4d426e108d9a7a375ae41b8b66f8f"
     },
     {
+      "chapterSlug": "ch08e",
+      "title": "8e장 도구 설명: 실제 built-in 입력과 인과 판정의 경계 · Observation Ordeal",
+      "path": "./evidence/ch08e.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 616,
+      "publicEventCount": 57,
+      "observedClaims": 7,
+      "correctionRequired": 10,
+      "additionalObservationRequired": 6,
+      "artifactSha256": "f05a441602ffb9488a22cd54ca091f5dd1632ee0dd2300e282b9cc04975a7af0"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -156,5 +169,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T20:13:57.295Z"
+  "generatedAt": "2026-08-03T20:33:59.345Z"
 }
