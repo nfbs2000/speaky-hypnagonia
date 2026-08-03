@@ -1,0 +1,378 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T19:57:29.508Z",
+  "title": "8c장 정적 시스템 프롬프트: preset과 explicit policy의 실제 경계 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch08c",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch08c:book-sdk-live-20260803:2026-08-03T19:50:00.000Z",
+    "traceSha256": "e41c3a45b6767d47f739eb7822fc6c461f1a20da64ead68f54286ba5b3b8e598",
+    "summarySha256": "2dbfd12d9f4cd8757c8d37831b3947f76577c6fb534fb289a35bbe585e1dc2f8",
+    "sourceEventCount": 249,
+    "publicEventCount": 72,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "105231-08cba367",
+      "105308-beb0e51a"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 7,
+    "correction": 8,
+    "unresolved": 5,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "matched-task-tool-surface-and-model",
+      "sequence": 0,
+      "title": "같은 작업대의 두 정책",
+      "type": "Control",
+      "question": "preset과 explicit 실행의 공통 task와 도구 표면이 보존됐는가?",
+      "consequence": "장 원문, user prompt, before snapshot, Bash/Edit/Read, default permission, Opus 5가 같았다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "두 attempt는 장 원문과 user prompt hash, before snapshot, init의 Bash/Edit/Read·default permission·Opus 5가 같고 prompt kind가 preset과 explicit으로 구성됐다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:manifest:option_summary",
+        "attempt:105308-beb0e51a:manifest:option_summary",
+        "attempt:105231-08cba367:sdk-message:1",
+        "attempt:105308-beb0e51a:sdk-message:1"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "preset-minimal-edit-pass-and-complete-report",
+      "sequence": 1,
+      "title": "완료 보고까지 닫힌 레인",
+      "type": "Evidence",
+      "question": "preset run이 수정과 테스트뿐 아니라 최종 보고까지 완료했는가?",
+      "consequence": "workspace listing, 두 Read, 한 줄 Edit, 실제 PASS, 실행·미실행 검증을 나눈 final과 success Result가 이어졌다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "preset run은 workspace를 나열하고 calculator/check를 읽은 뒤 한 줄 Edit, 실제 PASS, 실행·미실행 검증을 분리한 final, success Result까지 완료했다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:sdk-message:20",
+        "attempt:105231-08cba367:sdk-message:28",
+        "attempt:105231-08cba367:sdk-message:47",
+        "attempt:105231-08cba367:sdk-message:66",
+        "attempt:105231-08cba367:sdk-message:84",
+        "attempt:105231-08cba367:sdk-message:100"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "explicit-read-errors-and-cwd-recovery",
+      "sequence": 2,
+      "title": "잘못된 경로에서 돌아오다",
+      "type": "Recovery",
+      "question": "explicit run이 세 번의 Read 오류를 숨기지 않고 실제 cwd로 복구했는가?",
+      "consequence": "잘못된 홈 절대경로 Read 세 번 뒤 오류가 알려 준 cwd로 바꾸어 세 파일을 읽었다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "explicit run은 이미 상대 경로를 찾았지만 잘못된 홈 절대경로 Read 세 번을 실패하고, 오류가 알려 준 cwd로 복구해 세 파일을 읽었다.",
+      "sourceRefs": [
+        "attempt:105308-beb0e51a:sdk-message:28",
+        "attempt:105308-beb0e51a:sdk-message:45",
+        "attempt:105308-beb0e51a:sdk-message:52",
+        "attempt:105308-beb0e51a:sdk-message:56",
+        "attempt:105308-beb0e51a:sdk-message:67",
+        "attempt:105308-beb0e51a:sdk-message:92"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "explicit-minimal-edit-pass-but-terminal-failure",
+      "sequence": 3,
+      "title": "PASS 뒤 닫히지 않은 실행",
+      "type": "Terminal",
+      "question": "explicit run의 파일 수정과 check가 성공하면 run도 성공인가?",
+      "consequence": "한 줄 Edit와 PASS는 관찰됐지만 final 없이 error_max_turns로 끝났다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "explicit run은 calculator 한 줄을 수정하고 check PASS를 받았지만 final report 없이 error_max_turns로 종료됐다.",
+      "sourceRefs": [
+        "attempt:105308-beb0e51a:sdk-message:114",
+        "attempt:105308-beb0e51a:sdk-message:132",
+        "attempt:105308-beb0e51a:sdk-message:145"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "filtered-snapshots-preserve-source-scope",
+      "sequence": 4,
+      "title": "source 세 칸의 보존",
+      "type": "Integrity",
+      "question": "filtered source snapshot에서 요청 밖 파일이 바뀌었는가?",
+      "consequence": "두 run 모두 calculator만 바뀌고 check와 unrelated hash는 유지됐다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "host의 __pycache__ 제외 snapshot에서 두 run 모두 calculator.py만 바뀌고 check.py와 unrelated.md hash는 유지됐다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:process-event:101",
+        "attempt:105308-beb0e51a:process-event:146"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "explicit-post-test-pycache-observed",
+      "sequence": 5,
+      "title": "테스트가 남긴 숨은 디렉터리",
+      "type": "Filesystem",
+      "question": "Python 검증 뒤 전체 파일시스템에도 새 항목이 없었는가?",
+      "consequence": "explicit run의 마지막 ls에 새 __pycache__가 직접 나타났다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "explicit run의 테스트 후 fallback ls에는 새 __pycache__ 디렉터리가 실제로 나타났다.",
+      "sourceRefs": [
+        "attempt:105308-beb0e51a:sdk-message:140",
+        "attempt:105308-beb0e51a:sdk-message:144"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "terminal-metrics-and-tool-counts-differ",
+      "sequence": 6,
+      "title": "한 줄로 합칠 수 없는 계기판",
+      "type": "Metrics",
+      "question": "완결성, tool use, 시간, 비용이 모두 같은 방향으로 움직였는가?",
+      "consequence": "preset은 5회와 success, explicit은 11회와 max-turns였지만 preset의 시간과 비용이 더 컸다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "preset은 5 tool use와 success, explicit은 11 tool use와 max-turns였고 duration과 비용도 서로 달랐다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:sdk-message:100",
+        "attempt:105308-beb0e51a:sdk-message:145"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "passing-check-is-not-run-success",
+      "sequence": 7,
+      "title": "테스트 성공과 실행 성공",
+      "type": "Correction",
+      "question": "check PASS만으로 전체 agent run을 성공이라 불러도 되는가?",
+      "consequence": "explicit Result는 is_error=true, terminal_reason=max_turns였다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "check PASS는 mutation 검증 성공이지 run 성공이 아니다. explicit Result는 is_error=true, terminal_reason=max_turns다.",
+      "sourceRefs": [
+        "attempt:105308-beb0e51a:sdk-message:132",
+        "attempt:105308-beb0e51a:sdk-message:145"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "preset-path-was-not-direct-read",
+      "sequence": 8,
+      "title": "Read 앞에 있던 Bash",
+      "type": "Correction",
+      "question": "preset이 경로 탐색 없이 calculator를 곧바로 Read했는가?",
+      "consequence": "preset도 먼저 Bash로 workspace를 나열한 뒤 Read했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "preset도 calculator/check를 곧바로 Read한 것이 아니라 먼저 Bash로 workspace를 나열했다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:sdk-message:20",
+        "attempt:105231-08cba367:sdk-message:25",
+        "attempt:105231-08cba367:sdk-message:28"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "filtered-snapshot-is-not-total-filesystem",
+      "sequence": 9,
+      "title": "필터 밖의 파일시스템",
+      "type": "Correction",
+      "question": "changed_paths가 calculator 하나면 새 파일이 전혀 없었다는 뜻인가?",
+      "consequence": "snapshot은 __pycache__를 제외했다. source scope와 전체 filesystem mutation을 분리해야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "changed_paths는 __pycache__를 제외한 source snapshot이다. 이를 전체 파일시스템에 새 파일이 없었다는 증거로 사용하면 안 된다.",
+      "sourceRefs": [
+        "attempt:105308-beb0e51a:process-event:146",
+        "attempt:105308-beb0e51a:sdk-message:144"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "user-prompt-confounds-static-policy-attribution",
+      "sequence": 10,
+      "title": "사용자 지시라는 공통 원인",
+      "type": "Correction",
+      "question": "최소 수정과 테스트를 static system prompt의 단독 효과로 돌릴 수 있는가?",
+      "consequence": "공통 user prompt가 그 행동을 직접 요구해 인과가 분리되지 않았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "공통 user prompt가 최소 수정, unrelated 보존, check 실행, 실행·미실행 보고를 직접 요구해 해당 행동을 system prompt 단독 효과로 귀속할 수 없다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:manifest:option_summary",
+        "attempt:105308-beb0e51a:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "primary-opus-is-not-only-provider-usage",
+      "sequence": 11,
+      "title": "주연과 보조 모델",
+      "type": "Correction",
+      "question": "primary가 Opus 5이면 provider 사용 전체도 Opus뿐인가?",
+      "consequence": "두 Result model_usage에 Haiku 4.5 보조 사용도 기록됐다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "두 primary assistant는 Opus 5지만 두 Result model_usage에는 Haiku 4.5 보조 사용도 기록됐다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:sdk-message:100",
+        "attempt:105308-beb0e51a:sdk-message:145"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "max-turns-option-and-result-count-boundary",
+      "sequence": 12,
+      "title": "여섯으로 설정하고 일곱으로 기록",
+      "type": "Correction",
+      "question": "max_turns option과 Result num_turns를 같은 숫자라고 가정해도 되는가?",
+      "consequence": "host option은 6, explicit Result는 7이었다. 내부 카운팅 의미는 추측하지 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "host option의 max_turns는 6이지만 explicit Result의 num_turns는 7이다. 내부 카운팅 의미를 추측하지 않고 두 관찰값을 함께 보존한다.",
+      "sourceRefs": [
+        "attempt:105308-beb0e51a:sdk-message:145",
+        "spec:claims:max-turns-option-and-result-count-boundary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "single-pair-does-not-prove-preset-superiority",
+      "sequence": 13,
+      "title": "승자를 만들지 않은 한 쌍",
+      "type": "Correction",
+      "question": "preset만 final을 냈으니 모든 task에서 더 낫다고 결론 내릴 수 있는가?",
+      "consequence": "fixed-order 단일 표본이고 시간·비용은 반대 방향이라 일반 우월성을 증명하지 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "preset만 final까지 완료했지만 더 오래 걸리고 비용도 컸다. fixed-order 한 쌍으로 일반 우월성이나 단일 승자를 만들 수 없다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:sdk-message:100",
+        "attempt:105308-beb0e51a:sdk-message:145"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "exact-prompt-and-probe-not-provenance-bound",
+      "sequence": 14,
+      "title": "해시에 빠진 정확한 정책",
+      "type": "Correction",
+      "question": "attempt artifact만으로 exact prompt와 probe가 유일한 차이였음을 증명할 수 있는가?",
+      "consequence": "provenance에는 prompt_kind만 있고 exact policy, preset object, probe source, fixture hash가 없다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "manifest provenance는 장 원문과 prompt_kind option summary를 묶지만 exact policy, preset object, probe source, fixture hash를 묶지 않았다.",
+      "sourceRefs": [
+        "attempt:105231-08cba367:manifest:option_summary",
+        "attempt:105308-beb0e51a:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "exact-system-prompt-provider-receipt-not-observed",
+      "sequence": 15,
+      "title": "보이지 않은 prompt 영수증",
+      "type": "Unknown",
+      "question": "provider가 받은 exact system prompt 직렬화를 raw init에서 확인했는가?",
+      "consequence": "init에는 exact prompt text가 없어 직접 관찰하지 못했다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "raw init에는 exact system prompt text가 없어 provider가 받은 직렬화 payload를 직접 확인하지 못했다.",
+      "sourceRefs": [
+        "spec:claims:exact-system-prompt-provider-receipt-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "hidden-preset-text-not-observed",
+      "sequence": 16,
+      "title": "복원하지 않은 preset 전문",
+      "type": "Unknown",
+      "question": "Claude Code preset 내부 문장을 이번 run이 드러냈는가?",
+      "consequence": "preset object와 행동만 관찰했고 숨은 전문은 관찰하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "preset object와 행동은 확인했지만 Claude Code preset 내부 전문이나 특정 숨은 문장을 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:hidden-preset-text-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "repeated-counterbalanced-distribution-not-observed",
+      "sequence": 17,
+      "title": "순서를 바꾼 반복이 필요하다",
+      "type": "Unknown",
+      "question": "preset과 explicit 순서를 교차한 반복 분포가 있는가?",
+      "consequence": "preset 다음 explicit으로 한 번씩만 실행했다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "preset 후 explicit의 고정 순서로 한 번씩 실행했으므로 순서 교차 반복 분포는 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:repeated-counterbalanced-distribution-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "permission-and-safety-behavior-not-observed",
+      "sequence": 18,
+      "title": "열리지 않은 승인 장면",
+      "type": "Unknown",
+      "question": "정적 정책의 안전·승인 행동도 실제 callback으로 관찰했는가?",
+      "consequence": "permission과 hook callback은 두 run 모두 0개였다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "permission callback과 hook callback은 두 run 모두 0개라 static policy의 안전·승인 행동을 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:permission-and-safety-behavior-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "typescript-dynamic-boundary-not-observed",
+      "sequence": 19,
+      "title": "다른 언어의 미관찰 경계",
+      "type": "Unknown",
+      "question": "TypeScript 배열 prompt와 dynamic boundary를 Python run에서도 실행했는가?",
+      "consequence": "이번 Python 0.2.128 실행에서는 사용하거나 관찰하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "TypeScript 배열형 system prompt와 SYSTEM_PROMPT_DYNAMIC_BOUNDARY는 이 Python 0.2.128 실행에서 사용하거나 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:typescript-dynamic-boundary-not-observed"
+      ],
+      "cost": "?"
+    }
+  ]
+}

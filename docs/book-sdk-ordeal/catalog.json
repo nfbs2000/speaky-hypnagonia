@@ -118,6 +118,19 @@
       "artifactSha256": "951ce7f7a28a6a03c9f451961375eda6843cc34ab43f7e39453373a4453f9e39"
     },
     {
+      "chapterSlug": "ch08c",
+      "title": "8c장 정적 시스템 프롬프트: preset과 explicit policy의 실제 경계 · Observation Ordeal",
+      "path": "./evidence/ch08c.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 249,
+      "publicEventCount": 72,
+      "observedClaims": 7,
+      "correctionRequired": 8,
+      "additionalObservationRequired": 5,
+      "artifactSha256": "a90f7c214f1498810f8e504a2da070aa73d060d454c094dad63a3c8d03dbc9a3"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -130,5 +143,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T19:38:15.095Z"
+  "generatedAt": "2026-08-03T19:57:29.517Z"
 }
