@@ -1,12 +1,36 @@
 const shell = document.querySelector('.ordeal-shell')
 const cardList = document.getElementById('card-list')
 const inspection = document.querySelector('.inspection')
+const chapterSelect = document.getElementById('chapter')
+
+let selectedEntry = null
 
 try {
-  const response = await fetch('./evidence.json', { cache: 'no-store' })
+  const catalogResponse = await fetch('./catalog.json', { cache: 'no-store' })
+  if (!catalogResponse.ok) throw new Error(`ordeal_catalog_http_${catalogResponse.status}`)
+  const catalog = await catalogResponse.json()
+  if (catalog.schemaVersion !== 'hypnagonia-book-ordeal-catalog.v1' || !catalog.entries?.length) {
+    throw new Error('ordeal_catalog_contract_invalid')
+  }
+  const requested = new URLSearchParams(window.location.search).get('chapter')
+  selectedEntry = catalog.entries.find((entry) => entry.chapterSlug === requested) || catalog.entries[0]
+  chapterSelect.replaceChildren(...catalog.entries.map((entry) => {
+    const option = document.createElement('option')
+    option.value = entry.chapterSlug
+    option.textContent = `${entry.chapterSlug.toUpperCase()} · ${entry.title}`
+    return option
+  }))
+  chapterSelect.value = selectedEntry.chapterSlug
+  chapterSelect.addEventListener('change', () => {
+    const params = new URLSearchParams(window.location.search)
+    params.set('chapter', chapterSelect.value)
+    window.location.assign(`${window.location.pathname}?${params}`)
+  })
+
+  const response = await fetch(selectedEntry.path, { cache: 'no-store' })
   if (!response.ok) throw new Error(`ordeal_evidence_http_${response.status}`)
   const evidence = await response.json()
-  if (evidence.schemaVersion !== 'hypnagonia-book-ordeal.v1' || evidence.cards?.length !== 6) {
+  if (evidence.schemaVersion !== 'hypnagonia-book-ordeal.v1' || !evidence.cards?.length) {
     throw new Error('ordeal_evidence_contract_invalid')
   }
   initialize(evidence)
@@ -18,6 +42,11 @@ try {
 
 function initialize(evidence) {
   shell.dataset.state = 'ready'
+  document.title = `${evidence.title} · Hypnagonia`
+  document.getElementById('chapter-eyebrow').textContent = `RECORDED EVIDENCE · ${evidence.source.chapterSlug.toUpperCase()}`
+  document.getElementById('source-json').href = selectedEntry.path
+  document.getElementById('book-link').href = bookUrl(evidence.source.chapterSlug)
+  document.getElementById('book-link').textContent = `공개 책 ${evidence.source.chapterSlug.toUpperCase()} 읽기`
   document.getElementById('title').textContent = evidence.title
   document.getElementById('subtitle').textContent = evidence.subtitle
   document.getElementById('boundary').textContent = evidence.boundary
@@ -36,6 +65,7 @@ function initialize(evidence) {
   window.__bookSdkObservationOrdeal = {
     getState: () => ({
       schemaVersion: evidence.schemaVersion,
+      chapterSlug: evidence.source.chapterSlug,
       campaignId: evidence.source.campaignId,
       sourceEventCount: evidence.source.sourceEventCount,
       publicEventCount: evidence.source.publicEventCount,
@@ -48,6 +78,11 @@ function initialize(evidence) {
       if (index >= 0) selectCard(evidence.cards[index], cards[index])
     },
   }
+}
+
+function bookUrl(chapterSlug) {
+  const part = chapterSlug === 'ch30' ? 'part7' : 'part1'
+  return `https://nfbs2000.github.io/speaky-claude-cookbooks/book/${part}/${chapterSlug}/`
 }
 
 function cardElement(card, evidence) {

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal-catalog.v1",
+  "title": "Book SDK Observation Ordeal",
+  "entries": [
+    {
+      "chapterSlug": "ch01",
+      "title": "1장 AI 코딩 에이전트의 전체 기술 스택: 실제 SDK 첫 실행 · Observation Ordeal",
+      "path": "./evidence/ch01.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 58,
+      "publicEventCount": 18,
+      "observedClaims": 3,
+      "additionalObservationRequired": 1,
+      "artifactSha256": "6ef76a77b4066a01ad466f2139afbdff47aac8c7f6696b25e84040cd8e3871cc"
+    },
+    {
+      "chapterSlug": "ch04",
+      "title": "4장 도구 실행 오케스트레이션: 권한, 동시성, 스트리밍, 인터럽트 · Observation Ordeal",
+      "path": "./evidence/ch04.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 95,
+      "publicEventCount": 32,
+      "observedClaims": 4,
+      "additionalObservationRequired": 2,
+      "artifactSha256": "9d03719a4fbd84874d9d6e73219eb1d818cc139a21421742a503901839df574b"
+    },
+    {
+      "chapterSlug": "ch30",
+      "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
+      "path": "./evidence/ch30.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 119,
+      "publicEventCount": 45,
+      "observedClaims": 5,
+      "additionalObservationRequired": 1,
+      "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
+    }
+  ],
+  "generatedAt": "2026-08-03T16:22:08.378Z"
+}

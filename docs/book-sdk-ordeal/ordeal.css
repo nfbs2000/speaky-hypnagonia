@@ -74,6 +74,16 @@ footer,
 .brand span { font-weight: 700; }
 .brand small { margin-top: 4px; color: var(--muted); font: 9px/1.4 ui-monospace, monospace; }
 .topbar nav { display: flex; flex-wrap: wrap; gap: 16px; }
+.topbar nav select {
+  max-width: min(320px, 46vw);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #17111e;
+  color: var(--muted);
+  padding: 5px 8px;
+  font: 10px/1.4 ui-monospace, monospace;
+}
+.topbar nav select:focus-visible { border-color: var(--gold); color: var(--gold); outline: none; }
 .topbar nav a { color: var(--muted); font: 10px/1.4 ui-monospace, monospace; }
 .topbar nav a:hover,
 .topbar nav a:focus-visible { color: var(--gold); }

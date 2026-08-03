@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Book SDK 4장의 실제 Python SDK 관찰을 Hypnagonia 카드형 검증 과제로 재생합니다.">
+  <meta name="description" content="Book SDK의 실제 Python SDK 관찰을 Hypnagonia 카드형 검증 과제로 재생합니다.">
   <title>Book SDK Observation Ordeal · Hypnagonia</title>
   <link rel="icon" href="../assets/icon.png">
   <link rel="stylesheet" href="./ordeal.css">
@@ -19,14 +19,15 @@
         <span>Hypnagonia <small>Book SDK Observation Ordeal</small></span>
       </a>
       <nav>
+        <select id="chapter" aria-label="Book SDK 장 선택"></select>
         <a href="../">소스 가이드</a>
-        <a href="./evidence.json">증거 JSON</a>
+        <a id="source-json" href="./catalog.json">증거 JSON</a>
         <a href="https://github.com/nfbs2000/speaky-hypnagonia">GitHub</a>
       </nav>
     </header>
 
     <section class="briefing">
-      <p>RECORDED EVIDENCE · CHAPTER 04</p>
+      <p id="chapter-eyebrow">RECORDED EVIDENCE</p>
       <h1 id="title">Observation Ordeal</h1>
       <strong id="subtitle">실제 evidence를 불러오는 중입니다.</strong>
       <span id="boundary"></span>
@@ -76,12 +77,12 @@
         이 장면은 Hypnagonia 게임플레이 결과가 아닙니다. 카드 선택과 consequence 문법으로
         Education Shell의 검증 판정을 설명하는 강의용 projection입니다.
       </p>
-      <a href="https://nfbs2000.github.io/speaky-claude-cookbooks/book/part1/ch04/">공개 책 4장 읽기</a>
+      <a id="book-link" href="https://nfbs2000.github.io/speaky-claude-cookbooks/book/">공개 책 읽기</a>
     </footer>
 
     <section class="load-error" id="load-error" hidden>
       <h2>검증된 evidence를 불러오지 못했습니다.</h2>
-      <p>가짜 ordeal로 대체하지 않습니다. <a href="./evidence.json">source JSON</a>을 확인하세요.</p>
+      <p>가짜 ordeal로 대체하지 않습니다. <a href="./catalog.json">catalog JSON</a>을 확인하세요.</p>
     </section>
   </main>
   <script type="module" src="./ordeal.js"></script>

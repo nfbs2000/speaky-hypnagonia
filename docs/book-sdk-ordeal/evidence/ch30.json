@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T16:22:08.373Z",
+  "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch30",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch30:book-sdk-live-20260803:2026-08-03T15:36:02.207Z",
+    "traceSha256": "9b5f9e852e1e83a431c7ef54818fbb12cffdfff356d59912493ba2755e3bbbba",
+    "summarySha256": "e702d4c1c8ae736628767f115c66c0ca4a305afb2b4a9259f831ea982f908670",
+    "sourceEventCount": 119,
+    "publicEventCount": 45,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "153528-a47425f8"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 5,
+    "unresolved": 1,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "local-report-host-allow",
+      "sequence": 0,
+      "title": "허용된 기록",
+      "type": "Permission",
+      "question": "로컬 보고서 handler는 host allow 뒤에만 실행됐는가?",
+      "consequence": "permission request와 allow 뒤 handler·ToolResult·파일 hash가 이어졌다.",
+      "art": "permission",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "로컬 보고서는 host permission allow 뒤 handler와 ToolResult를 거쳐 생성됐다.",
+      "sourceRefs": [
+        "attempt:153528-a47425f8:permission-callback:35",
+        "attempt:153528-a47425f8:permission-callback:36",
+        "attempt:153528-a47425f8:process-event:40",
+        "attempt:153528-a47425f8:sdk-message:41"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "external-publish-denied-before-handler",
+      "sequence": 1,
+      "title": "닫힌 외부 문",
+      "type": "Constraint",
+      "question": "외부 게시를 거부했을 때 handler 실행도 실제로 막혔는가?",
+      "consequence": "deny와 error ToolResult만 남았고 handler 및 publish count는 0이었다.",
+      "art": "denial",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "외부 게시는 host deny와 오류 ToolResult까지만 진행됐고 handler 실행과 publish count는 0이었다.",
+      "sourceRefs": [
+        "attempt:153528-a47425f8:sdk-message:53",
+        "attempt:153528-a47425f8:permission-callback:54",
+        "attempt:153528-a47425f8:permission-callback:55",
+        "attempt:153528-a47425f8:sdk-message:59",
+        "attempt:153528-a47425f8:process-event:90"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "memory-saved-after-denial",
+      "sequence": 2,
+      "title": "거부 뒤의 메모리",
+      "type": "Recovery",
+      "question": "한 도구 거부 뒤 허용된 메모리 작업은 계속될 수 있는가?",
+      "consequence": "같은 턴에서 save_memory가 허용돼 외부 memory artifact를 남겼다.",
+      "art": "memory",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "거부된 게시 뒤 허용된 memory handler가 외부 memory artifact를 저장했다.",
+      "sourceRefs": [
+        "attempt:153528-a47425f8:sdk-message:59",
+        "attempt:153528-a47425f8:sdk-message:72",
+        "attempt:153528-a47425f8:permission-callback:74",
+        "attempt:153528-a47425f8:process-event:76",
+        "attempt:153528-a47425f8:sdk-message:77",
+        "attempt:153528-a47425f8:process-event:90"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "new-client-resumed-and-loaded-memory",
+      "sequence": 3,
+      "title": "되살아난 세션",
+      "type": "Continuity",
+      "question": "새 client가 같은 session을 재개하고 메모리를 실제 도구로 읽었는가?",
+      "consequence": "두 번째 init의 session이 같았고 load_memory handler와 ToolResult가 실행됐다.",
+      "art": "resume",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "새 client가 같은 session을 재개하고 실제 load_memory handler와 ToolResult 뒤 두 번째 Result를 냈다.",
+      "sourceRefs": [
+        "attempt:153528-a47425f8:sdk-message:89",
+        "attempt:153528-a47425f8:process-event:91",
+        "attempt:153528-a47425f8:sdk-message:92",
+        "attempt:153528-a47425f8:sdk-message:99",
+        "attempt:153528-a47425f8:process-event:100",
+        "attempt:153528-a47425f8:sdk-message:105",
+        "attempt:153528-a47425f8:sdk-message:115"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "artifact-state-stable",
+      "sequence": 4,
+      "title": "변하지 않은 증거",
+      "type": "Integrity",
+      "question": "재개 턴 뒤 report와 memory artifact 상태가 유지됐는가?",
+      "consequence": "두 snapshot의 hash가 같고 external publish count는 계속 0이었다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "두 턴 뒤 report와 memory hash는 같았고 external publish count는 계속 0이었다.",
+      "sourceRefs": [
+        "attempt:153528-a47425f8:process-event:90",
+        "attempt:153528-a47425f8:process-event:116"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "hosting-remote-eval-automatic-learning",
+      "sequence": 5,
+      "title": "아직 가지 않은 길",
+      "type": "Unknown",
+      "question": "이 로컬 MVP가 호스팅·원격 평가·자동 장기학습까지 증명했는가?",
+      "consequence": "실행하지 않았다. 제품 확장 항목은 추가 관측으로 남긴다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "호스팅, 원격 평가, 자동 장기학습은 이 로컬 run에서 실행하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:hosting-remote-eval-automatic-learning"
+      ],
+      "cost": "?"
+    }
+  ]
+}
