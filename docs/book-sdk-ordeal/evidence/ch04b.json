@@ -1,0 +1,476 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T23:06:32.535Z",
+  "title": "4b장 플랜 모드: 계획 artifact와 실행 승인 경계 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch04b",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch04b:book-sdk-live-20260803:2026-08-03T22:45:39.323983Z",
+    "traceSha256": "7c630a2423a6f9cb2fdcb1239707fe142758e5c0ee086e703779ed5d05b7b3aa",
+    "summarySha256": "51055d6f54cd297fcfedbfd4e3165e47b0887714da00391246923ad764cce4c4",
+    "sourceEventCount": 945,
+    "publicEventCount": 92,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "224407-d1e8d267"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 10,
+    "correction": 10,
+    "unresolved": 6,
+    "invalidAttempts": 1
+  },
+  "cards": [
+    {
+      "id": "attempt-integrity-and-source-provenance",
+      "sequence": 0,
+      "title": "열한 개의 봉인",
+      "type": "Integrity",
+      "question": "증거 파일 일곱 개와 실행 source 네 개가 실제 실행 버전에 묶였는가?",
+      "consequence": "integrity 7/7과 source provenance 4/4가 일치했다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "integrity manifest의 증거 파일 SHA-256 7개와 실행 시 chapter/probe/case/capture source SHA-256 4개가 현재 실행 artifact와 일치했다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:manifest:option_summary"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "actual-opus-and-serial-execution",
+      "sequence": 1,
+      "title": "한 줄로 선 실행",
+      "type": "Continuity",
+      "question": "이 계획 실험은 실제 Opus 5를 동시 호출 없이 실행했는가?",
+      "consequence": "actual primary model은 Opus 5였고 provider concurrency는 1이었다.",
+      "art": "continuity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "init과 terminal capture는 actual primary model Opus 5를 기록했고 manifest는 provider concurrency 1을 기록했다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:6",
+        "attempt:224407-d1e8d267:process-event:944"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "same-session-two-permission-modes",
+      "sequence": 2,
+      "title": "같은 방의 두 열쇠",
+      "type": "Lifecycle",
+      "question": "계획과 실행은 서로 다른 대화인가, 같은 session의 두 permission mode인가?",
+      "consequence": "같은 opaque session에서 plan init 뒤 acceptEdits init이 다시 나타났다.",
+      "art": "continuity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "같은 opaque SDK session의 plan init과 acceptEdits init이 각각 sequence 6과 906에 기록됐다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:6",
+        "attempt:224407-d1e8d267:sdk-message:906"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "read-investigation-in-plan",
+      "sequence": 3,
+      "title": "실행 전의 독해",
+      "type": "Investigation",
+      "question": "plan mode에서도 실제 파일 조사와 오류 복구가 일어났는가?",
+      "consequence": "Glob와 Read가 실행됐고 잘못된 경로 error 뒤 수정 경로가 성공했다.",
+      "art": "recovery",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "plan turn에서 Glob와 Read가 실행됐고 잘못된 첫 경로의 error와 수정한 경로의 success가 함께 보존됐다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:19",
+        "attempt:224407-d1e8d267:sdk-message:38",
+        "attempt:224407-d1e8d267:sdk-message:52",
+        "attempt:224407-d1e8d267:sdk-message:60"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "write-disabled-but-plan-edit-succeeds",
+      "sequence": 4,
+      "title": "닫힌 펜과 열린 교정",
+      "type": "Separation",
+      "question": "Write가 꺼졌다면 계획 artifact도 만들 수 없었는가?",
+      "consequence": "Write는 거부됐지만 격리된 계획 artifact의 Edit는 성공했다.",
+      "art": "separation",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "init 목록에 없는 Write는 disabled error였지만 이어진 Edit는 격리된 plan artifact를 갱신했다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:6",
+        "attempt:224407-d1e8d267:sdk-message:761",
+        "attempt:224407-d1e8d267:sdk-message:762",
+        "attempt:224407-d1e8d267:sdk-message:817",
+        "attempt:224407-d1e8d267:sdk-message:823"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "target-workspace-unchanged-before-approval",
+      "sequence": 5,
+      "title": "움직이지 않은 작업장",
+      "type": "Boundary",
+      "question": "계획 artifact가 바뀌는 동안 애플리케이션 source도 함께 바뀌었는가?",
+      "consequence": "baseline과 after-plan의 target app hash는 같았다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "plan artifact Edit와 별개로 baseline과 after-plan의 application app.py SHA-256은 같았다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:process-event:1",
+        "attempt:224407-d1e8d267:process-event:900"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "exit-plan-permission-gate-retried",
+      "sequence": 6,
+      "title": "두 번 닫힌 출구",
+      "type": "Permission",
+      "question": "ExitPlanMode 요청은 외부 승인 없이 자동으로 실행 mode를 열었는가?",
+      "consequence": "두 요청 모두 callback에서 deny됐고 terminal denial에도 남았다.",
+      "art": "denial",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "ExitPlanMode 두 요청은 permission callback에서 외부 승인이 없다는 이유로 두 번 모두 deny됐고 terminal permission_denials에도 남았다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:841",
+        "attempt:224407-d1e8d267:permission-callback:847",
+        "attempt:224407-d1e8d267:permission-callback:848",
+        "attempt:224407-d1e8d267:sdk-message:866",
+        "attempt:224407-d1e8d267:permission-callback:872",
+        "attempt:224407-d1e8d267:permission-callback:873",
+        "attempt:224407-d1e8d267:sdk-message:898"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "host-program-approval-and-explicit-mode-restore",
+      "sequence": 7,
+      "title": "호스트가 돌린 열쇠",
+      "type": "Control",
+      "question": "누가 승인 기록을 남기고 acceptEdits mode를 복원했는가?",
+      "consequence": "host-program 승인 뒤 host-owned mode transition이 명시적으로 기록됐다.",
+      "art": "permission",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "process timeline은 actor=host-program 승인 뒤 host가 plan에서 acceptEdits로 명시 전환했음을 기록했다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:process-event:901",
+        "attempt:224407-d1e8d267:process-event:902",
+        "attempt:224407-d1e8d267:process-event:903"
+      ],
+      "cost": 8
+    },
+    {
+      "id": "application-edit-after-approval",
+      "sequence": 8,
+      "title": "승인 뒤의 한 줄",
+      "type": "Execution",
+      "question": "애플리케이션 Edit와 hash 변경은 승인 경계 뒤에만 나타났는가?",
+      "consequence": "승인과 mode 복원 뒤 app Edit가 성공하고 target hash가 바뀌었다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "승인과 mode 복원 뒤 application app.py Edit가 성공했고 최종 target hash가 달라졌다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:916",
+        "attempt:224407-d1e8d267:sdk-message:922",
+        "attempt:224407-d1e8d267:process-event:943"
+      ],
+      "cost": 9
+    },
+    {
+      "id": "raw-otel-sequences-and-model-usage",
+      "sequence": 9,
+      "title": "겹쳐진 구백열한 흔적",
+      "type": "Telemetry",
+      "question": "raw SDK와 OTel의 실행 sequence가 실제로 대응하는가?",
+      "consequence": "911개 sequence가 일치했고 terminal usage는 Opus와 Haiku를 분리했다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "raw SDK 911개와 OTel sdk.message 911개 sequence가 한 trace에서 일치하고 terminal model_usage는 Opus 5와 Haiku 4.5를 분리해 기록했다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:898",
+        "attempt:224407-d1e8d267:sdk-message:941"
+      ],
+      "cost": 10
+    },
+    {
+      "id": "plan-mode-is-not-no-tools",
+      "sequence": 10,
+      "title": "도구 없는 계획이라는 착각",
+      "type": "Correction",
+      "question": "plan mode를 모든 도구가 멈추는 상태로 설명해도 되는가?",
+      "consequence": "읽기 도구와 plan artifact Edit가 실제로 실행됐으므로 설명을 고쳐야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "plan mode에서도 읽기 조사 도구와 격리된 plan artifact Edit가 실행됐으므로 도구가 전혀 실행되지 않는 모드라고 쓰면 안 된다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:19",
+        "attempt:224407-d1e8d267:sdk-message:817"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "mutation-request-zero-is-false",
+      "sequence": 11,
+      "title": "숫자 영의 함정",
+      "type": "Correction",
+      "question": "승인 전 mutation tool request가 항상 0이라고 판정해도 되는가?",
+      "consequence": "plan artifact Edit가 있었으므로 path class와 target hash로 경계를 판단한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "승인 전 mutation tool request는 0이 아니었다. plan artifact Edit와 application source Edit를 path class로 구분해야 한다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:817",
+        "attempt:224407-d1e8d267:process-event:900"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "write-absence-is-not-plan-file-absence",
+      "sequence": 12,
+      "title": "없는 Write, 남은 계획",
+      "type": "Correction",
+      "question": "Write 오류만으로 계획 파일도 없었다고 결론 내릴 수 있는가?",
+      "consequence": "이어진 Edit가 계획 artifact를 갱신했으므로 그 결론은 성립하지 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Write가 disabled였다는 사실을 계획 파일이 존재하지 않았다는 결론으로 확대할 수 없다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:762",
+        "attempt:224407-d1e8d267:sdk-message:823"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "host-approval-is-not-human-click",
+      "sequence": 13,
+      "title": "사람이 누르지 않은 승인",
+      "type": "Correction",
+      "question": "programmatic host approval을 실제 사용자의 버튼 클릭이라 불러도 되는가?",
+      "consequence": "actor는 host-program이었다. HITL UI는 이번 실행에서 검증하지 않았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "이번 승인 actor는 host-program이며 실제 사용자의 버튼 클릭이나 permission.reply UX를 검증한 것이 아니다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:process-event:901"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "mode-restore-is-host-owned",
+      "sequence": 14,
+      "title": "저절로 돌아오지 않은 모드",
+      "type": "Correction",
+      "question": "acceptEdits 복원을 SDK의 자동 기억 기능으로 설명해도 되는가?",
+      "consequence": "host가 이전 mode를 저장하고 set_permission_mode로 명시 복원했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "acceptEdits 복원은 SDK 자동 기억이 아니라 host의 명시적 set_permission_mode 결과다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:process-event:902",
+        "attempt:224407-d1e8d267:process-event:903"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "five-stage-workflow-not-guaranteed",
+      "sequence": 15,
+      "title": "보장되지 않은 다섯 문",
+      "type": "Correction",
+      "question": "구조화된 plan이 나왔으니 SDK가 정확한 다섯 heading을 보장하는가?",
+      "consequence": "그 heading을 보장하는 Python option이나 event는 관찰되지 않았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "구조화된 plan은 관찰됐지만 Python SDK가 정확한 다섯 heading을 보장하는 option이나 event는 관찰되지 않았다.",
+      "sourceRefs": [
+        "spec:claims:five-stage-workflow-not-guaranteed"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "full-sparse-not-public-option",
+      "sequence": 16,
+      "title": "노출되지 않은 밀도 조절기",
+      "type": "Correction",
+      "question": "full과 sparse 계획 선택을 현재 Python SDK option으로 가르칠 수 있는가?",
+      "consequence": "교육 개념은 가능하지만 검증된 공개 option은 확인하지 못했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "full/sparse 계획 선택을 현재 Python SDK의 검증된 공개 option으로 가르치지 않는다.",
+      "sourceRefs": [
+        "spec:claims:full-sparse-not-public-option"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "primary-opus-is-not-only-provider-usage",
+      "sequence": 17,
+      "title": "주연 뒤의 하이쿠",
+      "type": "Correction",
+      "question": "primary model이 Opus 5면 provider usage도 전부 Opus인가?",
+      "consequence": "terminal model_usage에는 Haiku 4.5도 함께 기록됐다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "primary assistant model은 Opus 5지만 terminal model_usage에는 Haiku 4.5도 있어 전체 provider usage를 Opus 하나로 쓰면 안 된다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:898",
+        "attempt:224407-d1e8d267:sdk-message:941"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "permission-callback-alone-is-incomplete",
+      "sequence": 18,
+      "title": "한 창으로 본 불완전한 시간선",
+      "type": "Correction",
+      "question": "permission callback만 읽으면 plan turn의 모든 도구를 볼 수 있는가?",
+      "consequence": "raw SDK, hook, callback, process snapshot을 결합해야 전체 경계가 보인다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "permission callback만 읽으면 allowed 도구와 plan artifact Edit를 놓칠 수 있으므로 raw SDK, hook, callback, process snapshot을 함께 읽어야 한다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:hook-callback:819",
+        "attempt:224407-d1e8d267:permission-callback:847"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "captured-and-edit-success-are-not-test-pass",
+      "sequence": 19,
+      "title": "수집과 검증의 거리",
+      "type": "Correction",
+      "question": "CAPTURED와 Edit 성공을 테스트 통과로 표시해도 되는가?",
+      "consequence": "Bash test는 실행되지 않았으므로 파일 변경과 검증 성공을 분리한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "CAPTURED와 application Edit 성공은 raw 수집 및 변경 성공이며 테스트 통과가 아니다. 이번 execution에는 Bash가 없었다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:941",
+        "attempt:224407-d1e8d267:process-event:944"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "human-permission-ui-not-observed",
+      "sequence": 20,
+      "title": "아직 누르지 않은 버튼",
+      "type": "Unknown",
+      "question": "실제 사용자의 permission reply와 승인 버튼을 관찰했는가?",
+      "consequence": "이번 actor는 host-program이다. live UI case가 더 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "실제 사용자의 permission.requested/reply와 버튼 승인 actor는 live UI case가 필요하다.",
+      "sourceRefs": [
+        "spec:claims:human-permission-ui-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "auto-plan-restore-not-observed",
+      "sequence": 21,
+      "title": "아직 돌아오지 않은 Auto",
+      "type": "Unknown",
+      "question": "auto에서 plan을 거쳐 정책 범위를 보존해 auto로 돌아왔는가?",
+      "consequence": "이번 이전 mode는 acceptEdits였으므로 auto 조합은 남은 실험이다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "auto에서 plan으로 갔다가 auto 정책 범위를 보존해 복원하는 별도 case가 필요하다.",
+      "sourceRefs": [
+        "spec:claims:auto-plan-restore-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "teamlead-approval-not-observed",
+      "sequence": 22,
+      "title": "아직 없는 상위 승인자",
+      "type": "Unknown",
+      "question": "팀리드나 상위 agent가 이 계획을 실제로 승인했는가?",
+      "consequence": "단일 agent case였으므로 팀 승인 흐름은 관찰하지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "상위 agent 또는 팀리드가 계획을 승인하는 팀 실행은 이번 단일 agent case 범위 밖이다.",
+      "sourceRefs": [
+        "spec:claims:teamlead-approval-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "post-approval-test-not-observed",
+      "sequence": 23,
+      "title": "실행되지 않은 검증",
+      "type": "Unknown",
+      "question": "승인 뒤 계획에 적힌 테스트까지 실제로 실행했는가?",
+      "consequence": "execution turn에는 Bash가 없어 별도 test case가 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "승인 후 계획에 적힌 Bash test까지 실행해 결과를 연결하는 case가 필요하다.",
+      "sourceRefs": [
+        "spec:claims:post-approval-test-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "plan-file-provisioner-and-lifecycle-not-observed",
+      "sequence": 24,
+      "title": "계획 파일 뒤의 안개",
+      "type": "Unknown",
+      "question": "빈 계획 파일을 준비한 component와 정리 시점을 확인했는가?",
+      "consequence": "Edit 성공은 보였지만 정확한 provisioner와 lifecycle은 보이지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "Write deny 뒤 Edit가 성공할 수 있도록 계획 파일을 준비한 정확한 component와 cleanup lifecycle은 관찰하지 않았다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:762",
+        "attempt:224407-d1e8d267:sdk-message:823"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "deny-revise-product-ux-not-observed",
+      "sequence": 25,
+      "title": "아직 고치지 않은 계획",
+      "type": "Unknown",
+      "question": "사용자가 수정 요청을 보내고 고친 plan을 다시 승인하는 UX를 실행했는가?",
+      "consequence": "모델의 재요청만 보였고 실제 revise interaction은 남아 있다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "callback deny 뒤 모델 재요청은 관찰했지만 실제 사용자의 수정 요청과 수정된 plan 승인 UX는 별도 관측이 필요하다.",
+      "sourceRefs": [
+        "attempt:224407-d1e8d267:sdk-message:841",
+        "attempt:224407-d1e8d267:sdk-message:866"
+      ],
+      "cost": "?"
+    }
+  ]
+}
