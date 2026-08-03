@@ -1,0 +1,464 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-03T21:39:23.587Z",
+  "title": "10장 파일 상태: summary의 V1과 디스크 V2 충돌 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch10",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch10:book-sdk-live-20260803:2026-08-03T22:20:00.000Z",
+    "traceSha256": "90bd3310282e2447e49e00db8fbff2ffa03bda82d636520cc6618bc66f3096d1",
+    "summarySha256": "8a25c92345cb79469b4c4940168073985a70baee0552275655960260fc164eb8",
+    "sourceEventCount": 87,
+    "publicEventCount": 52,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "111658-cc5ddf5e"
+    ]
+  },
+  "ordeal": {
+    "interpretation": 9,
+    "correction": 11,
+    "unresolved": 6,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "attempt-integrity-files-match",
+      "sequence": 0,
+      "title": "일곱 봉인의 일치",
+      "type": "Integrity",
+      "question": "CH10 원본 파일은 수집 당시 hash를 그대로 유지했는가?",
+      "consequence": "manifest, verdict, raw 4종, OTel의 SHA-256 7개가 모두 일치했다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "attempt integrity manifest가 열거한 manifest, verdict, raw 4종, OTel의 SHA-256 7개를 현재 파일에서 다시 계산해 모두 일치했다.",
+      "sourceRefs": [
+        "spec:claims:attempt-integrity-files-match"
+      ],
+      "cost": 1
+    },
+    {
+      "id": "same-session-survives-manual-boundary",
+      "sequence": 1,
+      "title": "경계를 건넌 세션",
+      "type": "Continuity",
+      "question": "compaction 전후가 같은 session으로 이어졌는가?",
+      "consequence": "같은 session ID가 유지됐고 경계 뒤 init이 다시 방출됐다.",
+      "art": "continuity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "before와 after phase는 같은 session ID를 사용했고 boundary 뒤 같은 ID의 init이 다시 방출됐다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:2",
+        "attempt:111658-cc5ddf5e:sdk-message:65",
+        "attempt:111658-cc5ddf5e:sdk-message:72"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "skill-and-v1-are-read-before-boundary",
+      "sequence": 2,
+      "title": "경계 전의 두 독해",
+      "type": "Evidence",
+      "question": "skill과 V1 파일은 실제 ToolUse/ToolResult로 읽혔는가?",
+      "consequence": "skill seq 21/25와 V1 seq 42/46이 연결된 Read 근거를 남겼다.",
+      "art": "memory",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "경계 전 skill file은 seq 21/25, state.md V1은 seq 42/46의 연결된 Read ToolUse/ToolResult로 관찰됐다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:21",
+        "attempt:111658-cc5ddf5e:sdk-message:25",
+        "attempt:111658-cc5ddf5e:sdk-message:42",
+        "attempt:111658-cc5ddf5e:sdk-message:46"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "manual-boundary-drops-3003-tokens",
+      "sequence": 3,
+      "title": "삼천 토큰의 낙하",
+      "type": "Boundary",
+      "question": "수동 compaction은 이번 run에서 실제 token을 줄였는가?",
+      "consequence": "5,281에서 2,278로 줄었고 dropped 3,003이 기록됐다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "manual compact boundary는 pre 5,281, post 2,278, cumulative dropped 3,003, duration 48,719ms를 기록했다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:65"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "continuation-summary-preserves-v1-and-reread-rule",
+      "sequence": 4,
+      "title": "요약에 남은 V1",
+      "type": "Memory",
+      "question": "continuation summary에는 어떤 상태와 규칙이 남았는가?",
+      "consequence": "7,762자 summary에 V1과 재조회 규칙은 있었지만 V2는 없었다.",
+      "art": "memory",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "seq 66의 7,762자 continuation summary에는 V1, skill 본문, 재조회 규칙이 있고 V2는 없다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:66"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "host-mutates-disk-to-v2-after-boundary",
+      "sequence": 5,
+      "title": "디스크의 두 번째 표식",
+      "type": "Mutation",
+      "question": "경계 뒤 실제 파일은 모델 기억과 다르게 바뀌었는가?",
+      "consequence": "host event가 state.md의 hash와 marker를 V1에서 V2로 바꿨다.",
+      "art": "continuity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "host process event seq 70은 boundary 뒤 state.md의 hash와 marker를 V1에서 V2로 변경했다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:process-event:70"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "post-mutation-tool-lane-is-empty",
+      "sequence": 6,
+      "title": "비어 있는 재조회 통로",
+      "type": "Provenance",
+      "question": "V2 변경 뒤 모델이 새 Read와 ToolResult를 확보했는가?",
+      "consequence": "post-mutation tool block은 0건인데 모델은 V1을 RE-READ라 불렀다.",
+      "art": "correction",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "V2 변경 뒤 Skill/Read ToolUse와 ToolResult는 0건인데 assistant와 Result는 V1을 RE-READ라고 보고했다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:process-event:70",
+        "attempt:111658-cc5ddf5e:sdk-message:72",
+        "attempt:111658-cc5ddf5e:sdk-message:80",
+        "attempt:111658-cc5ddf5e:sdk-message:84"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "compact-result-is-success-with-empty-text",
+      "sequence": 7,
+      "title": "말 없는 압축 영수증",
+      "type": "Receipt",
+      "question": "compaction 성공을 Result 자연어만으로 확인할 수 있는가?",
+      "consequence": "Result는 success였지만 0 turn과 빈 text였고 status/boundary가 근거였다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "compact phase Result seq 68은 success, num_turns 0, 빈 자연어 result이며 실제 경계 성공은 status와 boundary 사건으로 확인된다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:62",
+        "attempt:111658-cc5ddf5e:sdk-message:63",
+        "attempt:111658-cc5ddf5e:sdk-message:65",
+        "attempt:111658-cc5ddf5e:sdk-message:68"
+      ],
+      "cost": 8
+    },
+    {
+      "id": "raw-and-otel-sdk-sequences-align",
+      "sequence": 8,
+      "title": "한 줄로 겹친 두 기록",
+      "type": "Telemetry",
+      "question": "raw SDK와 OTel projection의 sequence는 일치하는가?",
+      "consequence": "raw 78건과 sdk.message span 78건이 일치하고 단일 trace에 묶였다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "raw SDK message 78건과 OTel sdk.message 78건의 sequence가 일치하고 89개 span은 하나의 trace에 속한다.",
+      "sourceRefs": [
+        "spec:claims:raw-and-otel-sdk-sequences-align"
+      ],
+      "cost": 9
+    },
+    {
+      "id": "skill-listing-is-not-post-boundary-execution",
+      "sequence": 9,
+      "title": "목록에만 남은 기술",
+      "type": "Correction",
+      "question": "init에 skill 이름이 있으면 경계 뒤 실제 실행됐다고 볼 수 있는가?",
+      "consequence": "availability는 보였지만 후속 Skill/Read 사건은 0건이었다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "seq 72 init에 skill 이름이 다시 나타난 사실은 availability이며 post-boundary skill 실행 증거가 아니다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:72",
+        "attempt:111658-cc5ddf5e:sdk-message:80"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "summary-rule-is-not-executed-action",
+      "sequence": 10,
+      "title": "기억된 규칙, 사라진 행동",
+      "type": "Correction",
+      "question": "summary가 재조회 규칙을 보존하면 다음 turn이 반드시 실행하는가?",
+      "consequence": "규칙은 남았지만 새 Read는 실행되지 않았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "summary가 재조회 규칙을 보존했어도 실제 다음 turn에 Read가 실행됐다는 뜻은 아니다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:66",
+        "attempt:111658-cc5ddf5e:sdk-message:80"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "model-reread-label-is-not-tool-evidence",
+      "sequence": 11,
+      "title": "거짓 재조회 표식",
+      "type": "Correction",
+      "question": "모델의 RE-READ 문장을 tool 사건으로 채택해도 되는가?",
+      "consequence": "자기보고는 post-boundary tool block 0건과 직접 모순됐다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "assistant의 RE-READ 자기보고는 V2 변경 뒤 대응 ToolUse/ToolResult 부재와 모순되므로 raw tool event를 우선해야 한다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:process-event:70",
+        "attempt:111658-cc5ddf5e:sdk-message:80",
+        "attempt:111658-cc5ddf5e:sdk-message:84"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "path-and-line-do-not-prove-freshness",
+      "sequence": 12,
+      "title": "정확하지만 오래된 좌표",
+      "type": "Correction",
+      "question": "정확한 path와 line 인용이 fresh provenance를 증명하는가?",
+      "consequence": "같은 좌표가 summary에 이미 있어 새 파일 관찰을 증명하지 못했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "final의 정확한 path와 line은 continuation summary에도 있었으므로 fresh file provenance를 증명하지 않는다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:66",
+        "attempt:111658-cc5ddf5e:sdk-message:80"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "sdk-files-persisted-event-is-not-current-python-type",
+      "sequence": 13,
+      "title": "존재하지 않는 Python 타입",
+      "type": "Correction",
+      "question": "SDKFilesPersistedEvent가 Python 0.2.128의 보장된 타입인가?",
+      "consequence": "export/parser와 이번 raw 어디에도 전용 타입이 없었다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Python SDK 0.2.128은 SDKFilesPersistedEvent를 export/parse하지 않으며 이번 raw에도 전용 file persisted system event가 없다.",
+      "sourceRefs": [
+        "spec:claims:sdk-files-persisted-event-is-not-current-python-type"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "manual-compact-does-not-prove-automatic-restore-policy",
+      "sequence": 14,
+      "title": "수동 경계 밖의 정책",
+      "type": "Correction",
+      "question": "한 번의 /compact로 자동 복원 정책까지 증명할 수 있는가?",
+      "consequence": "trigger는 manual이며 자동 threshold와 선택 복원은 범위 밖이다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "host가 직접 보낸 manual /compact 한 번으로 자동 threshold나 선택적 file/skill 복원 정책을 증명할 수 없다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:65"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "restore-surfaces-must-remain-separate",
+      "sequence": 15,
+      "title": "다섯 갈래 복원 표면",
+      "type": "Correction",
+      "question": "Read, checkpoint, session store, skill, plan 복원을 하나로 합쳐도 되는가?",
+      "consequence": "서로 다른 SDK 표면이므로 각각의 사건으로 검증해야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "tool Read, file checkpoint/rewind, session store, skill reinjection, plan restore는 서로 다른 관찰 표면이며 하나의 복원 보장으로 합치면 안 된다.",
+      "sourceRefs": [
+        "spec:claims:restore-surfaces-must-remain-separate"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "primary-opus-is-not-only-provider-usage",
+      "sequence": 16,
+      "title": "Opus 뒤의 보조 모델",
+      "type": "Correction",
+      "question": "primary Opus를 provider 전체 사용 모델 하나로 표시해도 되는가?",
+      "consequence": "세 Result의 model_usage에 Haiku 4.5 보조 사용도 남았다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "primary assistant는 Opus 5지만 세 Result의 model_usage에는 Haiku 4.5 보조 사용도 있어 전체 provider usage는 Opus 하나가 아니다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:sdk-message:59",
+        "attempt:111658-cc5ddf5e:sdk-message:68",
+        "attempt:111658-cc5ddf5e:sdk-message:84"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "captured-is-not-claim-pass",
+      "sequence": 17,
+      "title": "수집과 합격의 차이",
+      "type": "Correction",
+      "question": "CAPTURED와 assertion 0이 복원 주장 통과를 뜻하는가?",
+      "consequence": "원본 저장 완료 표식이며 verdict는 TODO와 passed null이었다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "OTel CAPTURED와 assertion count 0은 raw 수집 완료 표식이며 파일 복원 주장의 합격 판정이 아니다.",
+      "sourceRefs": [
+        "spec:claims:captured-is-not-claim-pass"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "otel-is-not-independent-provider-proof",
+      "sequence": 18,
+      "title": "같은 기록을 비춘 창",
+      "type": "Correction",
+      "question": "이번 OTel을 독립 provider 관측기로 취급할 수 있는가?",
+      "consequence": "같은 recorder가 raw와 host event를 투영한 trace다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "이 OTel은 같은 recorder가 raw SDK와 host event를 투영한 것이므로 독립 provider 관측기로 부르면 안 된다.",
+      "sourceRefs": [
+        "spec:claims:otel-is-not-independent-provider-proof"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "probe-runtime-source-is-not-fully-provenance-bound",
+      "sequence": 19,
+      "title": "봉인되지 않은 실행 코드",
+      "type": "Correction",
+      "question": "attempt가 exact probe, case, runtime source까지 hash로 묶었는가?",
+      "consequence": "장과 fixture/skill hash는 있지만 실행 코드 세 파일 hash는 없다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "manifest는 장 source와 V1/V2/skill hash를 묶지만 exact probe, case, runtime source hash를 묶지 않았다.",
+      "sourceRefs": [
+        "attempt:111658-cc5ddf5e:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "successful-post-boundary-v2-read-not-observed",
+      "sequence": 20,
+      "title": "아직 없는 V2 독해",
+      "type": "Unknown",
+      "question": "경계 뒤 V2를 읽은 성공 ToolResult를 확보했는가?",
+      "consequence": "이번 run은 실패한 재조회만 보여 주므로 성공 대조 실행이 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "host mutation 뒤 V2를 포함한 새 Read ToolUse와 연결 성공 ToolResult를 가진 실행이 필요하다.",
+      "sourceRefs": [
+        "spec:claims:successful-post-boundary-v2-read-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "selective-skill-reinjection-policy-not-observed",
+      "sequence": 21,
+      "title": "보이지 않은 선택 재주입",
+      "type": "Unknown",
+      "question": "호출된 skill만 자동 재주입하는 정책을 관찰했는가?",
+      "consequence": "init 목록은 보였지만 내부 선택 정책은 event로 드러나지 않았다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "호출된 skill만 선택적으로 자동 재주입하는 내부 정책은 이번 event stream에서 관찰되지 않았다.",
+      "sourceRefs": [
+        "spec:claims:selective-skill-reinjection-policy-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "plan-artifact-restore-not-observed",
+      "sequence": 22,
+      "title": "열리지 않은 계획 보관함",
+      "type": "Unknown",
+      "question": "plan artifact가 compaction 뒤 자동 복원됐는가?",
+      "consequence": "이번 fixture에는 plan artifact가 없어 별도 실행이 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "plan artifact가 compaction 뒤 자동 복원되는지는 이 실행에서 다루지 않았다.",
+      "sourceRefs": [
+        "spec:claims:plan-artifact-restore-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "checkpoint-compact-combination-not-observed",
+      "sequence": 23,
+      "title": "겹치지 않은 두 복원선",
+      "type": "Unknown",
+      "question": "checkpoint/rewind와 compaction을 결합한 파일 복구를 실행했는가?",
+      "consequence": "두 표면을 함께 유도하지 않아 별도 실제 실행이 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "file checkpoint/rewind와 compaction을 결합해 변경 파일을 복구하는 경로는 별도 실제 실행이 필요하다.",
+      "sourceRefs": [
+        "spec:claims:checkpoint-compact-combination-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "repeated-stale-rate-not-observed",
+      "sequence": 24,
+      "title": "측정하지 않은 실패 비율",
+      "type": "Unknown",
+      "question": "한 run으로 stale 응답의 일반적 발생률을 말할 수 있는가?",
+      "consequence": "반복 표본이 없어 이번 한 실패를 비율로 일반화하지 않는다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "한 번의 실행으로 stale 응답과 성공 재조회 비율을 일반화할 수 없다.",
+      "sourceRefs": [
+        "spec:claims:repeated-stale-rate-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "full-source-provenance-not-observed",
+      "sequence": 25,
+      "title": "완성되지 않은 출처 봉인",
+      "type": "Unknown",
+      "question": "장과 모든 실행 코드를 한 provenance manifest로 봉인했는가?",
+      "consequence": "다음 capture는 chapter, probe, case, runtime hash를 모두 저장해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "chapter, probe, case, runtime source hash를 모두 attempt에 묶는 새 provenance manifest가 필요하다.",
+      "sourceRefs": [
+        "spec:claims:full-source-provenance-not-observed"
+      ],
+      "cost": "?"
+    }
+  ]
+}
