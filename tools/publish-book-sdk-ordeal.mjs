@@ -26,6 +26,7 @@ import { ch13CardMeta } from './book-sdk-ordeal-ch13-cards.mjs'
 import { ch14CardMeta } from './book-sdk-ordeal-ch14-cards.mjs'
 import { ch15CardMeta } from './book-sdk-ordeal-ch15-cards.mjs'
 import { ch16CardMeta } from './book-sdk-ordeal-ch16-cards.mjs'
+import { ch17CardMeta } from './book-sdk-ordeal-ch17-cards.mjs'
 import { ch04bCardMeta } from './book-sdk-ordeal-ch04b-cards.mjs'
 import { ch30CardMeta } from './book-sdk-ordeal-ch30-cards.mjs'
 
@@ -338,6 +339,7 @@ const cardMetaByChapter = {
   ch14: ch14CardMeta,
   ch15: ch15CardMeta,
   ch16: ch16CardMeta,
+  ch17: ch17CardMeta,
   ch04b: ch04bCardMeta,
   ch30: ch30CardMeta,
 }
