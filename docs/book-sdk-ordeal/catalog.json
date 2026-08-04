@@ -379,6 +379,22 @@
       "artifactSha256": "ba560ca4eb8da6fbf2c99a6ccc34ed610b7f1ff886dd136c2cf58f057193b211"
     },
     {
+      "chapterSlug": "ch20",
+      "title": "20장 AgentDefinition: 선언이 아니라 연결된 worker 위임 사슬 · Observation Ordeal",
+      "path": "./evidence/ch20.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 42,
+      "publicEventCount": 51,
+      "configuredClaims": 3,
+      "observedClaims": 14,
+      "inferredClaims": 0,
+      "notObservedClaims": 7,
+      "correctionRequired": 11,
+      "additionalObservationRequired": 4,
+      "artifactSha256": "64a69d5da73bef6f369d6cce585fcc3d242677fe2116582c655ce9cb2b4636d1"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -391,5 +407,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-04T06:40:31.537Z"
+  "generatedAt": "2026-08-04T07:32:22.412Z"
 }

@@ -1,0 +1,676 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-04T07:32:22.403Z",
+  "title": "20장 AgentDefinition: 선언이 아니라 연결된 worker 위임 사슬 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch20",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch20:book-sdk-live-20260803:2026-08-04T07:02:48.439033Z",
+    "traceSha256": "0109e8ddacae0b63784fe3d354151785c5a7b6956107052f9f3ffc44b1836a01",
+    "summarySha256": "ad1eef7645d7f028d78426f0df023723dd180a4d078b1312a6b2904bf1f2c0b2",
+    "sourceEventCount": 42,
+    "publicEventCount": 51,
+    "model": "claude-opus-5",
+    "replayModels": [
+      "claude-opus-5"
+    ],
+    "citedModels": [
+      "claude-opus-5"
+    ],
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "131541-c05b4d89"
+    ]
+  },
+  "ordeal": {
+    "configured": 3,
+    "interpretation": 14,
+    "inferred": 0,
+    "notObserved": 7,
+    "correction": 11,
+    "unresolved": 4,
+    "invalidAttempts": 0
+  },
+  "cards": [
+    {
+      "id": "agent-definition-surface-configured",
+      "sequence": 0,
+      "title": "열세 칸의 작업자 설계도",
+      "type": "SDK contract",
+      "question": "AgentDefinition이 현재 Python SDK에서 실제로 노출하는 필드는 무엇인가?",
+      "consequence": "0.2.128 소스에서 description부터 permissionMode까지 열세 필드를 확인했다.",
+      "art": "configuration",
+      "status": "configured",
+      "evidenceLevel": "Configured",
+      "sourceSummary": "Python Agent SDK 0.2.128의 AgentDefinition은 description, prompt, tools, disallowedTools, model, skills, memory, mcpServers, initialPrompt, maxTurns, background, effort, permissionMode를 노출한다.",
+      "sourceRefs": [
+        "spec:claims:agent-definition-surface-configured"
+      ],
+      "cost": "C"
+    },
+    {
+      "id": "agents-initialize-serialization-configured",
+      "sequence": 1,
+      "title": "초기화로 건너간 선언",
+      "type": "Serialization",
+      "question": "agents map은 host 메모리에만 남는가, initialize request로 직렬화되는가?",
+      "consequence": "None 필드를 뺀 AgentDefinition dict가 streaming initialize에 전달된다.",
+      "art": "init",
+      "status": "configured",
+      "evidenceLevel": "Configured",
+      "sourceSummary": "ClaudeAgentOptions.agents의 dataclass 값은 None field를 제외한 dict로 변환돼 streaming initialize request에 전달된다. 선언은 실행 준비 증거이지 worker 실행 증거는 아니다.",
+      "sourceRefs": [
+        "spec:claims:agents-initialize-serialization-configured"
+      ],
+      "cost": "C"
+    },
+    {
+      "id": "controlled-delegation-configured",
+      "sequence": 2,
+      "title": "Read만 든 증거 작업자",
+      "type": "Configuration",
+      "question": "leader와 worker의 도구·모델·turn·permission 경계를 어떻게 고정했는가?",
+      "consequence": "worker는 Read만 허용하고 위험 도구를 금지한 foreground 단일 위임으로 구성됐다.",
+      "art": "boundary",
+      "status": "configured",
+      "evidenceLevel": "Configured",
+      "sourceSummary": "attempt는 leader에 Agent와 Read를 노출하고 evidence-reader worker에는 Read만 노출했다. worker는 Agent, Bash, Edit, Write를 disallow하고 model inherit, maxTurns 3, permissionMode dontAsk로 구성했으며 provider concurrency는 1이었다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:manifest:option_summary"
+      ],
+      "cost": "C"
+    },
+    {
+      "id": "assistant-messages-used-opus5",
+      "sequence": 3,
+      "title": "네 장의 Opus 영수증",
+      "type": "Model receipt",
+      "question": "요청값이 아니라 실제 응답 메시지 네 건이 모두 Opus 5였는가?",
+      "consequence": "sequence 9, 19, 26, 36의 AssistantMessage.model이 모두 claude-opus-5였다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 9, 19, 26, 36의 AssistantMessage.model은 모두 claude-opus-5였다. 실제 응답 모델은 requested 값이나 init 값이 아니라 원시 AssistantMessage에서 재판독했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:9",
+        "attempt:131541-c05b4d89:sdk-message:19",
+        "attempt:131541-c05b4d89:sdk-message:26",
+        "attempt:131541-c05b4d89:sdk-message:36"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "parent-agent-tool-use-observed",
+      "sequence": 4,
+      "title": "리더가 연 위임문",
+      "type": "Delegation",
+      "question": "worker 선언 뒤 리더가 실제 Agent tool을 호출했는가?",
+      "consequence": "sequence 19에 evidence-reader를 지정한 foreground Agent ToolUse가 남았다.",
+      "art": "tool",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 19에서 leader가 Agent ToolUse를 실제 생성했고 subagent_type evidence-reader, run_in_background false, 고유 tool_use_id를 기록했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:19"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "init-task-actual-agent-name-boundary",
+      "sequence": 5,
+      "title": "Task와 Agent의 다른 이름",
+      "type": "Surface boundary",
+      "question": "options, init tool 목록, 실제 호출의 이름이 모두 같은가?",
+      "consequence": "options는 Agent, init은 Task, 실제 ToolUse는 Agent여서 세 표면을 분리해야 한다.",
+      "art": "separation",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "options는 Agent를 지정했지만 init tools에는 Task가 노출됐고 실제 delegation ToolUseBlock.name은 Agent였다. 세 표면의 이름이 동일하지 않았다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:2",
+        "attempt:131541-c05b4d89:sdk-message:19"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "task-start-linked-to-agent",
+      "sequence": 6,
+      "title": "부모 ID를 단 출발표",
+      "type": "Task lifecycle",
+      "question": "TaskStarted가 어느 Agent 호출에서 태어났는지 연결할 수 있는가?",
+      "consequence": "task_id와 local_agent 유형, parent tool_use_id가 sequence 19 호출을 가리켰다.",
+      "art": "continuity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 20 TaskStartedMessage는 task_type local_agent와 task_id를 만들고 tool_use_id로 sequence 19의 parent Agent 호출을 연결했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:20"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "nested-worker-prompt-linked",
+      "sequence": 7,
+      "title": "작업자에게 내려간 질문",
+      "type": "Context link",
+      "question": "nested worker prompt가 부모 위임 ID를 보존했는가?",
+      "consequence": "sequence 22 UserMessage의 parent_tool_use_id가 부모 Agent 호출과 일치했다.",
+      "art": "continuity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 22의 worker prompt UserMessage는 parent_tool_use_id로 parent Agent tool_use_id를 보존했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:22"
+      ],
+      "cost": 8
+    },
+    {
+      "id": "task-progress-reported-read",
+      "sequence": 8,
+      "title": "Read를 보고한 진행 신호",
+      "type": "Progress",
+      "question": "task 진행 사건이 worker의 실제 마지막 도구를 보고했는가?",
+      "consequence": "TaskProgress는 같은 task에서 last_tool_name Read와 tool_uses 1을 기록했다.",
+      "art": "stream",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 25 TaskProgressMessage는 같은 task와 Agent tool_use_id에 대해 last_tool_name Read, tool_uses 1을 보고했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:25"
+      ],
+      "cost": 9
+    },
+    {
+      "id": "worker-read-linked-to-parent",
+      "sequence": 9,
+      "title": "부모 아래의 단 한 번 Read",
+      "type": "Worker execution",
+      "question": "worker AssistantMessage가 부모 Agent 아래에서 실제 Read를 만들었는가?",
+      "consequence": "sequence 26의 Read ToolUse가 parent Agent ID와 Opus 모델을 함께 보존했다.",
+      "art": "tool",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 26의 nested AssistantMessage는 parent_tool_use_id 아래 Read ToolUse를 한 번 생성했고 model은 claude-opus-5였다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:26"
+      ],
+      "cost": 10
+    },
+    {
+      "id": "worker-tool-result-contained-marker",
+      "sequence": 10,
+      "title": "작업자가 가져온 증거 표식",
+      "type": "Tool receipt",
+      "question": "worker의 Read 결과가 연결 ID와 통제 marker를 실제로 돌려줬는가?",
+      "consequence": "sequence 27 ToolResult가 Read와 Agent ID 및 CH20 marker를 함께 보존했다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 27 ToolResult는 worker Read ID와 parent Agent ID를 함께 보존하고 CH20_WORKER_EVIDENCE_CONTENT를 반환했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:27"
+      ],
+      "cost": 11
+    },
+    {
+      "id": "two-terminal-task-surfaces-observed",
+      "sequence": 11,
+      "title": "두 번 울린 완료 신호",
+      "type": "Task terminal",
+      "question": "foreground task 종료가 한 종류의 메시지로만 나타났는가?",
+      "consequence": "completed TaskUpdated와 completed TaskNotification이 연속으로 모두 관찰됐다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "foreground worker는 sequence 28 TaskUpdatedMessage(status completed)와 sequence 29 TaskNotificationMessage(status completed)를 모두 방출했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:28",
+        "attempt:131541-c05b4d89:sdk-message:29"
+      ],
+      "cost": 12
+    },
+    {
+      "id": "agent-tool-result-returned-worker-evidence",
+      "sequence": 12,
+      "title": "부모에게 돌아온 작업자 봉투",
+      "type": "Delegation receipt",
+      "question": "Agent ToolResult가 worker의 증거와 실행 신원을 부모에게 반환했는가?",
+      "consequence": "marker, agentId, evidence-reader, completed, Opus, readCount 1이 함께 돌아왔다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 30 parent Agent ToolResult는 worker marker, agentId, agentType evidence-reader, status completed, resolvedModel claude-opus-5, readCount 1을 기록했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:30"
+      ],
+      "cost": 13
+    },
+    {
+      "id": "leader-synthesis-and-terminal-success",
+      "sequence": 13,
+      "title": "리더가 닫은 증거 사슬",
+      "type": "Synthesis",
+      "question": "worker 결과 뒤 리더 종합과 terminal Result까지 이어졌는가?",
+      "consequence": "leader marker가 AssistantMessage와 success Result에 남아 전체 사슬을 닫았다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "sequence 36 leader AssistantMessage와 sequence 40 Result는 LEADER_SYNTHESIS_CONFIRMED marker를 보존했고 terminal subtype success, is_error false로 끝났다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:36",
+        "attempt:131541-c05b4d89:sdk-message:40"
+      ],
+      "cost": 14
+    },
+    {
+      "id": "attempt-integrity-files-match",
+      "sequence": 14,
+      "title": "일곱 파일의 봉인",
+      "type": "Integrity",
+      "question": "보존된 raw·process·callback·OTel 파일이 manifest의 해시와 일치하는가?",
+      "consequence": "출판 전 일곱 SHA-256을 다시 계산해 모두 일치시켰다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "출판 전 재검증에서 integrity manifest가 선언한 manifest, verdict, raw SDK/process/callback, OTel 파일 7개의 SHA-256이 모두 일치했다.",
+      "sourceRefs": [
+        "spec:claims:attempt-integrity-files-match"
+      ],
+      "cost": 15
+    },
+    {
+      "id": "raw-and-otel-sequences-align",
+      "sequence": 15,
+      "title": "마흔두 사건과 마흔네 그림자",
+      "type": "Telemetry",
+      "question": "raw SDK·host 사건과 OTel projection의 sequence가 정렬됐는가?",
+      "consequence": "39 SDK와 3 host 사건이 단일 trace의 44 span에 source sequence로 보존됐다.",
+      "art": "telemetry",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "원본에는 SDK message 39개와 host process event 3개가 있고 같은 AttemptRecorder가 만든 OTel span 44개는 단일 trace 702e839fcfbb947dc492d57eb4af8c52와 source sequence를 보존했다.",
+      "sourceRefs": [
+        "spec:claims:raw-and-otel-sequences-align"
+      ],
+      "cost": 16
+    },
+    {
+      "id": "auxiliary-haiku-usage-recorded",
+      "sequence": 16,
+      "title": "Opus 무대 뒤의 Haiku",
+      "type": "Usage boundary",
+      "question": "보이는 응답 모델과 provider run 전체 model usage가 같은가?",
+      "consequence": "AssistantMessage는 Opus였지만 terminal Result에는 Haiku 보조 사용량도 있었다.",
+      "art": "separation",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "terminal Result.model_usage에는 claude-opus-5와 claude-haiku-4-5-20251001이 함께 있었다. 보이는 AssistantMessage 응답 모델과 provider 내부 보조 사용량을 구분해야 한다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:40"
+      ],
+      "cost": 17
+    },
+    {
+      "id": "configured-agent-is-not-executed-agent",
+      "sequence": 17,
+      "title": "설계도는 실행 영수증이 아니다",
+      "type": "Correction",
+      "question": "agents map과 init agents만으로 worker 실행을 확정해도 되는가?",
+      "consequence": "Agent 호출, nested 사건, task 종료, 반환, leader 종합까지 연결해야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "agents map과 init agents만 보고 worker가 실행됐다고 말하면 안 된다. Agent ToolUse, nested worker event, task terminal, Agent ToolResult, leader synthesis가 연결돼야 한다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:19",
+        "attempt:131541-c05b4d89:sdk-message:30",
+        "attempt:131541-c05b4d89:sdk-message:40"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "init-model-is-not-response-model-proof",
+      "sequence": 18,
+      "title": "init 모델의 좁은 증언",
+      "type": "Correction",
+      "question": "init.model만으로 실제 사용자 응답 모델을 판정할 수 있는가?",
+      "consequence": "역사적 probe 판정을 버리고 네 AssistantMessage.model을 원시 기록에서 다시 읽었다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "historical probe는 manifest actual_model을 init.model에서 계산했다. 이번 출판은 원시 AssistantMessage.model 네 건을 재판독했으며 향후 probe도 그 기준으로 수정했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:2",
+        "attempt:131541-c05b4d89:sdk-message:9"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "opus-response-is-not-opus-only-provider-run",
+      "sequence": 19,
+      "title": "Opus 응답을 확대하지 않는 법",
+      "type": "Correction",
+      "question": "응답 네 건이 Opus면 provider 전체도 Opus만 썼다고 말해도 되는가?",
+      "consequence": "Result의 Haiku 보조 사용량 때문에 응답 모델과 전체 사용량을 분리했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "모든 AssistantMessage가 Opus 5였다는 관찰을 provider run 전체가 Opus만 사용했다는 주장으로 확대하면 안 된다. Result model_usage에는 보조 Haiku가 있다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:40"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "python-task-names-have-no-sdk-prefix",
+      "sequence": 20,
+      "title": "사라진 SDK 접두사",
+      "type": "Correction",
+      "question": "현재 Python task message class를 SDKTask*로 가르쳐도 되는가?",
+      "consequence": "0.2.128의 실제 이름은 TaskStarted, TaskProgress, TaskUpdated, TaskNotification이다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "현재 Python SDK class는 TaskStartedMessage, TaskProgressMessage, TaskUpdatedMessage, TaskNotificationMessage다. SDKTask* 이름으로 가르치면 안 된다.",
+      "sourceRefs": [
+        "spec:claims:python-task-names-have-no-sdk-prefix"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "unsupported-python-forwarding-options",
+      "sequence": 21,
+      "title": "Python에 없는 두 옵션",
+      "type": "Correction",
+      "question": "forwardSubagentText와 agentProgressSummaries가 Python ClaudeAgentOptions에 있는가?",
+      "consequence": "현재 Python 0.2.128 표면에는 없으므로 다른 binding의 옵션과 섞지 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Python ClaudeAgentOptions 0.2.128에는 forwardSubagentText와 agentProgressSummaries가 없다. 다른 binding이나 CLI 표면을 Python option으로 섞으면 안 된다.",
+      "sourceRefs": [
+        "spec:claims:unsupported-python-forwarding-options"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "agent-and-task-names-must-not-be-collapsed",
+      "sequence": 22,
+      "title": "이름 하나로 접지 않는 위임",
+      "type": "Correction",
+      "question": "configured Agent, init Task, actual Agent를 한 이름으로 정규화해도 되는가?",
+      "consequence": "표면별 이름을 보존해야 실제 호출과 task 생명주기를 함께 재생할 수 있다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "configured Agent, init Task, actual Agent 이름 중 하나만 정상형으로 남기면 실제 위임을 놓치거나 잘못 재생할 수 있다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:2",
+        "attempt:131541-c05b4d89:sdk-message:19"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "task-notification-is-not-only-terminal",
+      "sequence": 23,
+      "title": "Notification만 기다리면 놓치는 끝",
+      "type": "Correction",
+      "question": "TaskNotification만 terminal로 처리하면 모든 task를 닫을 수 있는가?",
+      "consequence": "background 경계에서는 terminal TaskUpdated만 올 수 있어 두 종류를 모두 추적해야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "TaskNotificationMessage만 terminal로 처리하면 안 된다. SDK 0.2.128은 terminal TaskUpdatedMessage만 올 수 있는 background 경계를 문서화하고 있다.",
+      "sourceRefs": [
+        "spec:claims:task-notification-is-not-only-terminal"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "terminal-success-alone-is-not-delegation-proof",
+      "sequence": 24,
+      "title": "성공 한 줄로는 부족한 위임",
+      "type": "Correction",
+      "question": "최종 success와 leader marker만으로 worker 실행을 증명할 수 있는가?",
+      "consequence": "nested Read와 연결 ID가 없으면 모델 서술이나 leader 직접 작업과 구분되지 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "최종 Result success나 leader marker만으로 worker 실행을 증명할 수 없다. nested Read와 연결 ID가 없으면 모델 서술 또는 직접 leader 작업과 구분되지 않는다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:sdk-message:26",
+        "attempt:131541-c05b4d89:sdk-message:27",
+        "attempt:131541-c05b4d89:sdk-message:40"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "declared-permission-is-not-enforcement-proof",
+      "sequence": 25,
+      "title": "권한 선언과 실제 차단 사이",
+      "type": "Correction",
+      "question": "worker permissionMode와 금지 도구 목록만으로 enforcement를 증명했는가?",
+      "consequence": "이번에는 허용된 Read만 성공했으므로 금지 요청의 실제 차단은 별도 증거가 필요하다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "worker permissionMode, tools, disallowedTools 선언만으로 모든 권한 경계를 보장했다고 말하면 안 된다. 이번에는 허용된 Read 성공만 관찰했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:manifest:option_summary",
+        "attempt:131541-c05b4d89:sdk-message:26"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "otel-is-not-independent-runtime-proof",
+      "sequence": 26,
+      "title": "독립 관찰자가 아닌 OTel",
+      "type": "Correction",
+      "question": "raw와 OTel 정렬을 독립 provider 교차 검증으로 부를 수 있는가?",
+      "consequence": "둘은 같은 AttemptRecorder의 원본과 projection이므로 수집 파이프라인 정합성만 증명한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "OTel은 같은 AttemptRecorder가 raw SDK와 host process event를 투영한 결과다. sequence 정합성은 수집 파이프라인 검증이지 독립 provider 관측이 아니다.",
+      "sourceRefs": [
+        "spec:claims:otel-is-not-independent-runtime-proof"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "historical-probe-source-not-bound",
+      "sequence": 27,
+      "title": "덜 묶인 과거 source hash",
+      "type": "Correction",
+      "question": "역사적 attempt가 chapter와 probe·case·runtime 소스를 모두 해시로 묶었는가?",
+      "consequence": "당시에는 chapter bytes만 묶였고 향후 probe가 세 source hash를 추가하도록 수정됐다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "2026-08-03 manifest source_hash는 당시 chapter bytes만 묶었고 chapter20.py, cases, runtime 전체 hash를 option_summary에 보존하지 않았다. 향후 probe는 세 source hash를 기록하도록 수정했다.",
+      "sourceRefs": [
+        "attempt:131541-c05b4d89:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "fork-context-inheritance-not-observed",
+      "sequence": 28,
+      "title": "열지 않은 fork 문",
+      "type": "Unknown",
+      "question": "fork worker와 비-fork worker의 parent context 상속 차이를 실행했는가?",
+      "consequence": "단일 foreground worker만 실행해 context 복제 경계는 미관찰이다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "worker가 parent 전체 context를 복제하는 fork mode와 비-fork mode의 대조는 실행하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:fork-context-inheritance-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "parallel-workers-and-validator-not-observed",
+      "sequence": 29,
+      "title": "소집하지 않은 병렬 작업자들",
+      "type": "Unknown",
+      "question": "여러 worker의 겹침과 독립 validator 검증을 관찰했는가?",
+      "consequence": "worker 한 명만 실행했으므로 병렬성과 검증자 구조를 일반화하지 않는다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "여러 worker의 병렬 실행, 순서 겹침, 독립 validator 검증은 worker 한 명의 foreground run으로 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:parallel-workers-and-validator-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "native-team-mailbox-not-observed",
+      "sequence": 30,
+      "title": "열리지 않은 팀 우편함",
+      "type": "Unknown",
+      "question": "Agent delegation이 native team mailbox와 peer message까지 증명하는가?",
+      "consequence": "두 표면은 다르며 이번 run에는 team 협업 사건이 없었다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "Team mailbox, claim loop, peer message 같은 native team 협업은 Agent delegation과 다른 표면이며 이번 run에서 실행하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:native-team-mailbox-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "remote-planner-not-observed",
+      "sequence": 31,
+      "title": "부르지 않은 원격 설계자",
+      "type": "Unknown",
+      "question": "원격 bridge나 별도 planner process를 이번 위임에서 실행했는가?",
+      "consequence": "local_agent foreground 위임만 관찰했으므로 외부 실행 주체는 범위 밖이다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "원격 bridge, 별도 planner process, 외부 실행 주체는 이번 local_agent 위임에서 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:remote-planner-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "background-delegation-not-observed",
+      "sequence": 32,
+      "title": "뒤에서 돌지 않은 작업자",
+      "type": "Unknown",
+      "question": "background worker의 수명과 stream close 경계를 관찰했는가?",
+      "consequence": "run_in_background=false였으므로 background terminal 차이는 미관찰이다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "background=true 또는 run_in_background=true worker의 수명, stream close, terminal event 차이는 실행하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:background-delegation-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "failure-cancel-retry-not-observed",
+      "sequence": 33,
+      "title": "오지 않은 실패와 재시도",
+      "type": "Unknown",
+      "question": "worker 실패·취소·maxTurns·retry와 leader recovery를 실행했는가?",
+      "consequence": "성공 foreground case 하나라 실패 계열 생명주기는 아직 증거가 없다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "worker 실패, maxTurns 소진, stop_task, cancellation, retry와 leader recovery는 성공 foreground case에서 관찰하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:failure-cancel-retry-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "extended-worker-fields-not-observed",
+      "sequence": 34,
+      "title": "쓰지 않은 확장 필드들",
+      "type": "Unknown",
+      "question": "skills, memory, MCP, initialPrompt, effort, model override의 실제 효과를 보았는가?",
+      "consequence": "타입 존재만 확인했고 worker 행동으로는 실행하지 않았다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "skills, memory, mcpServers, initialPrompt, effort와 model override의 실제 worker 동작은 타입 존재만 확인했으며 실행하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:extended-worker-fields-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "background-terminal-matrix-required",
+      "sequence": 35,
+      "title": "다음 시험: background 종착표",
+      "type": "Next experiment",
+      "question": "TaskUpdated 단독 terminal과 stream close를 어떻게 증명할 것인가?",
+      "consequence": "시간 제한을 둔 background worker를 별도 순차 case로 실행해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "TaskUpdatedMessage 단독 terminal과 stream close 경계를 가르치려면 bounded background worker를 별도 순차 case로 실행해야 한다.",
+      "sourceRefs": [
+        "spec:claims:background-terminal-matrix-required"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "worker-denial-case-required",
+      "sequence": 36,
+      "title": "다음 시험: 작업자 거절",
+      "type": "Next experiment",
+      "question": "worker의 tools·deny·permissionMode 합성을 무엇으로 검증할 것인가?",
+      "consequence": "금지 tool 요청을 유도하고 permission·hook 원시 사건과 handler 미실행을 수집해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "worker의 tools, disallowedTools, permissionMode 실제 합성 경계는 허용된 Read가 아니라 금지 tool 요청과 permission/hook 원시 event를 별도 관찰해야 한다.",
+      "sourceRefs": [
+        "spec:claims:worker-denial-case-required"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "worker-model-boundary-case-required",
+      "sequence": 37,
+      "title": "다음 시험: 작업자 모델 경계",
+      "type": "Next experiment",
+      "question": "inherit, override, 보안 거부와 fallback을 worker별로 어떻게 분리할 것인가?",
+      "consequence": "각 case의 AssistantMessage.model과 Result.model_usage를 함께 보존해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "inherit, 명시 model override, 보안 거부와 fallback의 worker별 모델 경계는 각 AssistantMessage.model과 Result.model_usage를 보존하는 별도 case가 필요하다.",
+      "sourceRefs": [
+        "spec:claims:worker-model-boundary-case-required"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "multiworker-handoff-evidence-required",
+      "sequence": 38,
+      "title": "다음 시험: 두 작업자의 인계",
+      "type": "Next experiment",
+      "question": "worker 간 handoff나 순차 협업을 무엇으로 연결할 것인가?",
+      "consequence": "20b장에서 두 parent Agent ID와 terminal 순서를 보존해 별도 검증한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "worker 사이 handoff 또는 순차 협업은 두 worker의 parent Agent ID와 terminal 순서를 보존하는 20b장 증거로 따로 검증해야 한다.",
+      "sourceRefs": [
+        "spec:claims:multiworker-handoff-evidence-required"
+      ],
+      "cost": "?"
+    }
+  ]
+}
