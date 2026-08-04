@@ -243,16 +243,46 @@ footer,
 }
 
 @media (max-width: 680px) {
-  .topbar { align-items: flex-start; flex-direction: column; }
-  .topbar nav { gap: 10px; }
+  .ordeal-shell,
+  .topbar,
+  .briefing,
+  .torment,
+  .inspection,
+  .hand { min-width: 0; }
+  .ordeal-shell { width: 100%; overflow-x: hidden; }
+  .topbar { align-items: flex-start; flex-direction: column; overflow: hidden; }
+  .topbar nav {
+    width: 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .topbar nav select {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: none;
+  }
+  .topbar nav a { min-width: 0; overflow-wrap: anywhere; }
   .briefing,
   .torment,
   .inspection,
   .hand { padding: 22px 14px; }
+  .briefing h1,
+  .briefing > strong,
+  .briefing > span { overflow-wrap: anywhere; }
   .torment { grid-template-columns: 110px minmax(0, 1fr); gap: 14px; }
   .torment__portrait { height: 120px; }
   .torment h2 { font-size: 17px; }
   .card-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .proof-card { min-height: 175px; }
   .ordeal-shell > footer { align-items: flex-start; flex-direction: column; padding: 16px 14px; }
+}
+
+@media (max-width: 460px) {
+  .briefing dl,
+  .card-list { grid-template-columns: 1fr; }
+  .torment { grid-template-columns: 90px minmax(0, 1fr); }
+  .torment__portrait { height: 108px; }
+  .torment small { overflow-wrap: anywhere; }
 }
