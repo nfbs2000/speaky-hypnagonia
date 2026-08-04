@@ -267,6 +267,22 @@
       "artifactSha256": "98329978519de53251d25a067a484701a64868474ef8eb460e167545595c867b"
     },
     {
+      "chapterSlug": "ch15",
+      "title": "15장 캐시 최적화: 동일 stable prefix와 앞쪽 timestamp 변경 비교 · Observation Ordeal",
+      "path": "./evidence/ch15.json",
+      "campaignId": "book-sdk-live-20260804",
+      "model": "claude-opus-5",
+      "sourceEventCount": 60,
+      "publicEventCount": 47,
+      "configuredClaims": 1,
+      "observedClaims": 12,
+      "inferredClaims": 2,
+      "notObservedClaims": 5,
+      "correctionRequired": 6,
+      "additionalObservationRequired": 3,
+      "artifactSha256": "c56e33b278972d00e989e3ffaca0952a562fceec940088ec8c785ec75643bb09"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -279,5 +295,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-04T00:11:31.091Z"
+  "generatedAt": "2026-08-04T00:47:55.774Z"
 }
