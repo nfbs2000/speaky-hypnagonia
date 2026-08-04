@@ -1,0 +1,575 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-04T05:08:54.026Z",
+  "title": "18장 훅: 동시 callback, output rewrite, 실행 전 deny · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch18",
+    "campaignId": "book-sdk-live-20260803",
+    "traceId": "recorded:book-sdk-ko:ch18:book-sdk-live-20260803:2026-08-04T04:55:08.257284Z",
+    "traceSha256": "6852b333b64630031623cd1c56a73bb68af5a4d6dabf174b6547f0631c5221f7",
+    "summarySha256": "b2ad376bf0a68fdfa9df348eb52c945d7ceedddc79425a29e9ca88de138c820e",
+    "sourceEventCount": 145,
+    "publicEventCount": 81,
+    "model": "claude-opus-5",
+    "replayModels": [
+      "claude-opus-5"
+    ],
+    "citedModels": [
+      "claude-opus-5"
+    ],
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "124612-be6db7b1",
+      "124434-0b611abe",
+      "130109-c4016acd"
+    ]
+  },
+  "ordeal": {
+    "configured": 2,
+    "interpretation": 11,
+    "inferred": 1,
+    "notObserved": 5,
+    "correction": 9,
+    "unresolved": 3,
+    "invalidAttempts": 2
+  },
+  "cards": [
+    {
+      "id": "hook-cases-configured",
+      "sequence": 0,
+      "title": "세 개의 통제된 갈고리",
+      "type": "Configuration",
+      "question": "rewrite와 deny 실험의 모델, 동시성, 도구와 hook 구성이 실행 전에 고정됐는가?",
+      "consequence": "세 replay attempt는 Opus 5, provider concurrency 1과 부작용 없는 MCP 도구를 사용했다.",
+      "art": "configuration",
+      "status": "configured",
+      "evidenceLevel": "Configured",
+      "sourceSummary": "세 replay attempt는 requested Opus 5, provider concurrency 1, include_hook_events true, whole-tool-allowed controlled MCP target을 사용했다. 두 rewrite attempt에는 PreToolUse matcher 두 개와 PostToolUse matcher 한 개를, deny attempt에는 PreToolUse deny matcher 한 개를 등록했다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:manifest:option_summary",
+        "attempt:124434-0b611abe:manifest:option_summary",
+        "attempt:130109-c4016acd:manifest:option_summary"
+      ],
+      "cost": "C"
+    },
+    {
+      "id": "python-hook-surface-configured",
+      "sequence": 1,
+      "title": "열 개의 훅 표면",
+      "type": "SDK contract",
+      "question": "Python SDK 0.2.128이 선언한 HookEvent 범위를 현재 타입 원전에서 확인했는가?",
+      "consequence": "PreToolUse부터 PermissionRequest까지 10개 literal을 타입 소스에서 확인했다.",
+      "art": "configuration",
+      "status": "configured",
+      "evidenceLevel": "Configured",
+      "sourceSummary": "Python Agent SDK 0.2.128 HookEvent 타입은 PreToolUse, PostToolUse, PostToolUseFailure, UserPromptSubmit, Stop, SubagentStop, PreCompact, Notification, SubagentStart, PermissionRequest의 10개 literal을 선언한다.",
+      "sourceRefs": [
+        "spec:claims:python-hook-surface-configured"
+      ],
+      "cost": "C"
+    },
+    {
+      "id": "assistant-messages-used-opus5",
+      "sequence": 2,
+      "title": "응답이 증명한 Opus 5",
+      "type": "Model receipt",
+      "question": "요청 설정이 아니라 실제 모델 응답이 Opus 5였는가?",
+      "consequence": "세 유효 attempt의 모든 AssistantMessage.model이 claude-opus-5였다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 replay attempt의 모든 AssistantMessage.model은 claude-opus-5였다. init 설정값만으로 실제 모델을 판정하지 않았다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:sdk-message:8",
+        "attempt:124612-be6db7b1:sdk-message:51",
+        "attempt:124434-0b611abe:sdk-message:8",
+        "attempt:124434-0b611abe:sdk-message:48",
+        "attempt:130109-c4016acd:sdk-message:8",
+        "attempt:130109-c4016acd:sdk-message:28"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "same-event-pre-hooks-entered-before-return",
+      "sequence": 3,
+      "title": "함께 열린 두 갈고리",
+      "type": "Concurrency",
+      "question": "같은 PreToolUse event의 두 callback이 한쪽 반환 전에 모두 진입했는가?",
+      "consequence": "pre-a와 pre-b 모두 barrier에 진입한 뒤에만 반환했다.",
+      "art": "concurrency",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "accepted rewrite attempt에서 pre-a와 pre-b가 모두 callback에 진입했고 두 callback 모두 both_entered true를 기록한 뒤에야 반환했다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:process-event:16",
+        "attempt:124612-be6db7b1:hook-callback:17",
+        "attempt:124612-be6db7b1:process-event:18",
+        "attempt:124612-be6db7b1:hook-callback:19",
+        "attempt:124612-be6db7b1:process-event:20",
+        "attempt:124612-be6db7b1:process-event:22"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "pre-hook-return-order-differed",
+      "sequence": 4,
+      "title": "뒤집힌 반환 순서",
+      "type": "Ordering",
+      "question": "hook 등록 순서와 callback 반환 순서가 항상 같은가?",
+      "consequence": "pre-a를 먼저 등록했지만 pre-b가 sequence 21에서 먼저 반환했다.",
+      "art": "concurrency",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "등록 목록에서 pre-a가 먼저였지만 실제 반환은 pre-b sequence 21, pre-a sequence 23 순서였다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:hook-callback:21",
+        "attempt:124612-be6db7b1:hook-callback:23"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "handler-ran-with-original-output",
+      "sequence": 5,
+      "title": "원본을 만든 도구",
+      "type": "Execution",
+      "question": "PostToolUse 변환 전에 controlled MCP handler가 실제 원본 출력을 만들었는가?",
+      "consequence": "handler 실행과 원본 tool_response가 host process 및 callback input에 남았다.",
+      "art": "tool",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "accepted rewrite attempt에서 controlled handler는 sequence 27에 원본 출력을 반환했고 PostToolUse callback input은 같은 원본 tool_response를 받았다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:process-event:27",
+        "attempt:124612-be6db7b1:hook-callback:28"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "post-hook-rewrote-mcp-output",
+      "sequence": 6,
+      "title": "모델 앞에서 바뀐 결과",
+      "type": "Rewrite",
+      "question": "PostToolUse의 유효한 MCP rewrite가 다음 모델-visible ToolResult를 바꿨는가?",
+      "consequence": "content block 배열 rewrite가 CH18_POST_HOOK_REWRITTEN_OUTPUT으로 전달됐다.",
+      "art": "rewrite",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "PostToolUse는 updatedMCPToolOutput에 content block 배열을 반환했고 다음 모델-visible ToolResultBlock은 CH18_POST_HOOK_REWRITTEN_OUTPUT을 담았다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:hook-callback:29",
+        "attempt:124612-be6db7b1:sdk-message:30"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "malformed-rewrite-failed-after-handler",
+      "sequence": 7,
+      "title": "실행 뒤에 깨진 포장",
+      "type": "Failure",
+      "question": "잘못된 rewrite wrapper는 handler 실행 전과 후 중 어디에서 실패했는가?",
+      "consequence": "handler는 이미 실행됐고 그 뒤 CLI가 e.reduce 오류 ToolResult를 만들었다.",
+      "art": "failure",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "잘못된 updatedMCPToolOutput mapping을 반환한 attempt에서도 handler는 먼저 실행됐고, 이후 CLI가 e.reduce is not a function 오류를 error ToolResultBlock으로 만들었다.",
+      "sourceRefs": [
+        "attempt:124434-0b611abe:process-event:24",
+        "attempt:124434-0b611abe:hook-callback:26",
+        "attempt:124434-0b611abe:sdk-message:27"
+      ],
+      "cost": 8
+    },
+    {
+      "id": "callback-hook-lifecycle-messages-zero",
+      "sequence": 8,
+      "title": "보이지 않은 lifecycle tape",
+      "type": "Observation",
+      "question": "include_hook_events=true가 Python callback lifecycle message를 실제 stream에 보장했는가?",
+      "consequence": "host callback 기록은 있었지만 두 rewrite run의 HookEventMessage는 0개였다.",
+      "art": "unknown",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "두 rewrite attempt는 include_hook_events true이고 host callback records는 각각 6개였지만 raw SDK stream의 HookEventMessage는 0개였다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:process-event:56",
+        "attempt:124434-0b611abe:process-event:53"
+      ],
+      "cost": 9
+    },
+    {
+      "id": "pretool-deny-blocked-handler",
+      "sequence": 9,
+      "title": "실행 전에 닫힌 문",
+      "type": "Denial",
+      "question": "PreToolUse deny가 ToolUse 요청 뒤 실제 handler 실행을 막았는가?",
+      "consequence": "error ToolResult와 permission denial은 남았고 handler 실행 목록은 비어 있었다.",
+      "art": "denial",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "deny attempt는 ToolUse 뒤 PreToolUse callback이 CH18_PRETOOL_HOOK_DENIED를 반환했고 error ToolResult와 terminal permission denial 1건을 남겼다. process finish의 tool execution 목록은 비어 있어 handler 실행은 0건이다.",
+      "sourceRefs": [
+        "attempt:130109-c4016acd:sdk-message:14",
+        "attempt:130109-c4016acd:hook-callback:15",
+        "attempt:130109-c4016acd:hook-callback:16",
+        "attempt:130109-c4016acd:sdk-message:18",
+        "attempt:130109-c4016acd:sdk-message:32",
+        "attempt:130109-c4016acd:process-event:33"
+      ],
+      "cost": 10
+    },
+    {
+      "id": "deny-coexisted-with-terminal-success",
+      "sequence": 10,
+      "title": "성공 안에 남은 거절",
+      "type": "Terminal boundary",
+      "question": "terminal success가 모든 tool 요청의 성공을 뜻하는가?",
+      "consequence": "permission denial 1건과 error ToolResult가 success Result와 함께 존재했다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "deny ToolResult는 error였지만 terminal Result 자체는 success, is_error false였고 permission_denials 1건을 보존했다.",
+      "sourceRefs": [
+        "attempt:130109-c4016acd:sdk-message:18",
+        "attempt:130109-c4016acd:sdk-message:32"
+      ],
+      "cost": 11
+    },
+    {
+      "id": "attempt-integrity-files-match",
+      "sequence": 11,
+      "title": "세 실행의 무결성 봉인",
+      "type": "Integrity",
+      "question": "판독한 raw, callback, process와 OTel 파일이 manifest hash와 일치하는가?",
+      "consequence": "세 유효 attempt의 선언 hash를 다시 계산해 모두 일치시켰다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 replay attempt에서 integrity manifest가 선언한 manifest, verdict, raw SDK/process/callback, OTel 파일의 SHA-256을 출판기가 다시 계산해 모두 일치했다.",
+      "sourceRefs": [
+        "spec:claims:attempt-integrity-files-match"
+      ],
+      "cost": 12
+    },
+    {
+      "id": "raw-and-otel-sequences-align",
+      "sequence": 12,
+      "title": "맞물린 Raw와 OTel",
+      "type": "Telemetry",
+      "question": "projection 과정에서 사건 순서가 바뀌거나 사라졌는가?",
+      "consequence": "세 attempt의 raw sequence와 같은 recorder가 만든 OTel sequence가 전건 정렬됐다.",
+      "art": "telemetry",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "세 replay attempt의 raw event sequence와 같은 recorder가 만든 OTel sequence가 전건 정렬됐고 attempt별 trace ID는 하나였다.",
+      "sourceRefs": [
+        "spec:claims:raw-and-otel-sequences-align"
+      ],
+      "cost": 13
+    },
+    {
+      "id": "same-event-hooks-dispatched-concurrently",
+      "sequence": 13,
+      "title": "동시 실행이라는 제한된 해석",
+      "type": "Inference",
+      "question": "barrier 통과가 이 구성의 concurrent dispatch를 지지하는가?",
+      "consequence": "이 버전과 PreToolUse 구성에서는 지지하지만 모든 hook과 버전으로 일반화하지 않는다.",
+      "art": "inference",
+      "status": "inferred",
+      "evidenceLevel": "Inferred",
+      "sourceSummary": "두 callback이 서로의 진입을 기다리는 barrier를 모두 통과했으므로 이 버전과 이 event 구성에서는 같은 event의 matcher가 concurrent dispatch된 것으로 해석한다. 모든 hook 종류와 버전에 일반화하지 않는다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:process-event:20",
+        "attempt:124612-be6db7b1:process-event:22"
+      ],
+      "cost": "I"
+    },
+    {
+      "id": "hook-order-is-not-a-pipeline",
+      "sequence": 14,
+      "title": "순차 파이프라인이 아니었다",
+      "type": "Correction",
+      "question": "여러 HookMatcher를 등록 순서대로 상태를 넘기는 pipeline으로 가르쳐도 되는가?",
+      "consequence": "두 callback이 함께 진입하고 역순 반환했으므로 그 설명을 교정했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "같은 event의 여러 HookMatcher를 등록 순서대로 실행되는 상태 변환 pipeline으로 설명하면 안 된다. 이 표본에서는 두 callback이 함께 진입하고 역순으로 반환했다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:hook-callback:17",
+        "attempt:124612-be6db7b1:hook-callback:19",
+        "attempt:124612-be6db7b1:hook-callback:21",
+        "attempt:124612-be6db7b1:hook-callback:23"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "mcp-rewrite-wrapper-is-invalid-here",
+      "sequence": 15,
+      "title": "잘못된 MCP 포장",
+      "type": "Correction",
+      "question": "updatedMCPToolOutput에 content 객체 wrapper를 넣는 예제가 현재 CLI에서 유효한가?",
+      "consequence": "객체 wrapper는 실패했고 content block 배열은 성공했다. 타입 설명도 함께 제한했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "updatedMCPToolOutput에 content 필드를 가진 object를 넣는 예시는 이 CLI에서 유효하지 않았다. content block 배열 자체는 성공했지만 현재 타입은 가능한 경우 updatedToolOutput을 선호하라고 설명한다.",
+      "sourceRefs": [
+        "attempt:124434-0b611abe:sdk-message:27",
+        "attempt:124612-be6db7b1:sdk-message:30"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "include-hook-events-is-not-guaranteed-callback-tape",
+      "sequence": 16,
+      "title": "옵션과 관찰의 거리",
+      "type": "Correction",
+      "question": "include_hook_events=true만으로 callback lifecycle tape를 약속할 수 있는가?",
+      "consequence": "callback은 실행됐지만 SDK output의 lifecycle message는 0개였다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "include_hook_events true만으로 Python callback의 hook_started와 hook_response가 항상 SDK output stream에 나온다고 가르치면 안 된다. 두 callback run에서 lifecycle message는 0개였다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:process-event:56",
+        "attempt:124434-0b611abe:process-event:53"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "hook-progress-is-not-current-python-phase",
+      "sequence": 17,
+      "title": "현재 타입에 없는 phase",
+      "type": "Correction",
+      "question": "Python SDK 0.2.128에 hook_progress phase가 있다고 설명할 수 있는가?",
+      "consequence": "현재 타입은 hook_started와 hook_response를 선언하며 hook_progress는 찾지 못했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Python SDK 0.2.128 HookEventMessage 타입은 hook_started와 hook_response를 문서화하며 hook_progress class 또는 phase는 찾지 못했다.",
+      "sourceRefs": [
+        "spec:claims:hook-progress-is-not-current-python-phase"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "model-narrative-is-not-handler-proof",
+      "sequence": 18,
+      "title": "모델 설명과 실행 증거의 분리",
+      "type": "Correction",
+      "question": "모델의 최종 문장만으로 host handler 실행 여부를 판정할 수 있는가?",
+      "consequence": "handler 실행 판정에는 host process record가 필요하다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "모델 최종문은 handler 내부 실행을 볼 수 없다고 정확히 제한했다. 반대로 모델이 handler가 실행 또는 미실행했다고 말하더라도 host process record 없이 실행 사실을 증명할 수 없다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:process-event:27",
+        "attempt:124612-be6db7b1:sdk-message:51",
+        "attempt:124434-0b611abe:process-event:24",
+        "attempt:124434-0b611abe:sdk-message:48"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "terminal-success-does-not-mean-every-tool-succeeded",
+      "sequence": 19,
+      "title": "종료 성공의 좁은 뜻",
+      "type": "Correction",
+      "question": "Result success를 모든 tool call의 성공으로 해석해도 되는가?",
+      "consequence": "malformed rewrite와 deny 모두 error ToolResult 뒤 success로 종료됐다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "terminal Result success를 모든 tool call의 성공으로 해석하면 안 된다. malformed rewrite와 explicit deny 모두 error ToolResult가 있었지만 terminal subtype은 success였다.",
+      "sourceRefs": [
+        "attempt:124434-0b611abe:sdk-message:27",
+        "attempt:124434-0b611abe:sdk-message:52",
+        "attempt:130109-c4016acd:sdk-message:18",
+        "attempt:130109-c4016acd:sdk-message:32"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "init-model-is-not-response-model-proof",
+      "sequence": 20,
+      "title": "요청 모델은 영수증이 아니다",
+      "type": "Correction",
+      "question": "System init.model 하나로 실제 응답 모델을 증명할 수 있는가?",
+      "consequence": "fallback과 synthetic message를 구분하려면 AssistantMessage.model을 판독해야 한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "실험 코드가 System init의 model만 actual_model로 사용하면 fallback 또는 synthetic message를 놓친다. 실제 모델 판정은 AssistantMessage.model의 단일성으로 해야 한다.",
+      "sourceRefs": [
+        "spec:claims:init-model-is-not-response-model-proof"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "otel-is-not-independent-runtime-proof",
+      "sequence": 21,
+      "title": "같은 사건의 두 표현",
+      "type": "Correction",
+      "question": "Raw와 OTel 일치가 독립 runtime 두 곳의 교차 검증인가?",
+      "consequence": "동일 recorder의 projection 정합성이지 독립 provider 증거는 아니다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "OTel은 같은 AttemptRecorder가 raw SDK와 host callback/process event를 투영한 결과다. sequence 일치는 수집 파이프라인 정합성이지 독립 provider 관측이 아니다.",
+      "sourceRefs": [
+        "spec:claims:otel-is-not-independent-runtime-proof"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "historical-probe-source-not-bound",
+      "sequence": 22,
+      "title": "과거 소스 귀속의 빈틈",
+      "type": "Correction",
+      "question": "2026-08-03 manifest가 당시 probe와 case 소스 전체를 hash로 묶었는가?",
+      "consequence": "chapter bytes만 묶었다. 향후 캡처에는 세 probe source hash를 추가한다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "2026-08-03 attempt manifest의 source_hash는 당시 chapter bytes만 가리키며 chapter18.py, cases, runtime 전체를 암호학적으로 묶지 않았다. 향후 캡처는 세 probe source hash도 option summary에 기록한다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:manifest:option_summary",
+        "attempt:130109-c4016acd:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "missing-hook-lifecycle-reason-not-observed",
+      "sequence": 23,
+      "title": "사라진 lifecycle의 원인",
+      "type": "Unknown",
+      "question": "callback lifecycle message가 0개였던 내부 이유까지 관찰했는가?",
+      "consequence": "stream에는 원인 event가 없어 이번 증거로 설명할 수 없다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "include_hook_events true인데 callback hook lifecycle message가 0개였던 내부 이유는 SDK stream에 나타나지 않았다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:process-event:56"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "command-hook-lifecycle-not-observed",
+      "sequence": 24,
+      "title": "command hook과의 미완 대조",
+      "type": "Unknown",
+      "question": "settings command hook과 Python callback hook의 stream 노출 차이를 비교했는가?",
+      "consequence": "같은 조건의 대조 실행을 하지 않아 아직 관찰되지 않았다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "Cookbook의 settings command hook과 이번 Python callback hook이 include_hook_events에서 다르게 노출되는지는 같은 조건으로 실행하지 않아 관찰하지 못했다.",
+      "sourceRefs": [
+        "spec:claims:command-hook-lifecycle-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "remaining-hook-events-not-observed",
+      "sequence": 25,
+      "title": "아직 열지 않은 여덟 갈고리",
+      "type": "Unknown",
+      "question": "나머지 HookEvent의 실제 입력과 차단 또는 변경 결과도 실행했는가?",
+      "consequence": "이번 workload는 PreToolUse와 PostToolUse만 직접 실행했다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "PostToolUseFailure, UserPromptSubmit, Stop, SubagentStart/Stop, PreCompact, Notification, PermissionRequest callback의 실제 입력과 차단 또는 변경 결과는 이번 두 case가 실행하지 않았다.",
+      "sourceRefs": [
+        "spec:claims:remaining-hook-events-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "built-in-output-rewrite-not-observed",
+      "sequence": 26,
+      "title": "내장 도구 rewrite의 빈칸",
+      "type": "Unknown",
+      "question": "Bash, Read, Edit의 updatedToolOutput schema도 같은 방식으로 검증했는가?",
+      "consequence": "MCP 전용 표본이라 built-in tool rewrite는 별도 실행이 필요하다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "built-in Bash, Read, Edit 등의 updatedToolOutput schema와 mismatch 처리 동작은 MCP 전용 표본으로 관찰하지 못했다.",
+      "sourceRefs": [
+        "spec:claims:built-in-output-rewrite-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "general-hook-scheduling-not-observed",
+      "sequence": 27,
+      "title": "일반 스케줄링 규칙의 경계",
+      "type": "Unknown",
+      "question": "한 PreToolUse 구성으로 모든 hook의 scheduling을 일반화할 수 있는가?",
+      "consequence": "event 종류, matcher 수와 CLI 버전을 넓힌 반복 증거가 없다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "모든 event, matcher 수, CLI 버전에서 callback scheduling과 반환 순서가 동일하다는 일반 규칙은 한 PreToolUse 구성으로 관찰되지 않았다.",
+      "sourceRefs": [
+        "spec:claims:general-hook-scheduling-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "current-cli-replication-required",
+      "sequence": 28,
+      "title": "다음 버전의 재현",
+      "type": "Next experiment",
+      "question": "2.1.220에서 본 동작을 현재 2.1.221에도 바로 귀속할 수 있는가?",
+      "consequence": "동일 probe를 새 session에서 순차 재실행해야 현재 버전을 주장할 수 있다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "공개 raw run은 Claude Code 2.1.220에서 수집됐다. 현재 설치된 2.1.221 동작을 주장하려면 동일 probe를 새 session에서 순차 재실행해야 한다.",
+      "sourceRefs": [
+        "attempt:124612-be6db7b1:manifest:option_summary",
+        "attempt:130109-c4016acd:manifest:option_summary"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "command-callback-lifecycle-comparison-required",
+      "sequence": 29,
+      "title": "두 hook 경로의 대조",
+      "type": "Next experiment",
+      "question": "callback과 command hook의 lifecycle 차이를 어떻게 확인할 것인가?",
+      "consequence": "같은 event, tool과 include_hook_events 조건의 대조 run을 수집해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "Python callback hook과 settings command hook을 같은 event, tool, include_hook_events 조건에서 비교해 lifecycle stream 차이를 추가 관찰해야 한다.",
+      "sourceRefs": [
+        "spec:claims:command-callback-lifecycle-comparison-required"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "hook-event-matrix-required",
+      "sequence": 30,
+      "title": "열 개의 훅 실험표",
+      "type": "Next experiment",
+      "question": "남은 hook과 built-in rewrite 경계를 무엇으로 확장할 것인가?",
+      "consequence": "각 event를 독립 session과 부작용 없는 fixture로 순차 관찰해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "UserPromptSubmit block, built-in updatedToolOutput, PostToolUseFailure, Stop과 subagent event는 각각 독립 session과 부작용 없는 fixture로 추가 관찰해야 한다.",
+      "sourceRefs": [
+        "spec:claims:hook-event-matrix-required"
+      ],
+      "cost": "?"
+    }
+  ]
+}
