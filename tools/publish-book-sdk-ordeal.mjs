@@ -27,6 +27,7 @@ import { ch14CardMeta } from './book-sdk-ordeal-ch14-cards.mjs'
 import { ch15CardMeta } from './book-sdk-ordeal-ch15-cards.mjs'
 import { ch16CardMeta } from './book-sdk-ordeal-ch16-cards.mjs'
 import { ch17CardMeta } from './book-sdk-ordeal-ch17-cards.mjs'
+import { ch17bCardMeta } from './book-sdk-ordeal-ch17b-cards.mjs'
 import { ch04bCardMeta } from './book-sdk-ordeal-ch04b-cards.mjs'
 import { ch30CardMeta } from './book-sdk-ordeal-ch30-cards.mjs'
 
@@ -46,6 +47,15 @@ const traceText = await fs.readFile(tracePath, 'utf8')
 const summaryText = await fs.readFile(summaryPath, 'utf8')
 const trace = JSON.parse(traceText)
 const summary = JSON.parse(summaryText)
+const citedModels = Array.isArray(summary.actual_models)
+  ? [...new Set(summary.actual_models.filter((value) => typeof value === 'string'))]
+  : []
+const replayModels = Array.isArray(summary.source_attempts)
+  ? [...new Set(summary.source_attempts
+    .filter((attempt) => attempt?.projection_role === 'replayed')
+    .map((attempt) => attempt?.actual_model)
+    .filter((value) => typeof value === 'string'))]
+  : []
 
 if (trace.chapterSlug !== summary.chapter_id) {
   throw new Error(`observation_ordeal_chapter_mismatch: ${trace.chapterSlug} != ${summary.chapter_id}`)
@@ -340,6 +350,7 @@ const cardMetaByChapter = {
   ch15: ch15CardMeta,
   ch16: ch16CardMeta,
   ch17: ch17CardMeta,
+  ch17b: ch17bCardMeta,
   ch04b: ch04bCardMeta,
   ch30: ch30CardMeta,
 }
@@ -387,7 +398,9 @@ const projection = {
     summarySha256: sha256(summaryText),
     sourceEventCount: numberValue(summary.source_event_count, trace.events.length),
     publicEventCount: trace.events.length,
-    model: Array.isArray(summary.actual_models) ? summary.actual_models[0] : undefined,
+    model: replayModels[0] || citedModels[0],
+    replayModels,
+    citedModels,
     proofGate: summary.proof_gate,
     attemptIds: Array.isArray(summary.source_attempts)
       ? summary.source_attempts.map((attempt) => attempt.attempt_id).filter(Boolean)

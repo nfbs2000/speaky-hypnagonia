@@ -315,6 +315,22 @@
       "artifactSha256": "fb946e6a33cf75d187d2d2702ab3584251f83b4ada6f5e62c26cab1c2adfcb92"
     },
     {
+      "chapterSlug": "ch17b",
+      "title": "17b장 프롬프트 인젝션: 원문 보존, 모델 행동, host deny의 분리 · Observation Ordeal",
+      "path": "./evidence/ch17b.json",
+      "campaignId": "book-sdk-live-20260804",
+      "model": "claude-opus-5",
+      "sourceEventCount": 206,
+      "publicEventCount": 57,
+      "configuredClaims": 2,
+      "observedClaims": 12,
+      "inferredClaims": 1,
+      "notObservedClaims": 6,
+      "correctionRequired": 8,
+      "additionalObservationRequired": 3,
+      "artifactSha256": "57b63d15f8f5dc5e47ae99be153653ea9cc155c92bfaf65d500c3e5c6f83efff"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -327,5 +343,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-04T03:10:26.286Z"
+  "generatedAt": "2026-08-04T04:17:05.274Z"
 }

@@ -140,9 +140,14 @@ function selectCard(card, element) {
 }
 
 function statusLabel(status) {
-  if (status === 'observed') return 'OBSERVED'
-  if (status === 'correction_required') return 'CORRECTION REQUIRED'
-  return 'ADDITIONAL OBSERVATION REQUIRED'
+  return {
+    configured: 'CONFIGURED',
+    observed: 'OBSERVED',
+    inferred: 'INFERRED',
+    correction_required: 'CORRECTION REQUIRED',
+    not_observed: 'NOT OBSERVED',
+    additional_observation_required: 'ADDITIONAL OBSERVATION REQUIRED',
+  }[status] ?? 'UNKNOWN'
 }
 
 function escapeHtml(value) {
