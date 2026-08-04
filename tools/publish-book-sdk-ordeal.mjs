@@ -1,8 +1,15 @@
 #!/usr/bin/env node
 
-import { createHash } from 'node:crypto'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import {
+  chapterOrder,
+  numberValue,
+  safeRefs,
+  safeText,
+  sha256,
+  stringValue,
+} from './book-sdk-ordeal-utils.mjs'
 import { ch06CardMeta } from './book-sdk-ordeal-ch06-cards.mjs'
 import { ch06bCardMeta } from './book-sdk-ordeal-ch06b-cards.mjs'
 import { ch07CardMeta } from './book-sdk-ordeal-ch07-cards.mjs'
@@ -18,6 +25,7 @@ import { ch12CardMeta } from './book-sdk-ordeal-ch12-cards.mjs'
 import { ch13CardMeta } from './book-sdk-ordeal-ch13-cards.mjs'
 import { ch14CardMeta } from './book-sdk-ordeal-ch14-cards.mjs'
 import { ch15CardMeta } from './book-sdk-ordeal-ch15-cards.mjs'
+import { ch16CardMeta } from './book-sdk-ordeal-ch16-cards.mjs'
 import { ch04bCardMeta } from './book-sdk-ordeal-ch04b-cards.mjs'
 import { ch30CardMeta } from './book-sdk-ordeal-ch30-cards.mjs'
 
@@ -329,6 +337,7 @@ const cardMetaByChapter = {
   ch13: ch13CardMeta,
   ch14: ch14CardMeta,
   ch15: ch15CardMeta,
+  ch16: ch16CardMeta,
   ch04b: ch04bCardMeta,
   ch30: ch30CardMeta,
 }
@@ -468,34 +477,6 @@ async function updateCatalog(file, evidencePath, value) {
   catalog.generatedAt = new Date().toISOString()
   await fs.mkdir(path.dirname(file), { recursive: true })
   await fs.writeFile(file, `${JSON.stringify(catalog, null, 2)}\n`)
-}
-
-function chapterOrder(value) {
-  const match = /^ch(\d+)([a-z]*)$/i.exec(String(value))
-  if (!match) return `${String(Number.MAX_SAFE_INTEGER).padStart(12, '0')}:${String(value)}`
-  return `${match[1].padStart(12, '0')}:${match[2].toLowerCase()}`
-}
-
-function safeText(value) {
-  return typeof value === 'string' ? value.replace(/\s+/g, ' ').trim().slice(0, 700) : ''
-}
-
-function safeRefs(value) {
-  return Array.isArray(value)
-    ? value.filter((item) => typeof item === 'string').slice(0, 12)
-    : []
-}
-
-function numberValue(value, fallback) {
-  return typeof value === 'number' && Number.isFinite(value) ? value : fallback
-}
-
-function stringValue(...values) {
-  return values.find((value) => typeof value === 'string' && value.trim()) || ''
-}
-
-function sha256(value) {
-  return createHash('sha256').update(value).digest('hex')
 }
 
 function requiredValue(flag) {

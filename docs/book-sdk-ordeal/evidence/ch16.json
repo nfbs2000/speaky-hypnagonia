@@ -1,0 +1,559 @@
+{
+  "schemaVersion": "hypnagonia-book-ordeal.v1",
+  "generatedAt": "2026-08-04T02:15:00.340Z",
+  "title": "16장 권한 시스템: callback shadow, 실행, 명시적 거부 · Observation Ordeal",
+  "subtitle": "실제 Python SDK 사건으로 관찰된 주장과 아직 남은 경계를 구분한다.",
+  "boundary": "Hypnagonia의 카드·선택·결과 문법을 빌린 강의용 projection이며 실제 게임 run이나 참가자 데이터가 아니다.",
+  "source": {
+    "courseId": "book-sdk-ko",
+    "chapterSlug": "ch16",
+    "campaignId": "book-sdk-live-20260804",
+    "traceId": "recorded:book-sdk-ko:ch16:book-sdk-live-20260804:2026-08-04T01:54:18.000000Z",
+    "traceSha256": "ae1e105333156a91dd784f7f4f424d6f5bbf2a3e4560a8f444858d119a16818a",
+    "summarySha256": "bfdaac788b695f19a96e18a1314a81fc452d1539c2ce8d0b830d1a80b90a2606",
+    "sourceEventCount": 287,
+    "publicEventCount": 89,
+    "model": "claude-opus-5",
+    "proofGate": "accepted_with_notes",
+    "attemptIds": [
+      "011846-47719847",
+      "011938-e9f4c66c",
+      "012734-2b0b0b7d",
+      "012008-eef2a963",
+      "012052-7b84bab0",
+      "122213-0bdafe87"
+    ]
+  },
+  "ordeal": {
+    "configured": 1,
+    "interpretation": 13,
+    "inferred": 2,
+    "notObserved": 6,
+    "correction": 5,
+    "unresolved": 3,
+    "invalidAttempts": 1
+  },
+  "cards": [
+    {
+      "id": "five-current-permission-cases-configured",
+      "sequence": 0,
+      "title": "다섯 갈래의 검문소",
+      "type": "Configuration",
+      "question": "Mode, rule, callback을 섞지 않고 다섯 독립 조건으로 고정했는가?",
+      "consequence": "새 workspace와 session, Opus 5, concurrency 1에서 acceptEdits와 bypass 조합을 따로 실행했다.",
+      "art": "configuration",
+      "status": "configured",
+      "evidenceLevel": "Configured",
+      "sourceSummary": "다섯 최신 case는 새 workspace, config와 물리 session, actual Opus 5, provider concurrency 1을 사용하고 acceptEdits 또는 bypassPermissions, allow/deny rule과 반대 결정을 내리도록 구성한 callback을 각각 고정했다.",
+      "sourceRefs": [
+        "attempt:011846-47719847:manifest:option_summary",
+        "attempt:011938-e9f4c66c:manifest:option_summary",
+        "attempt:012734-2b0b0b7d:manifest:option_summary",
+        "attempt:012008-eef2a963:manifest:option_summary",
+        "attempt:012052-7b84bab0:manifest:option_summary"
+      ],
+      "cost": "C"
+    },
+    {
+      "id": "actual-opus-independent-session-boundaries",
+      "sequence": 1,
+      "title": "겹치지 않은 다섯 입장",
+      "type": "Isolation",
+      "question": "하나의 대화나 병렬 호출이 결과를 섞었는가?",
+      "consequence": "다섯 init은 Opus 5와 서로 다른 session boundary를 기록했다.",
+      "art": "separation",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "다섯 최신 init은 모두 claude-opus-5와 서로 다른 SDK session boundary를 기록했다. 각 capture는 concurrency 1 계약으로 한 건씩 실행됐다.",
+      "sourceRefs": [
+        "attempt:011846-47719847:sdk-message:2",
+        "attempt:011938-e9f4c66c:sdk-message:2",
+        "attempt:012734-2b0b0b7d:sdk-message:2",
+        "attempt:012008-eef2a963:sdk-message:2",
+        "attempt:012052-7b84bab0:sdk-message:2"
+      ],
+      "cost": 2
+    },
+    {
+      "id": "execution-source-hashes-bound",
+      "sequence": 2,
+      "title": "실행 코드의 봉인",
+      "type": "Provenance",
+      "question": "판독한 실행이 어느 chapter와 probe 코드에서 나왔는가?",
+      "consequence": "각 manifest가 실행 당시 chapter, probe, case, runtime hash를 보존했다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "각 manifest는 실행 당시 chapter, probe, cases, runtime source hash를 묶었다. 핵심 네 case는 같은 실행 소스를 공유하고 상대 경로 통제는 변경된 세 실행 소스 hash를 별도로 보존한다.",
+      "sourceRefs": [
+        "spec:claims:execution-source-hashes-bound"
+      ],
+      "cost": 3
+    },
+    {
+      "id": "accept-edits-read-edit-mutated-without-callback",
+      "sequence": 3,
+      "title": "묻지 않고 바뀐 파일",
+      "type": "Permission",
+      "question": "acceptEdits의 Edit는 callback이 없었어도 실제 상태를 바꿨는가?",
+      "consequence": "Read와 Edit 왕복 뒤 marker와 hash가 BEFORE에서 AFTER로 바뀌었고 callback은 0이었다.",
+      "art": "permission",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "acceptEdits의 Read 후 Edit case에서 Read ToolUse/Result와 Edit ToolUse/Result가 이어졌고 host workspace marker와 hash가 CH16_BEFORE에서 CH16_AFTER_ACCEPT_EDITS로 바뀌었다. Permission callback 파일은 0행이었다.",
+      "sourceRefs": [
+        "attempt:011846-47719847:process-event:1",
+        "attempt:011846-47719847:sdk-message:16",
+        "attempt:011846-47719847:sdk-message:18",
+        "attempt:011846-47719847:sdk-message:37",
+        "attempt:011846-47719847:sdk-message:39",
+        "attempt:011846-47719847:process-event:59"
+      ],
+      "cost": 4
+    },
+    {
+      "id": "whole-tool-read-rule-shadow-warning",
+      "sequence": 4,
+      "title": "먼저 열린 Read 문",
+      "type": "Ordering",
+      "question": "Read whole-tool allow와 can_use_tool 중 무엇이 먼저 끝냈는가?",
+      "consequence": "Callback record 없이 Read가 실행됐고 SDK warning이 shadow를 기록했다.",
+      "art": "permission",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Read whole-tool allow가 can_use_tool을 shadow한다는 CanUseToolShadowedWarning이 기록됐고 실제 callback record는 없었다.",
+      "sourceRefs": [
+        "attempt:011846-47719847:process-event:58"
+      ],
+      "cost": 5
+    },
+    {
+      "id": "current-absolute-no-read-edit-succeeded",
+      "sequence": 5,
+      "title": "읽지 않은 절대 경로",
+      "type": "Counter-evidence",
+      "question": "현재 CLI에서 절대 경로 Edit는 선행 Read 없이 반드시 실패했는가?",
+      "consequence": "Edit ToolResult가 성공했고 host marker와 hash가 실제로 변경됐다.",
+      "art": "correction",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "CLI 2.1.221 절대 경로 case는 Read ToolUse 없이 Edit ToolUse와 성공 ToolResult를 기록했고, host workspace hash와 marker가 실제로 변경됐다.",
+      "sourceRefs": [
+        "attempt:011938-e9f4c66c:process-event:1",
+        "attempt:011938-e9f4c66c:sdk-message:17",
+        "attempt:011938-e9f4c66c:sdk-message:19",
+        "attempt:011938-e9f4c66c:process-event:37"
+      ],
+      "cost": 6
+    },
+    {
+      "id": "current-relative-no-read-edit-succeeded",
+      "sequence": 6,
+      "title": "읽지 않은 상대 경로",
+      "type": "Counter-evidence",
+      "question": "경로를 상대값으로 바꾸면 Read-before-Edit 실패가 재현됐는가?",
+      "consequence": "정확한 relative path에서도 Edit가 성공하고 파일 상태가 바뀌었다.",
+      "art": "correction",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "CLI 2.1.221 상대 경로 통제도 Read ToolUse 없이 정확한 relative file_path의 Edit와 성공 ToolResult를 기록했고, host workspace hash와 marker가 실제로 변경됐다.",
+      "sourceRefs": [
+        "attempt:012734-2b0b0b7d:process-event:1",
+        "attempt:012734-2b0b0b7d:sdk-message:23",
+        "attempt:012734-2b0b0b7d:sdk-message:25",
+        "attempt:012734-2b0b0b7d:process-event:44"
+      ],
+      "cost": 7
+    },
+    {
+      "id": "historical-relative-no-read-edit-failed",
+      "sequence": 7,
+      "title": "과거 검문 기록",
+      "type": "Versioned evidence",
+      "question": "2.1.220의 같은 상대 경로 관찰은 어떤 결과였는가?",
+      "consequence": "File has not been read yet 오류가 났고 before/after hash는 같았다.",
+      "art": "history",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Supporting-only CLI 2.1.220 실행은 상대 경로 Edit에서 File has not been read yet 오류 ToolResult를 기록했고 before/after workspace hash와 marker가 같았다.",
+      "sourceRefs": [
+        "attempt:122213-0bdafe87:sdk-message:2",
+        "attempt:122213-0bdafe87:process-event:1",
+        "attempt:122213-0bdafe87:sdk-message:24",
+        "attempt:122213-0bdafe87:sdk-message:26",
+        "attempt:122213-0bdafe87:process-event:46"
+      ],
+      "cost": 8
+    },
+    {
+      "id": "bypass-executed-controlled-handler-without-callback",
+      "sequence": 8,
+      "title": "우회로를 지난 실행",
+      "type": "Permission",
+      "question": "bypassPermissions에서 deny callback이 controlled tool을 막았는가?",
+      "consequence": "Callback 0인 채 host handler와 marker ToolResult가 실제로 이어졌다.",
+      "art": "permission",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "bypassPermissions와 deny callback 조합에서 controlled MCP ToolUse 뒤 host tool.execution과 marker ToolResult가 나타났고 callback record는 0이었다.",
+      "sourceRefs": [
+        "attempt:012008-eef2a963:sdk-message:15",
+        "attempt:012008-eef2a963:process-event:16",
+        "attempt:012008-eef2a963:sdk-message:20"
+      ],
+      "cost": 9
+    },
+    {
+      "id": "bypass-shadow-warning-observed",
+      "sequence": 9,
+      "title": "우회로의 경고문",
+      "type": "Ordering",
+      "question": "bypass가 callback을 건너뛴 사실을 runtime도 기록했는가?",
+      "consequence": "Explicit deny 이외 호출을 auto-approve한다는 shadow warning이 남았다.",
+      "art": "permission",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "bypassPermissions가 explicit deny 이외 도구를 callback 전에 auto-approve한다는 CanUseToolShadowedWarning이 실제 process event에 기록됐다.",
+      "sourceRefs": [
+        "attempt:012008-eef2a963:process-event:49"
+      ],
+      "cost": 10
+    },
+    {
+      "id": "explicit-deny-blocked-bypass-and-handler",
+      "sequence": 10,
+      "title": "우회로보다 강한 거부",
+      "type": "Denial",
+      "question": "Explicit deny가 bypass와 allow callback보다 먼저 도구를 닫았는가?",
+      "consequence": "Permission denied와 error ToolResult가 남고 callback과 handler는 실행되지 않았다.",
+      "art": "denial",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "같은 controlled MCP tool을 disallowed_tools에 넣은 bypass case는 permission_denied status와 error ToolResult를 기록했으며 callback 0, host handler 0, terminal permission_denials 1이었다.",
+      "sourceRefs": [
+        "attempt:012052-7b84bab0:sdk-message:16",
+        "attempt:012052-7b84bab0:sdk-message:17",
+        "attempt:012052-7b84bab0:sdk-message:19",
+        "attempt:012052-7b84bab0:sdk-message:37"
+      ],
+      "cost": 11
+    },
+    {
+      "id": "terminal-success-coexisted-with-tool-denial",
+      "sequence": 11,
+      "title": "승리 표식 속의 거절",
+      "type": "Terminal boundary",
+      "question": "Run success가 모든 도구의 승인과 같은 뜻인가?",
+      "consequence": "Terminal은 success였지만 같은 Result에 permission denial 1과 error ToolResult가 공존했다.",
+      "art": "result",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Explicit deny case의 개별 tool은 거부됐지만 terminal Result는 subtype success, is_error false이며 permission_denials 1을 동시에 기록했다.",
+      "sourceRefs": [
+        "attempt:012052-7b84bab0:sdk-message:19",
+        "attempt:012052-7b84bab0:sdk-message:37"
+      ],
+      "cost": 12
+    },
+    {
+      "id": "raw-and-otel-sequences-align",
+      "sequence": 12,
+      "title": "맞물린 원본과 투영",
+      "type": "Telemetry",
+      "question": "Raw SDK와 OTel 사이에서 권한 사건이 유실됐는가?",
+      "consequence": "다섯 최신 실행의 SDK와 process sequence가 각각 순서까지 일치했다.",
+      "art": "telemetry",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "다섯 최신 attempt에서 raw SDK와 OTel sdk.message sequence, raw process와 OTel process.event sequence가 각각 순서까지 전부 일치했다.",
+      "sourceRefs": [
+        "spec:claims:raw-and-otel-sequences-align"
+      ],
+      "cost": 13
+    },
+    {
+      "id": "attempt-integrity-files-match",
+      "sequence": 13,
+      "title": "여섯 실행의 봉인",
+      "type": "Integrity",
+      "question": "최신 다섯 실행과 역사적 보조 실행의 증거 파일이 바뀌었는가?",
+      "consequence": "Manifest, verdict, raw 네 종류와 OTel hash를 재계산해 모두 일치했다.",
+      "art": "integrity",
+      "status": "observed",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "다섯 최신 attempt와 역사적 supporting attempt의 integrity manifest가 열거한 manifest, verdict, raw 4종, OTel SHA-256을 재계산해 모두 일치했다.",
+      "sourceRefs": [
+        "spec:claims:attempt-integrity-files-match"
+      ],
+      "cost": 14
+    },
+    {
+      "id": "observable-surface-matches-precedence-model",
+      "sequence": 14,
+      "title": "보이는 순서의 지도",
+      "type": "Inference",
+      "question": "관찰값이 explicit deny, auto-approval, ask callback 순서를 지지하는가?",
+      "consequence": "결과는 그 모델과 일치하지만 내부 matcher 호출 순서를 직접 본 것은 아니다.",
+      "art": "inference",
+      "status": "inferred",
+      "evidenceLevel": "Inferred",
+      "sourceSummary": "관찰된 explicit deny 차단, mode 또는 whole-tool allow의 callback shadow, 실행 결과는 explicit deny가 auto-approval보다 앞서고 ask callback은 그 뒤의 미결정 호출에 사용된다는 모델과 일치한다. 내부 matcher 함수 호출 순서를 직접 관찰한 것은 아니다.",
+      "sourceRefs": [
+        "attempt:011846-47719847:process-event:58",
+        "attempt:012008-eef2a963:process-event:49",
+        "attempt:012052-7b84bab0:sdk-message:19"
+      ],
+      "cost": "I"
+    },
+    {
+      "id": "cli-version-is-strong-change-candidate",
+      "sequence": 15,
+      "title": "버전이라는 강한 후보",
+      "type": "Inference",
+      "question": "2.1.220 실패와 2.1.221 성공을 버전 하나로 확정할 수 있는가?",
+      "consequence": "버전은 강한 후보지만 prompt와 probe도 달라 단독 원인으로 확정하지 않았다.",
+      "art": "inference",
+      "status": "inferred",
+      "evidenceLevel": "Inferred",
+      "sourceSummary": "CLI 2.1.220의 상대 경로 실패와 2.1.221의 상대 경로 성공 때문에 CLI 버전은 강한 변화 후보다. 그러나 prompt와 probe 코드도 달라 내부 원인을 버전 하나로 확정할 수 없다.",
+      "sourceRefs": [
+        "attempt:122213-0bdafe87:sdk-message:2",
+        "attempt:122213-0bdafe87:sdk-message:26",
+        "attempt:012734-2b0b0b7d:sdk-message:2",
+        "attempt:012734-2b0b0b7d:sdk-message:25"
+      ],
+      "cost": "I"
+    },
+    {
+      "id": "can-use-tool-is-not-universal-pre-tool-callback",
+      "sequence": 16,
+      "title": "항상 울리지 않는 종",
+      "type": "Correction",
+      "question": "can_use_tool을 모든 tool 전에 반드시 호출되는 관문이라 써도 되는가?",
+      "consequence": "실제 실행과 거부가 있었지만 현재 다섯 case의 callback record는 모두 0이었다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "can_use_tool을 모든 tool 직전 항상 호출되는 보편 callback으로 설명하면 안 된다. 현재 acceptEdits와 bypass case는 실제 ToolUse 이후 실행 또는 거부 결과가 있었지만 callback record가 모두 0이었다.",
+      "sourceRefs": [
+        "attempt:011846-47719847:sdk-message:37",
+        "attempt:012008-eef2a963:process-event:16",
+        "attempt:012052-7b84bab0:sdk-message:19"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "read-before-edit-is-not-current-universal-law",
+      "sequence": 17,
+      "title": "무너진 보편 규칙",
+      "type": "Correction",
+      "question": "Edit는 현재도 선행 Read 없이는 항상 실패한다고 가르칠 수 있는가?",
+      "consequence": "2.1.221의 절대·상대 Edit가 모두 성공해 과거 실패는 versioned evidence로 낮췄다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Edit는 선행 Read 없이는 항상 실패한다는 현재 보편 법칙을 제거해야 한다. CLI 2.1.221의 절대·상대 통제는 모두 성공했으며 2.1.220 실패는 버전이 붙은 역사적 관찰로 남겨야 한다.",
+      "sourceRefs": [
+        "attempt:011938-e9f4c66c:sdk-message:19",
+        "attempt:012734-2b0b0b7d:sdk-message:25",
+        "attempt:122213-0bdafe87:sdk-message:26"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "terminal-run-success-is-not-all-tools-success",
+      "sequence": 18,
+      "title": "Run과 tool의 다른 결말",
+      "type": "Correction",
+      "question": "Terminal success 하나로 모든 tool handler 성공을 판정해도 되는가?",
+      "consequence": "Explicit deny case가 terminal success와 tool error를 동시에 보여 그 설명을 교정했다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "Terminal Result success를 모든 도구가 승인되고 handler가 실행됐다는 뜻으로 설명하면 안 된다. Explicit deny case는 error ToolResult와 denial 1인데도 terminal run은 success였다.",
+      "sourceRefs": [
+        "attempt:012052-7b84bab0:sdk-message:19",
+        "attempt:012052-7b84bab0:sdk-message:37"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "configured-permission-mode-is-not-full-semantic-proof",
+      "sequence": 19,
+      "title": "설정과 검증의 거리",
+      "type": "Correction",
+      "question": "Mode literal을 설정한 사실이 여섯 mode의 의미를 모두 증명하는가?",
+      "consequence": "이번 최신 실행은 acceptEdits와 bypassPermissions 두 mode만 직접 다뤘다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "PermissionMode literal을 설정할 수 있다는 사실과 모든 mode의 실제 의미를 장 전용 실행으로 검증했다는 주장을 구분해야 한다. 이번 최신 run은 acceptEdits와 bypassPermissions 두 mode에 집중했다.",
+      "sourceRefs": [
+        "attempt:011846-47719847:manifest:option_summary",
+        "attempt:012008-eef2a963:manifest:option_summary"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "otel-is-not-independent-provider-proof",
+      "sequence": 20,
+      "title": "같은 기록의 두 그림",
+      "type": "Correction",
+      "question": "Raw와 OTel 일치가 독립 provider 관측 두 개를 뜻하는가?",
+      "consequence": "같은 recorder의 무손실 투영은 확인하지만 독립 출처를 새로 만들지는 않는다.",
+      "art": "correction",
+      "status": "correction_required",
+      "evidenceLevel": "Observed",
+      "sourceSummary": "같은 recorder가 raw SDK와 process event를 OTel로 투영했으므로 sequence 일치는 수집기의 무손실 확인이지 독립 provider 관측 증거가 아니다.",
+      "sourceRefs": [
+        "spec:claims:otel-is-not-independent-provider-proof"
+      ],
+      "cost": "!"
+    },
+    {
+      "id": "exact-internal-permission-order-not-observed",
+      "sequence": 21,
+      "title": "보이지 않는 내부 문지기",
+      "type": "Unknown",
+      "question": "Matcher와 classifier 함수의 정확한 호출 순서를 보았는가?",
+      "consequence": "SDK event에는 내부 short-circuit 위치가 노출되지 않았다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "내부 permission matcher와 classifier 함수의 정확한 호출 순서 및 short-circuit 위치는 SDK event에 노출되지 않았다.",
+      "sourceRefs": [
+        "spec:claims:exact-internal-permission-order-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "full-rule-source-hierarchy-and-wildcards-not-observed",
+      "sequence": 22,
+      "title": "열지 않은 규칙 계층",
+      "type": "Unknown",
+      "question": "Managed, user, project와 wildcard 우선순위를 모두 시험했는가?",
+      "consequence": "Whole-tool allow와 exact deny만 실행해 전체 계층은 관찰되지 않았다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "전체 managed, user, project settings source hierarchy와 exact, prefix, wildcard matcher 우선순위는 이번 whole-tool allow와 exact deny 표본만으로 관찰되지 않았다.",
+      "sourceRefs": [
+        "spec:claims:full-rule-source-hierarchy-and-wildcards-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "auto-classifier-rationale-not-observed",
+      "sequence": 23,
+      "title": "말하지 않은 자동 판정",
+      "type": "Unknown",
+      "question": "Auto classifier가 왜 허용하거나 거부했는지 event가 설명했는가?",
+      "consequence": "내부 prompt와 rationale는 이번 stream에서 보이지 않았다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "auto classifier의 내부 prompt, 판정 기준과 allow 또는 deny rationale는 이번 event stream에서 관찰되지 않았다.",
+      "sourceRefs": [
+        "spec:claims:auto-classifier-rationale-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "exact-read-validation-change-cause-not-observed",
+      "sequence": 24,
+      "title": "아직 모르는 변화 원인",
+      "type": "Unknown",
+      "question": "두 CLI 결과 차이의 내부 원인을 직접 관찰했는가?",
+      "consequence": "버전 외 입력도 달라 validator 변화 원인은 확정되지 않았다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "CLI 2.1.220과 2.1.221 사이 Read-before-Edit 결과가 달라진 내부 원인은 관찰되지 않았다. 현재와 과거 probe code와 prompt가 완전히 동일하지 않아 버전 단독 원인도 증명되지 않았다.",
+      "sourceRefs": [
+        "attempt:122213-0bdafe87:sdk-message:26",
+        "attempt:012734-2b0b0b7d:sdk-message:25"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "chapter16-pretooluse-universal-path-not-observed",
+      "sequence": 25,
+      "title": "걸지 않은 PreToolUse",
+      "type": "Unknown",
+      "question": "PreToolUse가 모든 tool을 관찰하는 장 전용 경로를 실행했는가?",
+      "consequence": "다섯 attempt의 hook raw는 비어 있어 별도 live case가 필요하다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "PreToolUse가 모든 tool을 관찰한다는 장 전용 live hook path는 이번 다섯 attempt에서 실행하지 않았고 hook callback 원본도 비어 있었다.",
+      "sourceRefs": [
+        "spec:claims:chapter16-pretooluse-universal-path-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "real-user-ui-and-os-enforcement-not-observed",
+      "sequence": 26,
+      "title": "실제 승인창 밖의 실험",
+      "type": "Unknown",
+      "question": "사용자 승인 UI와 OS sandbox까지 이번 결과로 증명했는가?",
+      "consequence": "Temp file과 side-effect-free MCP 범위라 실제 UI와 OS enforcement는 보지 않았다.",
+      "art": "unknown",
+      "status": "not_observed",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "실제 사용자 승인 UI, 외부 destructive operation, sandbox와 OS enforcement는 통제된 temp file과 side-effect-free MCP handler 실험 범위 밖이다.",
+      "sourceRefs": [
+        "spec:claims:real-user-ui-and-os-enforcement-not-observed"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "same-probe-cross-cli-regression-required",
+      "sequence": 27,
+      "title": "같은 검으로 다시 겨룰 일",
+      "type": "Next experiment",
+      "question": "버전 원인을 좁히려면 무엇을 고정해야 하는가?",
+      "consequence": "같은 commit, prompt, path, SDK를 유지하고 CLI만 바꾸는 순차 회귀가 필요하다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "Read-before-Edit 변화 원인을 좁히려면 같은 probe commit, prompt, path, SDK를 고정한 채 CLI 2.1.220과 2.1.221만 바꾸는 순차 회귀 실행이 필요하다.",
+      "sourceRefs": [
+        "spec:claims:same-probe-cross-cli-regression-required"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "pretooluse-and-rule-hierarchy-cases-required",
+      "sequence": 28,
+      "title": "다음 세 검문소",
+      "type": "Next experiment",
+      "question": "PreToolUse, ask callback, wildcard hierarchy를 어떻게 검증할 것인가?",
+      "consequence": "각각 한 변수만 바꾸는 독립 chapter case로 실행해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "PreToolUse universal observation, default ask callback, source hierarchy와 wildcard rule은 각각 한 변수만 바꾸는 별도 chapter case로 실행해야 한다.",
+      "sourceRefs": [
+        "spec:claims:pretooluse-and-rule-hierarchy-cases-required"
+      ],
+      "cost": "?"
+    },
+    {
+      "id": "other-permission-modes-remain-separate-evidence",
+      "sequence": 29,
+      "title": "합치지 않을 다른 길",
+      "type": "Next experiment",
+      "question": "Default, dontAsk, auto, plan의 과거 증거를 이번 run처럼 섞어도 되는가?",
+      "consequence": "기존 ch08f와 ch04b 실행을 출처와 session을 분리한 채 연결해야 한다.",
+      "art": "unknown",
+      "status": "additional_observation_required",
+      "evidenceLevel": "Missing",
+      "sourceSummary": "default, dontAsk, auto, plan의 기존 ch08f와 ch04b 실행은 재사용 가능하지만 이번 다섯 case와 하나의 동시 run으로 합치지 말고 장별 출처와 session을 분리해 연결해야 한다.",
+      "sourceRefs": [
+        "spec:claims:other-permission-modes-remain-separate-evidence"
+      ],
+      "cost": "?"
+    }
+  ]
+}
