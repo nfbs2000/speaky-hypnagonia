@@ -251,6 +251,22 @@
       "artifactSha256": "71a4ebbe1f66d5e74a9d9c386c5d4a9544f29fd60d92630d61fe6dcc052aa27e"
     },
     {
+      "chapterSlug": "ch14",
+      "title": "14장 캐시 브레이크 감지: 동일 tool surface control과 변경 surface 비교 · Observation Ordeal",
+      "path": "./evidence/ch14.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 151,
+      "publicEventCount": 53,
+      "configuredClaims": 1,
+      "observedClaims": 14,
+      "inferredClaims": 2,
+      "notObservedClaims": 6,
+      "correctionRequired": 8,
+      "additionalObservationRequired": 4,
+      "artifactSha256": "98329978519de53251d25a067a484701a64868474ef8eb460e167545595c867b"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -263,5 +279,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-03T23:32:27.518Z"
+  "generatedAt": "2026-08-04T00:11:31.091Z"
 }
