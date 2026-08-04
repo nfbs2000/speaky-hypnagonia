@@ -411,6 +411,22 @@
       "artifactSha256": "d436a2b89b867b926073c5f6a24591c3eed71d0d274a8d871145b2452c4d63cb"
     },
     {
+      "chapterSlug": "ch29",
+      "title": "29장 raw SDK에서 bounded OTel까지: redaction과 lineage 감사 · Observation Ordeal",
+      "path": "./evidence/ch29.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 36,
+      "publicEventCount": 67,
+      "configuredClaims": 4,
+      "observedClaims": 22,
+      "inferredClaims": 2,
+      "notObservedClaims": 8,
+      "correctionRequired": 14,
+      "additionalObservationRequired": 5,
+      "artifactSha256": "dd63bc764010475d19aee7696e4de8b86dde7de2b7ece6eff08ccee43bfd4b75"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -423,5 +439,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-04T08:52:37.484Z"
+  "generatedAt": "2026-08-04T09:38:14.853Z"
 }
