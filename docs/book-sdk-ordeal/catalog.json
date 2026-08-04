@@ -395,6 +395,22 @@
       "artifactSha256": "64a69d5da73bef6f369d6cce585fcc3d242677fe2116582c655ce9cb2b4636d1"
     },
     {
+      "chapterSlug": "ch20b",
+      "title": "20b장 두 worker의 순차 handoff: leader 경유와 native Team의 경계 · Observation Ordeal",
+      "path": "./evidence/ch20b.json",
+      "campaignId": "book-sdk-live-20260803",
+      "model": "claude-opus-5",
+      "sourceEventCount": 82,
+      "publicEventCount": 69,
+      "configuredClaims": 3,
+      "observedClaims": 22,
+      "inferredClaims": 1,
+      "notObservedClaims": 9,
+      "correctionRequired": 12,
+      "additionalObservationRequired": 5,
+      "artifactSha256": "d436a2b89b867b926073c5f6a24591c3eed71d0d274a8d871145b2452c4d63cb"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -407,5 +423,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-04T07:32:22.412Z"
+  "generatedAt": "2026-08-04T08:52:37.484Z"
 }
