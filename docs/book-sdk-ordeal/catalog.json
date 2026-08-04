@@ -363,6 +363,22 @@
       "artifactSha256": "d779bfa5b21657a3f61efa90c4173e3454f6f63fd498358ae9fa10c19fd09ecf"
     },
     {
+      "chapterSlug": "ch19",
+      "title": "19장 CLAUDE.md: setting_sources와 memoryFiles의 실제 로드 경계 · Observation Ordeal",
+      "path": "./evidence/ch19.json",
+      "campaignId": "book-sdk-live-20260804",
+      "model": "claude-opus-5",
+      "sourceEventCount": 46,
+      "publicEventCount": 62,
+      "configuredClaims": 3,
+      "observedClaims": 13,
+      "inferredClaims": 1,
+      "notObservedClaims": 9,
+      "correctionRequired": 11,
+      "additionalObservationRequired": 5,
+      "artifactSha256": "ba560ca4eb8da6fbf2c99a6ccc34ed610b7f1ff886dd136c2cf58f057193b211"
+    },
+    {
       "chapterSlug": "ch30",
       "title": "30장 나만의 AI 에이전트: 권한, 산출물, 재개, 메모리 · Observation Ordeal",
       "path": "./evidence/ch30.json",
@@ -375,5 +391,5 @@
       "artifactSha256": "3dbc7278e572d9231e65f7af371da672d5b3129f1076206bc716be686f3bb32f"
     }
   ],
-  "generatedAt": "2026-08-04T05:45:21.306Z"
+  "generatedAt": "2026-08-04T06:40:31.537Z"
 }
